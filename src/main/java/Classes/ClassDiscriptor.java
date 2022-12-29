@@ -19,9 +19,29 @@ public class ClassDiscriptor {
 	public String name;
 	public String modifier;
 	public String extend;
+        public String implement;
 	public String lastModified;
 	public String constructor;
 	public List<Member> members;
+
+    public ClassDiscriptor() {
+    }
+
+        
+        
+    public ClassDiscriptor(String packageName, String name, String modifier, String extend, String implement, String lastModified, String constructor, List<Member> members) {
+        this.packageName = packageName;
+        this.name = name;
+        this.modifier = modifier;
+        this.extend = extend;
+        this.implement = implement;
+        this.lastModified = lastModified;
+        this.constructor = constructor;
+        this.members = members;
+    }
+        
+        
+        
 	public static class Member{
 		public String modifier;
 		public String type;

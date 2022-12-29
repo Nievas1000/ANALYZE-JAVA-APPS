@@ -64,6 +64,7 @@ public class Main {
 		for(ClassDiscriptor cd:cdList) {
 			builder.append("\r\nClass: "+cd.name);
 			builder.append("\r\n\tExtends: "+cd.extend);	
+                        builder.append("\r\n\tImplements: "+cd.implement);
 			builder.append("\r\n\tPackage: "+cd.packageName);
 			builder.append("\r\n\tLast Modified: "+cd.lastModified);
 			Long myLong = Long.parseLong(cd.lastModified);
@@ -141,7 +142,7 @@ public class Main {
 		JsonObject json=gson.toJsonTree(map).getAsJsonObject();
 		
 		//PostRequest(json);
-		PostRequest.PostRequest(json);
+		//PostRequest.PostRequest(json);
 		
 		return json.toString();
 	}
