@@ -133,6 +133,12 @@ public class ClassParser {
             m.type = parts[1];
             m.member = parts[2].substring(0, parts[2].length() - 1);
             addMember(m);
+        }else if(parts.length > 3 && isModifier(parts[0]) && line.endsWith(";")){
+            Member m = new Member();
+            m.modifier = parts[0];
+            m.type = parts[1];
+            m.member = parts[2]+parts[3]+parts[4];
+            addMember(m);
         }
     }
 

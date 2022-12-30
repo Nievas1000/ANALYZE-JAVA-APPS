@@ -1,5 +1,4 @@
 
-
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,18 +14,15 @@ import javax.xml.transform.Templates;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author Leoo
  */
 public class JFileChooserTest extends javax.swing.JFrame implements ActionListener {
-private JTextField txt;
+
+    private JTextField txt;
     private JButton btn;
-    
-    
-    
-    
+
     /**
      * Creates new form interfaz
      */
@@ -37,11 +33,10 @@ private JTextField txt;
         txt = new JTextField(30);
         add(txt);
 
-     
         btn = new JButton("Buscar...");
         btn.addActionListener(this);
         add(btn);
-       
+
         //initComponents();
     }
 
@@ -156,14 +151,14 @@ private JTextField txt;
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-         JFileChooserTest test = new JFileChooserTest();
+        JFileChooserTest test = new JFileChooserTest();
         test.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        test.setSize(400, 110);
+        test.setSize(400, 150);
         test.setVisible(true);
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new JFileChooserTest().setVisible(true);
+//                new JFileChooserTest().setVisible(true);
             }
         });
     }
@@ -180,31 +175,28 @@ private JTextField txt;
 
     @Override
     public void actionPerformed(ActionEvent ae) {
-       JFileChooser fileChooser = new JFileChooser();
-    fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-    
-    FileNameExtensionFilter imgFilter = new FileNameExtensionFilter("clases java","jpg","java","class"); 
-    fileChooser.setFileFilter(imgFilter);
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 
-    int result = fileChooser.showOpenDialog(this);
+        FileNameExtensionFilter imgFilter = new FileNameExtensionFilter("clases java", "jpg", "java", "class");
+        fileChooser.setFileFilter(imgFilter);
 
-    if (result != JFileChooser.CANCEL_OPTION) {
+        int result = fileChooser.showOpenDialog(this);
 
-        File fileName = fileChooser.getSelectedFile();
-        
-        Main m=new Main(); 
-        m.ver(fileName.toString());
-        
-        //System.out.println(fileName);
+        if (result != JFileChooser.CANCEL_OPTION) {
 
-        if ((fileName == null) || (fileName.getName().equals(""))) {
-            txt.setText("...");
-        } else {
-            txt.setText(fileName.getAbsolutePath());
+            File fileName = fileChooser.getSelectedFile();
+
+            Main m = new Main();
+            m.ver(fileName.toString());
+
+            //System.out.println(fileName);
+            if ((fileName == null) || (fileName.getName().equals(""))) {
+                txt.setText("...");
+            } else {
+                txt.setText(fileName.getAbsolutePath());
+            }
         }
     }
-}
-    
-    
-}
 
+}
