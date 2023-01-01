@@ -17,13 +17,13 @@ public class ClassParser {
 //import solutionparser.handlers.ClassDiscriptor.Member;
     private Path file;
     private ClassDiscriptor discriptor;
-//	private DatabaseDescriptor dbDescriptor;
+    //private DatabaseDescriptor dbDescriptor;
 
     public ClassParser(File file) {
         this.file = file.toPath();
 
         this.discriptor = new ClassDiscriptor();
-//		this.dbDescriptor=new DatabaseDescriptor();
+	//this.dbDescriptor=new DatabaseDescriptor();
         discriptor.lastModified = String.valueOf(file.lastModified());
         discriptor.members = new ArrayList();
         try {
@@ -62,9 +62,9 @@ public class ClassParser {
     public boolean isCommented(String line) {
         return (line.trim().startsWith("//") || line.trim().startsWith("/*"));
     }
-//	public DatabaseDescriptor getDBDescriptor() {
-//		return this.dbDescriptor;
-//	}
+	//public DatabaseDescriptor getDBDescriptor() {
+		//return this.dbDescriptor;
+	//}
 //	private void parseDB(List<String> lines) {
 //		for(String line:lines) {
 //			if(line.contains("jdbc:")) {
@@ -137,7 +137,7 @@ public class ClassParser {
             Member m = new Member();
             m.modifier = parts[0];
             m.type = parts[1];
-            m.member = parts[2]+parts[3]+parts[4];
+            m.member = parts[2]+parts[3];
             addMember(m);
         }
     }

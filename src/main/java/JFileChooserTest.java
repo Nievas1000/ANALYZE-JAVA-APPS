@@ -158,7 +158,7 @@ public class JFileChooserTest extends javax.swing.JFrame implements ActionListen
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-//                new JFileChooserTest().setVisible(true);
+                new JFileChooserTest().setVisible(true);
             }
         });
     }

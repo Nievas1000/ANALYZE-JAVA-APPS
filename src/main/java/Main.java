@@ -35,7 +35,7 @@ public class Main {
         System.out.println(args);
         String sCarpAct = System.getProperty(args, args);
         System.out.println(sCarpAct);
-        File file = new File(sCarpAct + File.separator + "src" );//+ File.separator + "main" + File.separator + "java" + File.separator + "com");
+        File file = new File(sCarpAct + File.separator + "src");//+ File.separator + "main" + File.separator + "java" + File.separator + "com");
         System.out.println(file);
         files = new ArrayList();
         if (file != null && file.exists()) {
@@ -43,7 +43,7 @@ public class Main {
         }
 
         List<ClassDiscriptor> cdList = new ArrayList();
-//		List<DatabaseDescriptor> dbList=new ArrayList<>();
+//        List<DatabaseDescriptor> dbList = new ArrayList();
         for (File f : files) {
             System.out.println("File: " + f.getAbsolutePath());
             ClassParser parser = new ClassParser(f);
@@ -51,10 +51,10 @@ public class Main {
             if (cd != null && cd.name != null) {
                 cdList.add(cd);
             }
-//			DatabaseDescriptor db=parser.getDBDescriptor();
-//			if(db!=null && db.db!=null) {
-//				dbList.add(db);
-//			}
+//              DatabaseDescriptor db = parser.getDBDescriptor();
+//            if (db != null && db.db != null) {
+//                dbList.add(db);
+//            }
         }
 
         StringBuilder builder = new StringBuilder();
@@ -79,6 +79,20 @@ public class Main {
             cd.lastModified = dia + "/" + mes + "/" + anio + "     " + hora + ":" + minuto + ":" + segundo;
 
             builder.append("\r\n\tLast Modified Date: " + dia + "/" + mes + "/" + anio + "     " + hora + ":" + minuto + ":" + segundo);
+            
+//            builder.append("\r\n\r\nDatabases:");
+//		for(DatabaseDescriptor db:dbList) {
+//			builder.append("\r\n\tSchema: "+db.db);
+//			builder.append("\r\n\t\tDatabaseType: "+db.type);
+//			builder.append("\r\n\t\tHost: "+db.host);
+//			builder.append("\r\n\t\tPort: "+db.port);
+//			builder.append("\r\n\t\tTables: [");
+//			List<String> tables=db.getTables();
+//			for(String table:tables) {
+//				builder.append(table+", ");
+//			}
+//			builder.append("]\r\n");
+//		}
 
             builder.append("\r\n\tClass Members: ");
 
@@ -94,6 +108,7 @@ public class Main {
 
         HashMap<String, List> map = new HashMap();
         map.put("classes", cdList);
+//        map.put("databases", dbList);
         //map.put("modifier",cdList);
         //map.put("Constructors",cdList);
         try {
@@ -113,13 +128,7 @@ public class Main {
             }
             System.out.println("JSON file created" + builder);
             System.out.println("JSON: " + json);
-//			MessageDialog.openInformation(
-//					window.getShell(),
-//					"SolutionParser",
-//					builder.toString()
-//					);
-//			MessageDialog.openInformation(window.getShell(), "JSON", "JSON content is copied to your clipboard");
-//			MessageDialog.openInformation(window.getShell(), "JSON", "JSON file download on path: " + pathFile );
+
         } catch (Exception e2) {
             e2.printStackTrace();
 
