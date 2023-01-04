@@ -56,11 +56,6 @@ jobs:
       - name: Deploy to S3 Bucket
         if: ${{ github.event_name == 'push' }}
         run: aws s3 sync --delete staging s3://appcodojo
-      - name: Invalidate the cache
-        run: |
-          aws cloudfront create-invalidation \
-            --distribution-id ${{secrets.AWS_DIST_ID}} \
-            --paths "/*"
     
   activate-workflow:
     needs: [deploy]
