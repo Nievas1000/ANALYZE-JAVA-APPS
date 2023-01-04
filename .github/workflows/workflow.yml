@@ -1,0 +1,69 @@
+name: Codojo CI
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  sonarcloud:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v3
+          with:
+            fetch-depth: 0
+        - name: Check code
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar 
+
+  build:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout main branch from GitHub 
+          uses: actions/checkout@v3
+        - name: Set up JAVA
+          uses: actions/setup-java@v3
+          with:
+            distribution: 'temurin'
+            java-version: '17'
+        - name: Have GitHub Actions Build Maven Project
+          run: |
+            mvn -B package --file pom.xml
+        - name: Step 5 - Persist workflow data as artificats
+          uses: actions/upload-artifact@v3
+          with:
+            name: CodojoApp
+            path: target
+
+  deploy:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main branch from GitHub 
+        uses: actions/checkout@v3
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
+          aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+          aws-region: ${{secrets.AWS_REGION}}
+      - uses: actions/download-artifact@v3
+        with:
+          name: CodojoApp
+          path: target  
+      - name: Deploy to S3 Bucket
+        if: ${{ github.event_name == 'push' }}
+        run: aws s3 sync --delete target s3://appcodojo
+    
+  activate-workflow:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Workflow
+        uses: convictional/trigger-workflow-and-wait@v1.6.1
+        with:
+          owner: Codojoio
+          repo: UiLogin
+          github_token: ${{secrets.ACCESS_TOKEN}}
+          workflow_file_name: download.yml
+          ref: main
