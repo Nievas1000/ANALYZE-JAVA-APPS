@@ -30,11 +30,12 @@ jobs:
         - name: Have GitHub Actions Build Maven Project
           run: |
             mvn -B package --file pom.xml
+            mkdir staging && cp target/*.jar staging
         - name: Step 5 - Persist workflow data as artificats
           uses: actions/upload-artifact@v3
           with:
             name: CodojoApp
-            path: target
+            path: staging
 
   deploy:
     needs: [build]
@@ -51,10 +52,10 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: CodojoApp
-          path: target  
+          path: staging  
       - name: Deploy to S3 Bucket
         if: ${{ github.event_name == 'push' }}
-        run: aws s3 sync --delete target s3://appcodojo
+        run: aws s3 sync --delete staging s3://appcodojo
     
   activate-workflow:
     needs: [deploy]
