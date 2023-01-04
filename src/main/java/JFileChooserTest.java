@@ -22,6 +22,7 @@ public class JFileChooserTest extends javax.swing.JFrame implements ActionListen
 
     private JTextField txt;
     private JButton btn;
+    private JTextField txt1;
 
     /**
      * Creates new form interfaz
@@ -37,6 +38,9 @@ public class JFileChooserTest extends javax.swing.JFrame implements ActionListen
         btn.addActionListener(this);
         add(btn);
 
+       
+      
+        
         //initComponents();
     }
 
@@ -156,11 +160,11 @@ public class JFileChooserTest extends javax.swing.JFrame implements ActionListen
         test.setSize(400, 150);
         test.setVisible(true);
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new JFileChooserTest().setVisible(true);
-            }
-        });
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+////                new JFileChooserTest().setVisible(true);
+//            }
+//        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -25,6 +25,12 @@ import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class Main {
 
@@ -35,7 +41,7 @@ public class Main {
         System.out.println(args);
         String sCarpAct = System.getProperty(args, args);
         System.out.println(sCarpAct);
-        File file = new File(sCarpAct + File.separator + "src");//+ File.separator + "main" + File.separator + "java" + File.separator + "com");
+        File file = new File(sCarpAct + File.separator + "src" + File.separator + "main" + File.separator + "java" + File.separator + "com");
         System.out.println(file);
         files = new ArrayList();
         if (file != null && file.exists()) {
@@ -55,6 +61,14 @@ public class Main {
 //            if (db != null && db.db != null) {
 //                dbList.add(db);
 //            }
+        }
+        try{
+        List<String> lista=getTables();
+            for (String string : lista) {
+                System.out.println(string);
+            }
+        }catch(Exception e){
+            System.out.println(e);
         }
 
         StringBuilder builder = new StringBuilder();
@@ -79,7 +93,7 @@ public class Main {
             cd.lastModified = dia + "/" + mes + "/" + anio + "     " + hora + ":" + minuto + ":" + segundo;
 
             builder.append("\r\n\tLast Modified Date: " + dia + "/" + mes + "/" + anio + "     " + hora + ":" + minuto + ":" + segundo);
-            
+
 //            builder.append("\r\n\r\nDatabases:");
 //		for(DatabaseDescriptor db:dbList) {
 //			builder.append("\r\n\tSchema: "+db.db);
@@ -93,7 +107,6 @@ public class Main {
 //			}
 //			builder.append("]\r\n");
 //		}
-
             builder.append("\r\n\tClass Members: ");
 
             for (int i = 0; i < cd.members.size(); i++) {
@@ -155,6 +168,24 @@ public class Main {
                 getFiles(f);
             }
         }
+    }
+
+    public List getTables() throws ClassNotFoundException, SQLException {
+        List<String> tables=new ArrayList();
+        Class.forName("com.mysql.jdbc.Driver");
+        Connection conexion = DriverManager.getConnection(
+                "jdbc:mysql://sql.freedb.tech:3306/freedb_practicas", "freedb_leonardo", "kWPgVw8z5Bg?9MU");
+
+                Statement statement=conexion.createStatement();
+		ResultSet rs=statement.executeQuery("show tables from "+"freedb_practicas");
+               
+                
+                while(rs.next()) {
+			tables.add(rs.getString(1));
+                      
+		}
+		     
+        return tables;
     }
 
 }
