@@ -31,7 +31,7 @@ public class PostRequest {
 			System.out.println(conexion.getResponseCode());
                         JOptionPane.showMessageDialog(null,conexion.getResponseCode());
 			for (int c; (c = in.read()) >= 0;)
-	                       System.out.println((char)c);
+	                       System.out.print((char)c);
                        
 			
 		} catch (Exception e) {
