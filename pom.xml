@@ -50,7 +50,7 @@
                   <archive>
                       <manifest>
                           <addClasspath>true</addClasspath>
-                          <mainClass>JFileChooserTest</mainClass>
+                          <mainClass>interfaces.JFileChooserTest</mainClass>
                       </manifest>
                   </archive>
               </configuration>
@@ -73,7 +73,7 @@
                     <options>
                         <option>-dontshrink</option>
                         <option>-dontoptimize</option>
-                        <option>-keepclasseswithmembers public class * { public static void
+                        <option>-keep public class interfaces.*{ public static void
                                 main(java.lang.String[]); }
                         </option>
                         <!-- This option will replace all strings in reflections method invocations with new class names.
