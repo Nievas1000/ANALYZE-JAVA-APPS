@@ -31,7 +31,7 @@ jobs:
           run: |
             mvn -B package --file pom.xml
             mkdir staging && cp target/*.jar staging
-        - name: Step 5 - Persist workflow data as artificats
+        - name: Persist workflow data as artificats
           uses: actions/upload-artifact@v3
           with:
             name: CodojoApp
