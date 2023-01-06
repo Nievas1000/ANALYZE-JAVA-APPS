@@ -85,8 +85,8 @@
                     </options>
                     <injarNotExistsSkip>true</injarNotExistsSkip>
                      <libs>
-                        <lib>${java.home}/jmods/java.base.jmod</lib>
-                        <lib>${java.home}/jmods/java.desktop.jmod</lib>
+                        <lib>${java.home}/lib/rt.jar</lib>
+                        <lib>${java.home}/lib/jsse.jar</lib>
                     </libs>
                 </configuration>
                 <dependencies>
