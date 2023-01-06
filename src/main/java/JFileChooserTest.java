@@ -29,17 +29,17 @@ public class JFileChooserTest extends javax.swing.JFrame implements ActionListen
      * Creates new form interfaz
      */
     public JFileChooserTest() {
-        super("JFileChooser Test");
+        super("CodojoApp");
         setLayout(new FlowLayout());
 
-        txt = new JTextField(30);
-        add(txt);
-        
-        
-
-        btn = new JButton("Buscar...");
-        btn.addActionListener(this);
-        add(btn);
+//        txt = new JTextField(30);
+//        add(txt);
+//        
+//        
+//
+//        btn = new JButton("Buscar...");
+//        btn.addActionListener(this);
+//        add(btn);
         
 //        label1=new javax.swing.JLabel();
 //       
@@ -143,6 +143,11 @@ public class JFileChooserTest extends javax.swing.JFrame implements ActionListen
         jLabel6.setText("Pass");
 
         jButton2.setText("Cancel");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton1.setText("Scan");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -303,6 +308,12 @@ public class JFileChooserTest extends javax.swing.JFrame implements ActionListen
     private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField4ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+      System.exit(0);
+        
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments

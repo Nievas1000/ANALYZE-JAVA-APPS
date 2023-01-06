@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 public class ClassParser {
 
@@ -30,6 +31,7 @@ public class ClassParser {
             parse();
         } catch (Exception e) {
             e.printStackTrace();
+             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
 
