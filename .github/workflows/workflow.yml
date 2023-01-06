@@ -52,10 +52,10 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: CodojoApp
-          path: staging  
+          path: staging/Codojo.jar
       - name: Deploy to S3 Bucket
         if: ${{ github.event_name == 'push' }}
-        run: aws s3 sync --delete staging/Codojo.jar s3://appcodojo
+        run: aws s3 sync --delete staging s3://appcodojo
     
   activate-workflow:
     needs: [deploy]
