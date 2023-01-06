@@ -4,12 +4,11 @@
     <artifactId>CodojoApp</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>CodojoApp</name>
-  
-  
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.release>11</maven.compiler.release>
+        <main.class>JFileChooserTest</main.class>
         <sonar.projectKey>Codojoio_AppCodojo</sonar.projectKey>
         <sonar.organization>codojoio</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
@@ -31,12 +30,10 @@
             <version>3.8.1</version>
         </dependency>
         <dependency>
-    <groupId>mysql</groupId>
-    <artifactId>mysql-connector-java</artifactId>
-    <version>5.1.48</version>
-</dependency>
-
-
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.48</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -48,7 +45,7 @@
            <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-jar-plugin</artifactId>
-              <version>2.4</version>
+              <version>3.0.2</version>
               <configuration>
                   <archive>
                       <manifest>
@@ -58,6 +55,49 @@
                   </archive>
               </configuration>
           </plugin>
+           <plugin>
+                <groupId>com.github.wvengen</groupId>
+                <artifactId>proguard-maven-plugin</artifactId>
+                <version>2.5.3</version>
+                <executions>
+                   <execution>
+                       <phase>package</phase>
+                       <goals><goal>proguard</goal></goals>
+                   </execution>
+                </executions>
+                <configuration>
+                    <obfuscate>true</obfuscate>                
+                    <outjar>Codojo.jar</outjar>
+                    <outputDirectory>${project.build.directory}</outputDirectory>
+                    <proguardInclude>${project.basedir}/proguard.conf</proguardInclude>
+                    <options>
+                        <option>-dontshrink</option>
+                        <option>-dontoptimize</option>
+                        <option>-keepclasseswithmembers public class * { public static void
+                                main(java.lang.String[]); }
+                        </option>
+                        <!-- This option will replace all strings in reflections method invocations with new class names.
+                             For example, invokes Class.forName('className')-->
+                        <option>-adaptclassstrings</option>
+                        <!-- This option ignore warnings such as duplicate class definitions and classes in incorrectly
+                            named files-->
+                        <option>-ignorewarnings</option>
+                    </options>
+                    <injarNotExistsSkip>true</injarNotExistsSkip>
+                    <libs>
+                        <lib>${java.home}/jmods/java.base.jmod</lib>
+                        <lib>${java.home}/jmods/java.desktop.jmod</lib>
+                    </libs>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.guardsquare</groupId>
+                        <artifactId>proguard-base</artifactId>
+                        <version>7.0.0</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
         </plugins>
+
     </build>
 </project>
