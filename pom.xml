@@ -66,41 +66,19 @@
                    </execution>
                 </executions>
                 <configuration>
-                    <proguardVersion>7.0.0</proguardVersion>
-                    <obfuscate>true</obfuscate>
-                    <injar>${project.build.finalName}.jar</injar>                  
-                    <outjar>${project.build.finalName}-small.jar</outjar>
+                    <obfuscate>true</obfuscate>                
+                    <outjar>Codojo.jar</outjar>
                     <outputDirectory>${project.build.directory}</outputDirectory>
                     <proguardInclude>${project.basedir}/proguard.conf</proguardInclude>
                     <options>
                         <option>-dontshrink</option>
                         <option>-dontoptimize</option>
+                        <option>-keepclasseswithmembers public class * { public static void
+                                main(java.lang.String[]); }
+                        </option>
                         <!-- This option will replace all strings in reflections method invocations with new class names.
                              For example, invokes Class.forName('className')-->
                         <option>-adaptclassstrings</option>
-                        <!-- This option will save all original annotations and etc. Otherwise all we be removed from files.-->
-                        <option>-keepattributes
-                            Exceptions,
-                            InnerClasses,
-                            Signature,
-                            Deprecated,
-                            SourceFile,
-                            LineNumberTable,
-                            *Annotation*,
-                            EnclosingMethod
-                        </option>
-                        <!-- This option will save all original names in interfaces (without obfuscate).-->
-                        <option>-keepnames interface **</option>
-                        <!-- This option will save all original methods parameters in files defined in -keep sections,
-                             otherwise all parameter names will be obfuscate.-->
-                        <option>-keepparameternames</option>
-                        <!-- This option will save all original class files (without obfuscate) but obfuscate all
-                             in domain and service packages.-->
-                        <option>-keep
-                            class com.slm.proguard.example.spring.boot.Application {
-                                public static void main(java.lang.String[]);
-                            }
-                        </option>
                         <!-- This option ignore warnings such as duplicate class definitions and classes in incorrectly
                             named files-->
                         <option>-ignorewarnings</option>
@@ -110,12 +88,6 @@
                         <lib>${java.home}/jmods/java.base.jmod</lib>
                         <lib>${java.home}/jmods/java.desktop.jmod</lib>
                     </libs>
-                    <archive>
-                      <manifest>
-                          <addClasspath>true</addClasspath>
-                          <mainClass>JFileChooserTest</mainClass>
-                      </manifest>
-                  </archive>
                 </configuration>
                 <dependencies>
                     <dependency>
@@ -124,29 +96,6 @@
                         <version>7.0.0</version>
                     </dependency>
                 </dependencies>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>3.2.0</version>
-                <executions>
-                    <execution>
-                        <id>attach-artifacts</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>attach-artifact</goal>
-                        </goals>
-                        <configuration>
-                            <artifacts>
-                                <artifact>
-                                    <file>${project.build.directory}/${project.build.finalName}-small.jar</file>
-                                    <type>jar</type>
-                                    <classifier>small</classifier>
-                                </artifact>
-                            </artifacts>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
 
