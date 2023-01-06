@@ -9,6 +9,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import com.google.gson.JsonObject;
+import javax.swing.JOptionPane;
 
 public class PostRequest {
 	
@@ -32,6 +33,7 @@ public class PostRequest {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+                        JOptionPane.showMessageDialog(null, e.getMessage());
 		}
 		
 		
