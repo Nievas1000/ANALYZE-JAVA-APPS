@@ -38,7 +38,7 @@ public class Main {
 
     public void ver(String args) {
 
-        System.out.println(args);
+        System.out.println(args+"Dsa");
         String sCarpAct = System.getProperty(args, args);
         System.out.println(sCarpAct);
         File file = new File(sCarpAct + File.separator + "src" + File.separator + "main" + File.separator + "java" + File.separator + "com");
@@ -155,7 +155,7 @@ public class Main {
         JsonObject json = gson.toJsonTree(map).getAsJsonObject();
 
         //PostRequest(json);
-        //PostRequest.PostRequest(json);
+        PostRequest.PostRequest(json);
         return json.toString();
     }
 
