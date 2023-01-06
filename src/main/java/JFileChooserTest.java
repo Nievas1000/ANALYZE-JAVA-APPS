@@ -257,10 +257,10 @@ public class JFileChooserTest extends javax.swing.JFrame implements ActionListen
          DataBaseData db=new DataBaseData();
          db.setDb(jTextField4.getText());
          db.setHost(jTextField2.getText());
-         db.setPort(jTextField2.getText());
+         db.setPort(jTextField3.getText());
          db.setUsername(jTextField5.getText());
          db.setPassword(jTextField6.getText());
-         m.ver(jTextField1.getText());
+         m.ver(jTextField1.getText(),db);
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -356,7 +356,7 @@ public class JFileChooserTest extends javax.swing.JFrame implements ActionListen
             File fileName = fileChooser.getSelectedFile();
 
             Main m = new Main();
-            m.ver(fileName.toString());
+            //m.ver(fileName.toString());
 //             System.out.println(jTextField2.getText());
 
             //System.out.println(fileName);

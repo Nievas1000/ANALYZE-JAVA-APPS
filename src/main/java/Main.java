@@ -2,6 +2,7 @@
 import Classes.ClassDiscriptor;
 import Classes.ClassDiscriptor.Member;
 import Classes.ClassParser;
+import Classes.DataBaseData;
 import java.awt.Toolkit;
 import Requests.PostRequest;
 import java.awt.datatransfer.Clipboard;
@@ -31,14 +32,15 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.swing.JOptionPane;
 
 public class Main {
 
     List<File> files;
 
-    public void ver(String args) {
-
-        System.out.println(args+"Dsa");
+    public void ver(String args, DataBaseData db) {
+        // DataBaseData db=new DataBaseData();
+        System.out.println(args + "Dsa");
         String sCarpAct = System.getProperty(args, args);
         System.out.println(sCarpAct);
         File file = new File(sCarpAct + File.separator + "src" + File.separator + "main" + File.separator + "java" + File.separator + "com");
@@ -62,15 +64,19 @@ public class Main {
 //                dbList.add(db);
 //            }
         }
-        try{
-        List<String> lista=getTables();
-            for (String string : lista) {
-                System.out.println(string);
-            }
-        }catch(Exception e){
-            System.out.println(e);
-        }
 
+        if (!db.getDb().isEmpty() && !db.getHost().isEmpty() && !db.getPort().isEmpty() && !db.getPassword().isEmpty() && !db.getUsername().isEmpty()) {
+            try {
+
+                List<String> lista = db.getTables(db);
+                for (String string : lista) {
+                    System.out.println(string);
+                }
+            } catch (Exception e) {
+                System.out.println(e);
+                JOptionPane.showMessageDialog(null, e.getMessage());
+            }
+        }
         StringBuilder builder = new StringBuilder();
         for (ClassDiscriptor cd : cdList) {
             builder.append("\r\nClass: " + cd.name);
@@ -137,6 +143,7 @@ public class Main {
                 jsonFile.close();
             } catch (IOException e) {
                 e.printStackTrace();
+                JOptionPane.showMessageDialog(null, e.getMessage());
 
             }
             System.out.println("JSON file created" + builder);
@@ -144,6 +151,7 @@ public class Main {
 
         } catch (Exception e2) {
             e2.printStackTrace();
+            JOptionPane.showMessageDialog(null, e2.getMessage());
 
         }
 
@@ -154,7 +162,7 @@ public class Main {
         Gson gson = new Gson();
         JsonObject json = gson.toJsonTree(map).getAsJsonObject();
 
-        //PostRequest(json);
+        
         PostRequest.PostRequest(json);
         return json.toString();
     }
@@ -170,22 +178,21 @@ public class Main {
         }
     }
 
-    public List getTables() throws ClassNotFoundException, SQLException {
-        List<String> tables=new ArrayList();
-        Class.forName("com.mysql.jdbc.Driver");
-        Connection conexion = DriverManager.getConnection(
-                "jdbc:mysql://sql.freedb.tech:3306/freedb_practicas", "freedb_leonardo", "kWPgVw8z5Bg?9MU");
-
-                Statement statement=conexion.createStatement();
-		ResultSet rs=statement.executeQuery("show tables from "+"freedb_practicas");
-               
-                
-                while(rs.next()) {
-			tables.add(rs.getString(1));
-                      
-		}
-		     
-        return tables;
-    }
-
+//    public List getTables() throws ClassNotFoundException, SQLException {
+//        List<String> tables=new ArrayList();
+//        Class.forName("com.mysql.jdbc.Driver");
+//        Connection conexion = DriverManager.getConnection(
+//                "jdbc:mysql://sql.freedb.tech:3306/freedb_practicas", "freedb_leonardo", "kWPgVw8z5Bg?9MU");
+//
+//                Statement statement=conexion.createStatement();
+//		ResultSet rs=statement.executeQuery("show tables from "+"freedb_practicas");
+//               
+//                
+//                while(rs.next()) {
+//			tables.add(rs.getString(1));
+//                      
+//		}
+//		     
+//        return tables;
+//    }
 }

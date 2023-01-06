@@ -13,16 +13,14 @@ import java.util.List;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-
 public class DataBaseData {
 
     public String db;
-	public String type;
-	public String username;
-	public String password;
-	public String host;
-	public String port;
+    public String type;
+    public String username;
+    public String password;
+    public String host;
+    public String port;
 
     public DataBaseData() {
     }
@@ -83,23 +81,21 @@ public class DataBaseData {
     public void setPort(String port) {
         this.port = port;
     }
-        
-        
-     public List getTables() throws ClassNotFoundException, SQLException {
-        List<String> tables=new ArrayList();
+
+    public List getTables(DataBaseData db) throws ClassNotFoundException, SQLException {
+        List<String> tables = new ArrayList();
         Class.forName("com.mysql.jdbc.Driver");
         Connection conexion = DriverManager.getConnection(
-                "jdbc:mysql://"+host+":"+port+"/"+db, username, password);
+                "jdbc:mysql://" + db.getHost()+ ":".concat(db.getPort()) + "/" + db.getDb(), db.getUsername(), db.getPassword());
+        
+        Statement statement = conexion.createStatement();
+        ResultSet rs = statement.executeQuery("show tables from " + db.getDb());
 
-                Statement statement=conexion.createStatement();
-		ResultSet rs=statement.executeQuery("show tables from "+"freedb_practicas");
-               
-                
-                while(rs.next()) {
-			tables.add(rs.getString(1));
-                      
-		}
-		     
+        while (rs.next()) {
+            tables.add(rs.getString(1));
+
+        }
+
         return tables;
     }
 }
