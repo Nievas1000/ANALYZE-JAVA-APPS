@@ -84,6 +84,10 @@
                         <option>-ignorewarnings</option>
                     </options>
                     <injarNotExistsSkip>true</injarNotExistsSkip>
+                     <libs>
+                        <lib>${java.home}/jmods/java.base.jmod</lib>
+                        <lib>${java.home}/jmods/java.desktop.jmod</lib>
+                    </libs>
                 </configuration>
                 <dependencies>
                     <dependency>
