@@ -18,7 +18,11 @@ jobs:
           run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar 
 
   build:
-      runs-on: ubuntu-latest
+      strategy:
+          matrix:
+            os: [ubuntu-latest, macos-latest, windows-latest]
+            jdk: [8, 11, 17]
+      runs-on: ${{ matrix.os }}
       steps:
         - name: Checkout main branch from GitHub 
           uses: actions/checkout@v3
@@ -26,7 +30,7 @@ jobs:
           uses: actions/setup-java@v3
           with:
             distribution: 'temurin'
-            java-version: '17'
+            java-version: ${{ matrix.jdk }}
         - name: Have GitHub Actions Build Maven Project
           run: |
             mvn -B package --file pom.xml
