@@ -8,7 +8,6 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.release>11</maven.compiler.release>
-        <main.class>JFileChooserTest</main.class>
         <sonar.projectKey>Codojoio_AppCodojo</sonar.projectKey>
         <sonar.organization>codojoio</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
@@ -55,7 +54,32 @@
                   </archive>
               </configuration>
           </plugin>
-           <plugin>
+          <plugin>
+                <!-- Maven Shade Plugin para empaquetar las dependencias con la aplicacion -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.1</version>
+                <executions>
+                    <execution>
+                        <!-- Define cuando se ha de ejecutar el plugin para que se lance cuando NetBeans construye el proyecto -->
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <minimizeJar>true</minimizeJar>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <manifestEntries>
+                                        <Main-Class>interfaces.JFileChooserTest</Main-Class>
+                                    </manifestEntries>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>com.github.wvengen</groupId>
                 <artifactId>proguard-maven-plugin</artifactId>
                 <version>2.5.3</version>
@@ -66,16 +90,24 @@
                    </execution>
                 </executions>
                 <configuration>
-                    <obfuscate>true</obfuscate>                
+                    <obfuscate>true</obfuscate>
+                    <injar>${project.build.finalName}.jar</injar>               
                     <outjar>Codojo.jar</outjar>
                     <outputDirectory>${project.build.directory}</outputDirectory>
                     <proguardInclude>${project.basedir}/proguard.conf</proguardInclude>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>com.yourcompany</groupId>
+                            <artifactId>data</artifactId>
+                        </exclusion>
+                    </exclusions>
                     <options>
+                        <option>-libraryjars  ${java.home}</option>
                         <option>-dontshrink</option>
                         <option>-dontoptimize</option>
-                        <option>-keep public class interfaces.*{ public static void
-                                main(java.lang.String[]); }
-                        </option>
+                        <option>-keep class com.** { *; }</option>
+                        <option>-keep class interfaces.JFileChooserTest { *; }</option>
+                        <option>-keep class Classes.ClassDiscriptor { *; }</option>
                         <!-- This option will replace all strings in reflections method invocations with new class names.
                              For example, invokes Class.forName('className')-->
                         <option>-adaptclassstrings</option>
@@ -84,10 +116,6 @@
                         <option>-ignorewarnings</option>
                     </options>
                     <injarNotExistsSkip>true</injarNotExistsSkip>
-                     <libs>
-                        <lib>${java.home}/lib/rt.jar</lib>
-                        <lib>${java.home}/lib/jsse.jar</lib>
-                    </libs>
                 </configuration>
                 <dependencies>
                     <dependency>
@@ -101,3 +129,4 @@
 
     </build>
 </project>
+  
