@@ -166,7 +166,9 @@ public class ClassParser {
         line = line.trim();
         if (line.contains("class") || line.contains("interface")) {
             String[] parts = line.split("\\s+");
-
+            if(line.contains("interface")){
+                discriptor.interfaz=true;
+            }
             if (parts[3].equals("extends")) {
                 discriptor.extend = parts[4].substring(0, parts[4].length() - 1);
             } else if (parts[3].equals("implements")) {

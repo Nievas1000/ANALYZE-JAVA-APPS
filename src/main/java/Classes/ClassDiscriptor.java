@@ -17,6 +17,7 @@ import java.util.List;
 public class ClassDiscriptor {
 	public String packageName;
 	public String name;
+        public Boolean interfaz=false;
         public String constructor;
 	public String modifier;
 	public String extend;
@@ -38,6 +39,8 @@ public class ClassDiscriptor {
         this.members = members;
     }
 
+   
+
     public String getPackageName() {
         return packageName;
     }
@@ -53,6 +56,16 @@ public class ClassDiscriptor {
     public void setName(String name) {
         this.name = name;
     }
+
+    public Boolean getInterfaz() {
+        return interfaz;
+    }
+
+    public void setInterfaz(Boolean interfaz) {
+        this.interfaz = interfaz;
+    }
+
+   
 
     public String getConstructor() {
         return constructor;
@@ -101,6 +114,10 @@ public class ClassDiscriptor {
     public void setMembers(List<Member> members) {
         this.members = members;
     }
+
+
+    
+    
 
         
         

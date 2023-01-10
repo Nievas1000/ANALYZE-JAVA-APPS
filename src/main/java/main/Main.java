@@ -30,7 +30,7 @@ public class Main {
         System.out.println(args + "Dsa");
         String sCarpAct = System.getProperty(args, args);
         System.out.println(sCarpAct);
-        File file = new File(sCarpAct + File.separator + "src" + File.separator + "main" + File.separator + "java" + File.separator + "com");
+        File file = new File(sCarpAct + File.separator + "src" );//+ File.separator + "main" + File.separator + "java" + File.separator + "com");
         System.out.println(file);
         files = new ArrayList();
         if (file != null && file.exists()) {
@@ -66,7 +66,8 @@ public class Main {
 //        }
         StringBuilder builder = new StringBuilder();
         for (ClassDiscriptor cd : cdList) {
-            builder.append("\r\nClass: " + cd.name);
+            builder.append("\r\nName: " + cd.name);
+            builder.append("\r\n\tInterfaz: " + cd.interfaz);
             cd.setConstructor("null");
             builder.append("\r\n\tConstructors: ").append(cd.getConstructor());
             builder.append("\r\n\tExtends: " + cd.extend);
