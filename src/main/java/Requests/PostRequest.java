@@ -15,7 +15,7 @@ public class PostRequest {
 	
 	public static void PostRequest(JsonObject json) throws MalformedURLException {
 		try {
-                    String respuesta;
+                        String str ="";
 			URL url=new URL("https://3itqr368e0.execute-api.us-east-1.amazonaws.com/test/codojo");
 			HttpURLConnection conexion=(HttpURLConnection) url.openConnection();
 			conexion.setRequestMethod("POST");
@@ -30,8 +30,10 @@ public class PostRequest {
 			Reader in = new BufferedReader(new InputStreamReader(conexion.getInputStream(), "UTF-8"));
 			System.out.println(conexion.getResponseCode());
                         JOptionPane.showMessageDialog(null,conexion.getResponseCode());
-			for (int c; (c = in.read()) >= 0;)
-	                       System.out.print((char)c);
+			for (int c; (c = in.read()) >= 0;){
+                            str=str+(char)c;
+                        }
+	                        JOptionPane.showMessageDialog(null, str);
                        
 			
 		} catch (Exception e) {

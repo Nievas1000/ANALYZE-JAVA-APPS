@@ -55,7 +55,7 @@ public class Main {
         }
 
         List<ClassDiscriptor> cdList = new ArrayList();
-//        List<DatabaseDescriptor> dbList = new ArrayList();
+        //List<DatabaseMetaData> dbList = new ArrayList();
         for (File f : files) {
             System.out.println("File: " + f.getAbsolutePath());
             ClassParser parser = new ClassParser(f);
@@ -72,10 +72,10 @@ public class Main {
         if (!db.getDb().isEmpty() && !db.getHost().isEmpty() && !db.getPort().isEmpty() && !db.getPassword().isEmpty() && !db.getUsername().isEmpty()) {
             try {
 
-                List<String> lista = db.getTables(db);
-                for (String string : lista) {
-                    System.out.println(string);
-                }
+               
+//                for (String string : lista) {
+//                    System.out.println(string);
+//                }
             } catch (Exception e) {
                 System.out.println(e);
                 JOptionPane.showMessageDialog(null, e.getMessage());
@@ -128,13 +128,14 @@ public class Main {
             }
 
         }
-
+        try{
+            if (!db.getDb().isEmpty() && !db.getHost().isEmpty() && !db.getPort().isEmpty() && !db.getPassword().isEmpty() && !db.getUsername().isEmpty()) {
+               List<String> lista = db.getTables(db);
+            }
         HashMap<String, List> map = new HashMap();
         map.put("classes", cdList);
-//        map.put("databases", dbList);
-        //map.put("modifier",cdList);
-        //map.put("Constructors",cdList);
-        try {
+        map.put("tables", lista);
+       
             String json = toJSON(map);
             StringSelection selection = new StringSelection(json);
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
