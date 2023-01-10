@@ -129,12 +129,16 @@ public class Main {
 
         }
         try{
+             HashMap<String, List> map = new HashMap();
             if (!db.getDb().isEmpty() && !db.getHost().isEmpty() && !db.getPort().isEmpty() && !db.getPassword().isEmpty() && !db.getUsername().isEmpty()) {
                List<String> lista = db.getTables(db);
+                 map.put("classes", cdList);
+                 map.put("tables", lista);
+            }else{
+                 map.put("classes", cdList);
             }
-        HashMap<String, List> map = new HashMap();
-        map.put("classes", cdList);
-        map.put("tables", lista);
+       
+        
        
             String json = toJSON(map);
             StringSelection selection = new StringSelection(json);
