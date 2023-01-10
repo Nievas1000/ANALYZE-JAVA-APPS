@@ -1,8 +1,5 @@
 package main;
 
-
-
-
 import Classes.ClassDiscriptor;
 import Classes.ClassDiscriptor.Member;
 import Classes.ClassParser;
@@ -11,31 +8,17 @@ import java.awt.Toolkit;
 import Requests.PostRequest;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.Reader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import javax.swing.JOptionPane;
 
 public class Main {
@@ -69,25 +52,27 @@ public class Main {
 //            }
         }
 
-        if (!db.getDb().isEmpty() && !db.getHost().isEmpty() && !db.getPort().isEmpty() && !db.getPassword().isEmpty() && !db.getUsername().isEmpty()) {
-            try {
-
-               
-//                for (String string : lista) {
-//                    System.out.println(string);
-//                }
-            } catch (Exception e) {
-                System.out.println(e);
-                JOptionPane.showMessageDialog(null, e.getMessage());
-            }
-        }
+//        if (!db.getDb().isEmpty() && !db.getHost().isEmpty() && !db.getPort().isEmpty() && !db.getPassword().isEmpty() && !db.getUsername().isEmpty()) {
+//            try {
+//
+//               
+////                for (String string : lista) {
+////                    System.out.println(string);
+////                }
+//            } catch (Exception e) {
+//                System.out.println(e);
+//                JOptionPane.showMessageDialog(null, e.getMessage());
+//            }
+//        }
         StringBuilder builder = new StringBuilder();
         for (ClassDiscriptor cd : cdList) {
             builder.append("\r\nClass: " + cd.name);
+            cd.setConstructor("null");
+            builder.append("\r\n\tConstructors: ").append(cd.getConstructor());
             builder.append("\r\n\tExtends: " + cd.extend);
             builder.append("\r\n\tImplements: " + cd.implement);
-            builder.append("\r\n\tPackage: " + cd.packageName);
-            builder.append("\r\n\tLast Modified: " + cd.lastModified);
+            // builder.append("\r\n\tPackage: " + cd.packageName);
+            // builder.append("\r\n\tLast Modified: " + cd.lastModified);
             Long myLong = Long.parseLong(cd.lastModified);
             Date dateD = new Date(myLong);
             Calendar dateC = new GregorianCalendar();
@@ -128,18 +113,16 @@ public class Main {
             }
 
         }
-        try{
-             HashMap<String, List> map = new HashMap();
+        try {
+            HashMap<String, List> map = new HashMap();
             if (!db.getDb().isEmpty() && !db.getHost().isEmpty() && !db.getPort().isEmpty() && !db.getPassword().isEmpty() && !db.getUsername().isEmpty()) {
-               List<String> lista = db.getTables(db);
-                 map.put("classes", cdList);
-                 map.put("tables", lista);
-            }else{
-                 map.put("classes", cdList);
+                List<String> lista = db.getTables(db);
+                map.put("classes", cdList);
+                map.put("tables", lista);
+            } else {
+                map.put("classes", cdList);
             }
-       
-        
-       
+
             String json = toJSON(map);
             StringSelection selection = new StringSelection(json);
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
@@ -171,8 +154,7 @@ public class Main {
         Gson gson = new Gson();
         JsonObject json = gson.toJsonTree(map).getAsJsonObject();
 
-        
-        PostRequest.PostRequest(json);
+        //PostRequest.PostRequest(json);
         return json.toString();
     }
 
@@ -186,22 +168,4 @@ public class Main {
             }
         }
     }
-
-//    public List getTables() throws ClassNotFoundException, SQLException {
-//        List<String> tables=new ArrayList();
-//        Class.forName("com.mysql.jdbc.Driver");
-//        Connection conexion = DriverManager.getConnection(
-//                "jdbc:mysql://sql.freedb.tech:3306/freedb_practicas", "freedb_leonardo", "kWPgVw8z5Bg?9MU");
-//
-//                Statement statement=conexion.createStatement();
-//		ResultSet rs=statement.executeQuery("show tables from "+"freedb_practicas");
-//               
-//                
-//                while(rs.next()) {
-//			tables.add(rs.getString(1));
-//                      
-//		}
-//		     
-//        return tables;
-//    }
 }
