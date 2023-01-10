@@ -49,10 +49,10 @@ public class ClassParser {
 //				System.out.println("DB CODE DETECTED!!!");
 //				parseDB(lines);
 //			}
-            if (discriptor.packageName == null) {
-                getPackageName(lines.get(i));
-                continue;
-            }
+//            if (discriptor.packageName == null) {
+//                getPackageName(lines.get(i));
+//                continue;
+//            }
             if (discriptor.name == null) {
                 getClassName(lines.get(i));
                 continue;
@@ -144,23 +144,23 @@ public class ClassParser {
         }
     }
 
-    public void getPackageName(String line) {
-        line = line.trim();
-        if (line.startsWith("package")) {
-            String[] parts = line.split("\\s+");
-            if (parts.length == 2) {
-                if (parts[1].endsWith(";")) {
-                    discriptor.packageName = parts[1].substring(0, parts[1].length() - 1);
-                } else {
-                    discriptor.packageName = parts[1];
-                }
-            } else if (parts.length == 3 && parts[2].equals(";")) {
-                discriptor.packageName = parts[1];
-            }
-        } else if (getClassName(line)) {
-            discriptor.packageName = "default";
-        }
-    }
+//    public void getPackageName(String line) {
+//        line = line.trim();
+//        if (line.startsWith("package")) {
+//            String[] parts = line.split("\\s+");
+//            if (parts.length == 2) {
+//                if (parts[1].endsWith(";")) {
+//                    discriptor.packageName = parts[1].substring(0, parts[1].length() - 1);
+//                } else {
+//                    discriptor.packageName = parts[1];
+//                }
+//            } else if (parts.length == 3 && parts[2].equals(";")) {
+//                discriptor.packageName = parts[1];
+//            }
+//        } else if (getClassName(line)) {
+//            discriptor.packageName = "default";
+//        }
+//    }
 
     public boolean getClassName(String line) {
         line = line.trim();
