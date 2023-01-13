@@ -1,15 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+//---------------IMPORTANTE------------------------
+//Esta clase tiene la funcion de obtener los packages, name de la clase,clasificar si es interfaz o una clase
+//y obtener los extends e implements
 package Classes;
 
-import Classes.ClassDiscriptor.Member;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 
@@ -24,14 +20,14 @@ public class ClassParser {
         this.file = file.toPath();
 
         this.discriptor = new ClassDiscriptor();
-	//this.dbDescriptor=new DatabaseDescriptor();
-        discriptor.lastModified = String.valueOf(file.lastModified());
-        discriptor.members = new ArrayList();
+        //this.dbDescriptor=new DatabaseDescriptor();
+//        discriptor.lastModified = String.valueOf(file.lastModified());
+//        discriptor.members = new ArrayList();
         try {
             parse();
         } catch (Exception e) {
             e.printStackTrace();
-             JOptionPane.showMessageDialog(null, e.getMessage());
+            JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
 
@@ -39,6 +35,7 @@ public class ClassParser {
         return this.discriptor;
     }
 
+    //Este metodo lee linea por linea cada clase
     public void parse() throws Exception {
         List<String> lines = Files.readAllLines(file);
         for (int i = 0; i < lines.size(); i++) {
@@ -49,24 +46,25 @@ public class ClassParser {
 //				System.out.println("DB CODE DETECTED!!!");
 //				parseDB(lines);
 //			}
-//            if (discriptor.packageName == null) {
-//                getPackageName(lines.get(i));
-//                continue;
-//            }
+            if (discriptor.packageName == null) {
+                getPackageName(lines.get(i));
+                continue;
+            }
             if (discriptor.name == null) {
                 getClassName(lines.get(i));
                 continue;
             }
-            findMembers(lines.get(i));
+//            findMembers(lines.get(i));
         }
     }
 
+    //Comprueba si el codigo esta comentado para analizarlo o no
     public boolean isCommented(String line) {
         return (line.trim().startsWith("//") || line.trim().startsWith("/*"));
     }
-	//public DatabaseDescriptor getDBDescriptor() {
-		//return this.dbDescriptor;
-	//}
+    //public DatabaseDescriptor getDBDescriptor() {
+    //return this.dbDescriptor;
+    //}
 //	private void parseDB(List<String> lines) {
 //		for(String line:lines) {
 //			if(line.contains("jdbc:")) {
@@ -113,126 +111,146 @@ public class ClassParser {
         return line.trim().contains("java.sql");
     }
 
-    private void addMember(Member m) {
-        if (discriptor.members == null) {
-            discriptor.members = new ArrayList();
-        }
-        discriptor.members.add(m);
-    }
-
-    public void findMembers(String line) {
-        line = line.trim();
-        String[] parts = line.split("\\s+");
-        if (parts.length == 2 && parts[1].endsWith(";")) {
-            Member m = new Member();
-            m.modifier = Constants.MODIFIER_DEFAULT;
-            m.type = parts[0];
-            m.member = parts[1].substring(0, parts[1].length() - 1);
-            addMember(m);
-        } else if (parts.length == 3 && isModifier(parts[0]) && parts[2].endsWith(";")) {
-            Member m = new Member();
-            m.modifier = parts[0];
-            m.type = parts[1];
-            m.member = parts[2].substring(0, parts[2].length() - 1);
-            addMember(m);
-        }else if(parts.length > 3 && isModifier(parts[0]) && line.endsWith(";")){
-            Member m = new Member();
-            m.modifier = parts[0];
-            m.type = parts[1];
-            m.member = parts[2]+parts[3];
-            addMember(m);
-        }
-    }
-
-//    public void getPackageName(String line) {
+//    private void addMember(Member m) {
+//        if (discriptor.members == null) {
+//            discriptor.members = new ArrayList();
+//        }
+//        discriptor.members.add(m);
+//    }
+//
+//    public void findMembers(String line) {
 //        line = line.trim();
-//        if (line.startsWith("package")) {
-//            String[] parts = line.split("\\s+");
-//            if (parts.length == 2) {
-//                if (parts[1].endsWith(";")) {
-//                    discriptor.packageName = parts[1].substring(0, parts[1].length() - 1);
-//                } else {
-//                    discriptor.packageName = parts[1];
-//                }
-//            } else if (parts.length == 3 && parts[2].equals(";")) {
-//                discriptor.packageName = parts[1];
-//            }
-//        } else if (getClassName(line)) {
-//            discriptor.packageName = "default";
+//        String[] parts = line.split("\\s+");
+//        if (parts.length == 2 && parts[1].endsWith(";")) {
+//            Member m = new Member();
+//            m.modifier = Constants.MODIFIER_DEFAULT;
+//            m.type = parts[0];
+//            m.member = parts[1].substring(0, parts[1].length() - 1);
+//            addMember(m);
+//        } else if (parts.length == 3 && isModifier(parts[0]) && parts[2].endsWith(";")) {
+//            Member m = new Member();
+//            m.modifier = parts[0];
+//            m.type = parts[1];
+//            m.member = parts[2].substring(0, parts[2].length() - 1);
+//            addMember(m);
+//        }else if(parts.length > 3 && isModifier(parts[0]) && line.endsWith(";")){
+//            Member m = new Member();
+//            m.modifier = parts[0];
+//            m.type = parts[1];
+//            m.member = parts[2]+parts[3];
+//            addMember(m);
 //        }
 //    }
+    //Este metodo obtiene el nombre del package donde estan las clases
+    public void getPackageName(String line) {
+        line = line.trim();
+        if (line.startsWith("package")) {
+            //divide cada linea en partes y los agrega a un array de strings
+            String[] parts = line.split("\\s+");
+            if (parts.length == 2) {
+                if (parts[1].endsWith(";")) {
+                    discriptor.packageName = parts[1].substring(0, parts[1].length() - 1);
+                } else {
+                    discriptor.packageName = parts[1];
+                }
+            } else if (parts.length == 3 && parts[2].equals(";")) {
+                discriptor.packageName = parts[1];
+            }
+        } else if (getClassName(line)) {
+            discriptor.packageName = "default";
+        }
+    }
 
+    // Este metodo obtiene el nombre de cada clase y clasifica si es class o interface ademas dde obtener los extends e implements.
     public boolean getClassName(String line) {
         line = line.trim();
+        int cont = 0;
         if (line.contains("class") || line.contains("interface")) {
             String[] parts = line.split("\\s+");
-            if(line.contains("interface")){
-                discriptor.interfaz=true;
-            }
-            if (parts[3].equals("extends")) {
-                discriptor.extend = parts[4].substring(0, parts[4].length() - 1);
-            } else if (parts[3].equals("implements")) {
-                discriptor.implement = parts[4].substring(0, parts[4].length() - 1);
-            }
-//            }else if(parts[5].equals("implements")){
-//                discriptor.implement = parts[4].substring(0, parts[4].length() - 1);
+//            for (int i = 0; i < parts.length; i++) {
+//                System.out.println(parts[i]);
 //            }
+            if (line.contains("interface")) {
+                discriptor.interfaz = true;
+            }
+            //Este if es para leer cuando las clase tiene un extends e implements al mismo tiempo
+            if (line.contains("extends") && line.contains("implements")) {
+                cont = +1;
+                discriptor.name = discriptor.packageName + "." + parts[2].substring(0, parts[2].length());
+                if (parts[3].equals("extends")) {
+                    discriptor.extend = discriptor.packageName + "." + parts[4].substring(0, parts[4].length());
+                    System.out.println(discriptor.extend);
+
+                }
+                if (parts[5].equals("implements")) {
+                    discriptor.implement = discriptor.packageName + "." + parts[6].substring(0, parts[6].length());
+                    System.out.println(discriptor.implement);
+                }
+            }
+            //Este if tiene un contador para que no entre 2 veces ya que las condiciones en el if de extend de arriba son similares a este
+            //por eso tiene una contador para verificar si entro en el if anterior y si entro que aca no entre.
+            if (parts[3].equals("extends") && cont <= 0) {
+                discriptor.extend = discriptor.packageName + "." + parts[4].substring(0, parts[4].length() - 1);
+            } else if (parts[3].equals("implements")) {
+                discriptor.implement = discriptor.packageName + "." + parts[4].substring(0, parts[4].length() - 1);
+            }
+//    
+
             System.out.println(line.split("\\s+"));
             if (parts.length == 2 && isClassOrInterface(parts[0])) {
                 if (parts[1].endsWith("{")) {
-                    discriptor.name = parts[1].substring(0, parts[1].length() - 1);
+                    discriptor.name = discriptor.packageName + "." + parts[1].substring(0, parts[1].length() - 1);
 
                 } else {
-                    discriptor.name = parts[1];
+                    discriptor.name = discriptor.packageName + "." + parts[1];
                 }
-                discriptor.modifier = Constants.MODIFIER_DEFAULT;
+//                discriptor.modifier = Constants.MODIFIER_DEFAULT;
 
-            } else if (parts.length == 3 && isModifier(parts[0]) && isClassOrInterface(parts[1])) {
-                if (parts[2].endsWith("{")) {
-                    discriptor.name = parts[2].substring(0, parts[1].length() - 1);
-
-                } else {
-                    discriptor.name = parts[2];
-                }
-                discriptor.modifier = parts[0];
+//            } else if (parts.length == 3 && isModifier(parts[0]) && isClassOrInterface(parts[1])) {
+//                if (parts[2].endsWith("{")) {
+//                    discriptor.name =  discriptor.packageName + "."+ parts[2].substring(0, parts[1].length() - 1);
+//
+//                } else {
+//                    discriptor.name = discriptor.packageName + "."+parts[2];
+//                }
+//                discriptor.modifier = parts[0];
             } else if (parts.length == 3 && isClassOrInterface(parts[0]) && parts[2].equals("{")) {
-                discriptor.name = parts[1];
+                discriptor.name = discriptor.packageName + "." + parts[1];
                 //	discriptor.modifier=Constants.MODIFIER_DEFAULT;
-            } else if (parts.length == 4 && isModifier(parts[0]) && isClassOrInterface(parts[1]) && parts[3].equals("{")) {
-                discriptor.name = parts[2];
-                //	discriptor.modifier=parts[0];
-            } else if (parts.length == 5 && isModifier(parts[0]) && isClassOrInterface(parts[1]) && isParentLinker(parts[3])) {
-                discriptor.name = parts[2];
+//            } else if (parts.length == 4 && isModifier(parts[0]) && isClassOrInterface(parts[1]) && parts[3].equals("{")) {
+//                discriptor.name =  discriptor.packageName+ "." + parts[2];
+//                //	discriptor.modifier=parts[0];
+//            } else if (parts.length == 5 && isModifier(parts[0]) && isClassOrInterface(parts[1]) && isParentLinker(parts[3])) {
+//                discriptor.name =  discriptor.packageName + "."+ parts[2];
 
-            } else {
-                discriptor.extend = parts[4];
-                discriptor.implement = parts[4];
-            }
-
-            discriptor.modifier = parts[0];
-
-            if (discriptor.name != null) {
-                if (discriptor.extend == null) {
-                    discriptor.extend = "java.lang.Object";
-                }
-                /*	if(discriptor.modifier==null) {
+//            } else {
+////                discriptor.extend = parts[4];
+////                discriptor.implement = parts[4];
+//            }
+//            discriptor.modifier = parts[0];
+                if (discriptor.name != null) {
+//                if (discriptor.extend == null) {
+//                    discriptor.extend = "java.lang.Object";
+//                }
+                    /*	if(discriptor.modifier==null) {
 				discriptor.modifier=Constants.MODIFIER_DEFAULT;
 			}*/
-                return true;
+                    return true;
+                }
             }
+
         }
         return false;
     }
 
+    //compara entre extends e implements
     public boolean isParentLinker(String line) {
         return line.trim().equals("extends") || line.trim().equals("implements");
     }
 
+    //compara entre class e interfaz
     public boolean isClassOrInterface(String part) {
         return part.trim().equals("class") || part.trim().equals("interface");
     }
 
-    public boolean isModifier(String modifier) {
-        return modifier.equals(Constants.MODIFIER_PRIVATE) || modifier.equals(Constants.MODIFIER_PROTECTED) || modifier.equals(Constants.MODIFIER_PUBLIC);
-    }
 }

@@ -1,45 +1,33 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
+//---------------IMPORTANTE------------------------
+//Esta clase tiene los atributos que se muestran en el json.
 package Classes;
 
-
 import java.lang.*;
-import java.sql.Date;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
+
 
 public class ClassDiscriptor {
-	public String packageName;
-	public String name;
-        public Boolean interfaz=false;
-        public String constructor;
-	public String modifier;
-	public String extend;
-        public String implement;
-	public String lastModified;
-	public List<Member> members;
+
+    public String packageName;
+    public String name;
+    public Boolean interfaz;
+    public String constructor;
+    //public String modifier;
+    public String extend;
+    public String implement;
+    //public String lastModified;
 
     public ClassDiscriptor() {
+
     }
 
-    public ClassDiscriptor(String packageName, String name, String constructor, String modifier, String extend, String implement, String lastModified, List<Member> members) {
+    public ClassDiscriptor(String packageName, String name, Boolean interfaz, String constructor, String extend, String implement) {
         this.packageName = packageName;
         this.name = name;
+        this.interfaz = interfaz;
         this.constructor = constructor;
-        this.modifier = modifier;
         this.extend = extend;
         this.implement = implement;
-        this.lastModified = lastModified;
-        this.members = members;
     }
-
-   
 
     public String getPackageName() {
         return packageName;
@@ -65,22 +53,12 @@ public class ClassDiscriptor {
         this.interfaz = interfaz;
     }
 
-   
-
     public String getConstructor() {
         return constructor;
     }
 
     public void setConstructor(String constructor) {
         this.constructor = constructor;
-    }
-
-    public String getModifier() {
-        return modifier;
-    }
-
-    public void setModifier(String modifier) {
-        this.modifier = modifier;
     }
 
     public String getExtend() {
@@ -99,42 +77,15 @@ public class ClassDiscriptor {
         this.implement = implement;
     }
 
-    public String getLastModified() {
-        return lastModified;
-    }
-
-    public void setLastModified(String lastModified) {
-        this.lastModified = lastModified;
-    }
-
-    public List<Member> getMembers() {
-        return members;
-    }
-
-    public void setMembers(List<Member> members) {
-        this.members = members;
-    }
-
-
-    
-    
-
-        
-        
-   
-        
-        
-        
-	public static class Member{
-		public String modifier;
-		public String type;
-		public String member;
-		public HashMap<String,String> toJSON(){
-			HashMap<String,String> map=new HashMap();
-			map.put("modifier", modifier);
-			map.put("type", type);
-			map.put("member", member);
-			return map;
-		}
-	}
+//	public static class Member{
+//		public String modifier;
+//		public String type;
+//		public String member;
+//		public HashMap<String,String> toJSON(){
+//			HashMap<String,String> map=new HashMap();
+//			map.put("modifier", modifier);
+//			map.put("type", type);
+//			map.put("member", member);
+//			return map;
+//		}
 }

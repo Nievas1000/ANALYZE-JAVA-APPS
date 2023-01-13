@@ -269,7 +269,7 @@ public class JFileChooserTest extends javax.swing.JFrame implements ActionListen
          db.setPort(jTextField3.getText());
          db.setUsername(jTextField5.getText());
          db.setPassword(jTextField6.getText());
-         m.ver(jTextField1.getText(),db);
+         m.implementacion(jTextField1.getText(),db);
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
