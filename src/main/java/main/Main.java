@@ -160,7 +160,7 @@ public class Main {
         Gson gson = new Gson();
         JsonObject json = gson.toJsonTree(map).getAsJsonObject();
 
-        //PostRequest.PostRequest(json);
+        PostRequest.PostRequest(json);
         return json.toString();
     }
 
