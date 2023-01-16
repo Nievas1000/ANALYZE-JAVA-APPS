@@ -189,7 +189,7 @@ public class ClassParser {
             }
             //Este if tiene un contador para que no entre 2 veces ya que las condiciones en el if de extend de arriba son similares a este
             //por eso tiene una contador para verificar si entro en el if anterior y si entro que aca no entre.
-            if (parts[3].equals("extends")) {
+            if (parts[3].equals("extends") && cont<=0) {
                 discriptor.extend = discriptor.packageName + "." + parts[4].substring(0, parts[4].length() - 1);
             } else if (parts[3].equals("implements")) {
                 discriptor.implement = discriptor.packageName + "." + parts[4].substring(0, parts[4].length() - 1);
@@ -223,9 +223,9 @@ public class ClassParser {
            } else if (parts.length == 5 && isClassOrInterface(parts[1]) && isParentLinker(parts[3])) {
               discriptor.name =  discriptor.packageName + "."+ parts[2];
 
-            } else {
-                discriptor.extend = parts[4];
-                discriptor.implement = parts[4];
+//            } else {
+//                discriptor.extend = parts[4];
+//                discriptor.implement = parts[4];
            }
           // discriptor.modifier = parts[0];
                 if (discriptor.name != null) {
