@@ -189,7 +189,7 @@ public class ClassParser {
             }
             //Este if tiene un contador para que no entre 2 veces ya que las condiciones en el if de extend de arriba son similares a este
             //por eso tiene una contador para verificar si entro en el if anterior y si entro que aca no entre.
-            if (parts[3].equals("extends") && cont <= 0) {
+            if (parts[3].equals("extends")) {
                 discriptor.extend = discriptor.packageName + "." + parts[4].substring(0, parts[4].length() - 1);
             } else if (parts[3].equals("implements")) {
                 discriptor.implement = discriptor.packageName + "." + parts[4].substring(0, parts[4].length() - 1);
@@ -206,28 +206,28 @@ public class ClassParser {
                 }
 //                discriptor.modifier = Constants.MODIFIER_DEFAULT;
 
-//            } else if (parts.length == 3 && isModifier(parts[0]) && isClassOrInterface(parts[1])) {
-//                if (parts[2].endsWith("{")) {
-//                    discriptor.name =  discriptor.packageName + "."+ parts[2].substring(0, parts[1].length() - 1);
-//
-//                } else {
-//                    discriptor.name = discriptor.packageName + "."+parts[2];
-//                }
-//                discriptor.modifier = parts[0];
+            } else if (parts.length == 3 && isClassOrInterface(parts[1])) {
+                if (parts[2].endsWith("{")) {
+                    discriptor.name =  discriptor.packageName + "."+ parts[2].substring(0, parts[1].length() - 1);
+
+                } else {
+                    discriptor.name = discriptor.packageName + "."+parts[2];
+                }
+               // discriptor.modifier = parts[0];
             } else if (parts.length == 3 && isClassOrInterface(parts[0]) && parts[2].equals("{")) {
                 discriptor.name = discriptor.packageName + "." + parts[1];
                 //	discriptor.modifier=Constants.MODIFIER_DEFAULT;
-//            } else if (parts.length == 4 && isModifier(parts[0]) && isClassOrInterface(parts[1]) && parts[3].equals("{")) {
-//                discriptor.name =  discriptor.packageName+ "." + parts[2];
+            } else if (parts.length == 4 && isClassOrInterface(parts[1]) && parts[3].equals("{")) {
+                discriptor.name =  discriptor.packageName+ "." + parts[2];
 //                //	discriptor.modifier=parts[0];
-//            } else if (parts.length == 5 && isModifier(parts[0]) && isClassOrInterface(parts[1]) && isParentLinker(parts[3])) {
-//                discriptor.name =  discriptor.packageName + "."+ parts[2];
+           } else if (parts.length == 5 && isClassOrInterface(parts[1]) && isParentLinker(parts[3])) {
+              discriptor.name =  discriptor.packageName + "."+ parts[2];
 
-//            } else {
-////                discriptor.extend = parts[4];
-////                discriptor.implement = parts[4];
-//            }
-//            discriptor.modifier = parts[0];
+            } else {
+                discriptor.extend = parts[4];
+                discriptor.implement = parts[4];
+           }
+          // discriptor.modifier = parts[0];
                 if (discriptor.name != null) {
 //                if (discriptor.extend == null) {
 //                    discriptor.extend = "java.lang.Object";
@@ -238,10 +238,10 @@ public class ClassParser {
                     return true;
                 }
             }
-
+ return false;
         }
-        return false;
-    }
+        
+    
 
     //compara entre extends e implements
     public boolean isParentLinker(String line) {
