@@ -144,7 +144,7 @@ public class Main {
 //                map.put("tables", lista);
 //            } else {
                 map.put("UserAplicationKey",userkey);
-                map.put("AplicationName", filename);
+                map.put("AplicationName", filename.getName());
                 map.put("classes", cdList);
                 
             //}
@@ -154,9 +154,9 @@ public class Main {
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             clipboard.setContents(selection, selection);
             String user = System.getProperty("user.name");
-            String dir = System.getProperty("user.dir");
+            String dir=System.getProperty("user.dir");
             
-            String pathFile = dir + filename + ".json";
+            String pathFile = dir + "\\" + filename.getName() + ".json";
             try {
                 //se escribe el json en el pathfile del usuario y se guarda alli
                 FileWriter jsonFile = new FileWriter(pathFile);
@@ -187,7 +187,7 @@ public class Main {
         Gson gson = new Gson();
         JsonObject json = gson.toJsonTree(map).getAsJsonObject();
 
-        PostRequest.PostRequest(json);
+        //PostRequest.PostRequest(json);
         return json.toString();
     }
 
