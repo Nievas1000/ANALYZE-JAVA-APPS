@@ -15,22 +15,42 @@ import java.util.HashMap;
 import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.util.Properties;
 
 import javax.swing.JOptionPane;
 
 public class Main {
 
     List<File> files;
+    
+//    public static void main(String[] args) {
+//        
+//    }
 
-    public void implementacion(String args, DataBaseData db) {
+    //Metodo principal que desencadena todo los procesos
+    public void implementacion(String args,String userkey) {
         // DataBaseData db=new DataBaseData();
-        System.out.println(args + "Dsa");
+//        try{
+//            filereader();
+//        }catch(Exception e){
+//            System.out.println(e.getMessage());
+//        }
+            
+       // System.out.println(args + "Dsa");
         //trae la direccion del archivo
         String sCarpAct = System.getProperty(args, args);
-        System.out.println(sCarpAct);
+        System.out.println(sCarpAct + "1");
+        //System.out.println(sCarpAct);
         //Se crea un nuevo file y se le pasa como argumento la direccion del archivo
+        File filename = new File(sCarpAct);
         File file = new File(sCarpAct + File.separator + "src");//+ File.separator + "main" + File.separator + "java" + File.separator + "com");
         System.out.println(file);
+        System.out.println(filename.getName());
         files = new ArrayList();
         if (file != null && file.exists()) {
             //trae el archivo
@@ -114,24 +134,29 @@ public class Main {
 //            }
         }
         try {
-            HashMap<String, List> map = new HashMap();
+            HashMap<String,Object> map = new HashMap();
             //comprobacion de si el usuario ingreso sus datos de la db
-            if (!db.getDb().isEmpty() && !db.getHost().isEmpty() && !db.getPort().isEmpty() && !db.getPassword().isEmpty() && !db.getUsername().isEmpty()) {
-                //trae las tablas de la db
-                List<String> lista = db.getTables(db);
-                //se agrega la lista a un hashmap
+//            if (!db.getDb().isEmpty() && !db.getHost().isEmpty() && !db.getPort().isEmpty() && !db.getPassword().isEmpty() && !db.getUsername().isEmpty()) {
+//                //trae las tablas de la db
+//                List<String> lista = db.getTables(db);
+//                //se agrega la lista a un hashmap
+//                map.put("classes", cdList);
+//                map.put("tables", lista);
+//            } else {
+                map.put("UserAplicationKey",userkey);
+                map.put("AplicationName", filename);
                 map.put("classes", cdList);
-                map.put("tables", lista);
-            } else {
-                map.put("classes", cdList);
-            }
+                
+            //}
 
             String json = toJSON(map);
             StringSelection selection = new StringSelection(json);
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             clipboard.setContents(selection, selection);
             String user = System.getProperty("user.name");
-            String pathFile = "C:\\Users\\" + user + "\\Desktop\\" + user + ".json";
+            String dir = System.getProperty("user.dir");
+            
+            String pathFile = dir + filename + ".json";
             try {
                 //se escribe el json en el pathfile del usuario y se guarda alli
                 FileWriter jsonFile = new FileWriter(pathFile);
@@ -152,6 +177,8 @@ public class Main {
         }
 
     }
+
+
     //esta funcion 
 
     //Este metodo transforma un hashmap a json mediante la dependencia de google.gson
@@ -175,4 +202,40 @@ public class Main {
             }
         }
     }
+    //Este metodo obtiene los datos del archivo de propiedades y llama al metodo implementacion que desencadena todo el programa
+     public void filereader() throws IOException{
+
+        try (InputStream input = new FileInputStream(System.getProperty("user.dir") + "\\"+"AddAppToCodojoConfig.config.properties")) {
+            System.out.println(System.getProperty("user.dir"));
+            Properties prop = new Properties();
+
+            // load a properties file
+            prop.load(input);
+            String filepath;
+            String userkey;
+            // get the property value and print it out
+            userkey=prop.getProperty("USER.APPLICATION.KEY");
+            filepath=prop.getProperty("APPLICATION.FILEPATH");
+            System.out.println(filepath);
+            Main main=new Main();
+            main.implementacion(filepath, userkey);
+           // System.out.println(prop.getProperty("db.password"));
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+
+    }
 }
+          
+        
+        
+        
+    
+//    public static void main(String[] args) {
+//        Main mainclass=new Main();
+//        mainclass.implementacion(args, db);
+//    }
+
+

@@ -49,7 +49,7 @@
                   <archive>
                       <manifest>
                           <addClasspath>true</addClasspath>
-                          <mainClass>interfaces.JFileChooserTest</mainClass>
+                          <mainClass>main.MainEjecute</mainClass>
                       </manifest>
                   </archive>
               </configuration>
@@ -71,7 +71,7 @@
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <manifestEntries>
-                                        <Main-Class>interfaces.JFileChooserTest</Main-Class>
+                                        <Main-Class>main.MainEjecute</Main-Class>
                                     </manifestEntries>
                                 </transformer>
                             </transformers>
@@ -106,7 +106,7 @@
                         <option>-dontshrink</option>
                         <option>-dontoptimize</option>
                         <option>-keep class com.** { *; }</option>
-                        <option>-keep class interfaces.JFileChooserTest { *; }</option>
+                        <option>-keep class main.MainEjecute { *; }</option>
                         <option>-keep class Classes.ClassDiscriptor { *; }</option>
                         <!-- This option will replace all strings in reflections method invocations with new class names.
                              For example, invokes Class.forName('className')-->

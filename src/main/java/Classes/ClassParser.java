@@ -4,9 +4,11 @@
 package Classes;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 import javax.swing.JOptionPane;
 
 public class ClassParser {
@@ -241,7 +243,19 @@ public class ClassParser {
  return false;
         }
         
-    
+    public void filereader() throws IOException{
+        File files=new File("C:\\Users\\Leoo\\Downloads\\AddAppToCodojoConfig.txt");
+         String[] parts;
+         List<String> lines = Files.readAllLines(files.toPath());
+         for (int i = 0; i < lines.size(); i++) {
+            parts=lines.get(i).split("\\s+");
+             System.out.println(parts[i]);
+        }
+          
+        
+        
+        
+    }
 
     //compara entre extends e implements
     public boolean isParentLinker(String line) {

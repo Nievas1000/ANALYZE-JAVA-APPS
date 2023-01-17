@@ -12,6 +12,8 @@ public class ClassDiscriptor {
     public Boolean interfaz;
     public String constructor;
     //public String modifier;
+    public String pathfile;
+    public String userkey;
     public String extend;
     public String implement;
     //public String lastModified;
@@ -20,15 +22,36 @@ public class ClassDiscriptor {
 
     }
 
-    public ClassDiscriptor(String packageName, String name, Boolean interfaz, String constructor, String extend, String implement) {
+    public ClassDiscriptor(String packageName, String name, Boolean interfaz, String constructor, String pathfile, String userkey, String extend, String implement) {
         this.packageName = packageName;
         this.name = name;
         this.interfaz = interfaz;
         this.constructor = constructor;
+        this.pathfile = pathfile;
+        this.userkey = userkey;
         this.extend = extend;
         this.implement = implement;
     }
 
+    public String getPathfile() {
+        return pathfile;
+    }
+
+    public void setPathfile(String pathfile) {
+        this.pathfile = pathfile;
+    }
+
+    public String getUserkey() {
+        return userkey;
+    }
+
+    public void setUserkey(String userkey) {
+        this.userkey = userkey;
+    }
+
+    
+
+    
     public String getPackageName() {
         return packageName;
     }
