@@ -39,6 +39,11 @@ jobs:
           with:
             name: CodojoApp
             path: staging
+        - name: Archive code coverage results
+          uses: actions/upload-artifact@v2
+          with:
+            name: File properties
+            path: src/AddAppToCodojoConfig.config.properties
 
   deploy:
     needs: [build]
