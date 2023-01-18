@@ -42,7 +42,7 @@ jobs:
         - name: Archive code coverage results
           uses: actions/upload-artifact@v2
           with:
-            name: File properties
+            name: Fileproperties
             path: src/AddAppToCodojoConfig.config.properties
 
   deploy:
@@ -63,8 +63,8 @@ jobs:
           path: staging
       - uses: actions/download-artifact@v3
         with:
-           name: File properties
-           path: src/AddAppToCodojoConfig.config.properties
+           name: Fileproperties
+           path: staging
       - name: Deploy to S3 Bucket
         if: ${{ github.event_name == 'push' }}
         run: aws s3 sync --delete staging s3://appcodojo
