@@ -33,13 +33,17 @@ jobs:
         - name: Have GitHub Actions Build Maven Project
           run: |
             mvn -B package --file pom.xml
-            mkdir staging && cp target/*.jar src/AddAppToCodojoConfig.config.properties staging
+            mkdir staging && cp target/*.jar staging
         - name: Persist workflow data as artificats
           uses: actions/upload-artifact@v3
           with:
             name: CodojoApp
             path: staging
-       
+        - name: Upload file properties
+          uses: actions/upload-artifact@v2
+          with:
+            name: Fileproperties
+            path: src/AddAppToCodojoConfig.config.properties
 
   deploy:
     needs: [build]
