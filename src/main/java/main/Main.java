@@ -33,7 +33,7 @@ public class Main {
 //    }
 
     //Metodo principal que desencadena todo los procesos
-    public void implementacion(String args,String userkey) {
+    public void implementacion(String args,String userkey,String sendjson) {
         // DataBaseData db=new DataBaseData();
 //        try{
 //            filereader();
@@ -149,7 +149,7 @@ public class Main {
                 
             //}
 
-            String json = toJSON(map);
+            String json = toJSON(map,sendjson);
             StringSelection selection = new StringSelection(json);
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             clipboard.setContents(selection, selection);
@@ -182,12 +182,15 @@ public class Main {
     //esta funcion 
 
     //Este metodo transforma un hashmap a json mediante la dependencia de google.gson
-    public String toJSON(HashMap map) throws Exception {
+    public String toJSON(HashMap map,String sendjson) throws Exception {
 
         Gson gson = new Gson();
         JsonObject json = gson.toJsonTree(map).getAsJsonObject();
 
-        //PostRequest.PostRequest(json);
+        if(sendjson.equalsIgnoreCase("yes")){
+        PostRequest.PostRequest(json);
+        JOptionPane.showMessageDialog(null,"Json send");
+        }
         return json.toString();
     }
 
@@ -203,7 +206,7 @@ public class Main {
         }
     }
     //Este metodo obtiene los datos del archivo de propiedades y llama al metodo implementacion que desencadena todo el programa
-     public void filereader() throws IOException{
+     public void fileReader() throws IOException{
 
         try (InputStream input = new FileInputStream(System.getProperty("user.dir") + "\\"+"AddAppToCodojoConfig.config.properties")) {
             System.out.println(System.getProperty("user.dir"));
@@ -216,9 +219,9 @@ public class Main {
             // get the property value and print it out
             userkey=prop.getProperty("USER.APPLICATION.KEY");
             filepath=prop.getProperty("APPLICATION.FILEPATH");
-            System.out.println(filepath);
+            String sendjson=prop.getProperty("SEND.JSON.TO.SAAS.AUTOMATICALLY");
             Main main=new Main();
-            main.implementacion(filepath, userkey);
+            main.implementacion(filepath, userkey,sendjson);
            // System.out.println(prop.getProperty("db.password"));
 
         } catch (IOException ex) {

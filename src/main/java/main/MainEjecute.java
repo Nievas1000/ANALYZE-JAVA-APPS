@@ -17,7 +17,7 @@ public class MainEjecute {
         
         try {
             Main main=new Main();
-            main.filereader();
+            main.fileReader();
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage());
         }
