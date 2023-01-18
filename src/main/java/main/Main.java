@@ -143,8 +143,8 @@ public class Main {
 //                map.put("classes", cdList);
 //                map.put("tables", lista);
 //            } else {
-                map.put("UserAplicationKey",userkey);
-                map.put("AplicationName", filename.getName());
+                map.put("UserApplicationKey",userkey);
+                map.put("ApplicationName", filename.getName());
                 map.put("classes", cdList);
                 
             //}
