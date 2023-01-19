@@ -3,6 +3,7 @@
 package Classes;
 
 import java.lang.*;
+import java.util.HashMap;
 
 
 public class ClassDiscriptor {
@@ -16,6 +17,7 @@ public class ClassDiscriptor {
     public String userkey;
     public String extend;
     public String implement;
+    
     //public String lastModified;
 
     public ClassDiscriptor() {
@@ -32,6 +34,10 @@ public class ClassDiscriptor {
         this.extend = extend;
         this.implement = implement;
     }
+
+    
+
+    
 
     public String getPathfile() {
         return pathfile;

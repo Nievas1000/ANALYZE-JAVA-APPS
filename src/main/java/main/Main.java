@@ -15,10 +15,13 @@ import java.util.HashMap;
 import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.StringReader;
 import java.nio.file.Files;
 import java.util.Properties;
 
@@ -27,21 +30,20 @@ import javax.swing.JOptionPane;
 public class Main {
 
     List<File> files;
-    
+
 //    public static void main(String[] args) {
 //        
 //    }
-
     //Metodo principal que desencadena todo los procesos
-    public void implementacion(String args,String userkey,String sendjson) {
+    public void implementacion(String args, String userkey, String sendjson) {
         // DataBaseData db=new DataBaseData();
 //        try{
 //            filereader();
 //        }catch(Exception e){
 //            System.out.println(e.getMessage());
 //        }
-            
-       // System.out.println(args + "Dsa");
+
+        // System.out.println(args + "Dsa");
         //trae la direccion del archivo
         String sCarpAct = System.getProperty(args, args);
         System.out.println(sCarpAct + "1");
@@ -134,7 +136,8 @@ public class Main {
 //            }
         }
         try {
-            HashMap<String,Object> map = new HashMap();
+            //Hashmap Generico
+            HashMap<String, Object> map = new HashMap();
             //comprobacion de si el usuario ingreso sus datos de la db
 //            if (!db.getDb().isEmpty() && !db.getHost().isEmpty() && !db.getPort().isEmpty() && !db.getPassword().isEmpty() && !db.getUsername().isEmpty()) {
 //                //trae las tablas de la db
@@ -143,19 +146,18 @@ public class Main {
 //                map.put("classes", cdList);
 //                map.put("tables", lista);
 //            } else {
-                map.put("UserApplicationKey",userkey);
-                map.put("ApplicationName", filename.getName());
-                map.put("classes", cdList);
-                
-            //}
+            map.put("UserApplicationKey", userkey);
+            map.put("ApplicationName", filename.getName());
+            map.put("classes", cdList);
 
-            String json = toJSON(map,sendjson);
+            //}
+            String json = toJSON(map, sendjson);
             StringSelection selection = new StringSelection(json);
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             clipboard.setContents(selection, selection);
             String user = System.getProperty("user.name");
-            String dir=System.getProperty("user.dir");
-            
+            String dir = System.getProperty("user.dir");
+
             String pathFile = dir + "\\" + filename.getName() + ".json";
             try {
                 //se escribe el json en el pathfile del usuario y se guarda alli
@@ -178,18 +180,16 @@ public class Main {
 
     }
 
-
     //esta funcion 
-
     //Este metodo transforma un hashmap a json mediante la dependencia de google.gson
-    public String toJSON(HashMap map,String sendjson) throws Exception {
+    public String toJSON(HashMap map, String sendjson) throws Exception {
 
         Gson gson = new Gson();
         JsonObject json = gson.toJsonTree(map).getAsJsonObject();
 
-        if(sendjson.equalsIgnoreCase("yes")){
-        PostRequest.PostRequest(json);
-        JOptionPane.showMessageDialog(null,"Json send");
+        if (sendjson.equalsIgnoreCase("yes")) {
+            PostRequest.PostRequest(json);
+            JOptionPane.showMessageDialog(null, "Json send");
         }
         return json.toString();
     }
@@ -205,40 +205,41 @@ public class Main {
             }
         }
     }
-    //Este metodo obtiene los datos del archivo de propiedades y llama al metodo implementacion que desencadena todo el programa
-     public void fileReader() throws IOException{
 
-        try (InputStream input = new FileInputStream(System.getProperty("user.dir") + "\\"+"AddAppToCodojoConfig.config.properties")) {
+    //Este metodo obtiene los datos del archivo de propiedades y llama al metodo implementacion que desencadena todo el programa
+    public void fileReader() throws IOException {
+        Object lines = new Object();
+
+        try (InputStream input = new FileInputStream("C:\\Users\\Leoo\\Desktop\\Nueva carpeta" + "\\" + "AddAppToCodojoConfig.config.properties")) {
             System.out.println(System.getProperty("user.dir"));
             Properties prop = new Properties();
 
             // load a properties file
             prop.load(input);
-            String filepath;
-            String userkey;
+
             // get the property value and print it out
-            userkey=prop.getProperty("USER.APPLICATION.KEY");
-            filepath=prop.getProperty("APPLICATION.FILEPATH");
-            String sendjson=prop.getProperty("SEND.JSON.TO.SAAS.AUTOMATICALLY");
-            Main main=new Main();
-            main.implementacion(filepath, userkey,sendjson);
-           // System.out.println(prop.getProperty("db.password"));
+            String userkey = prop.getProperty("USER.APPLICATION.KEY");
+            String sendjson = prop.getProperty("SEND.JSON.TO.SAAS.AUTOMATICALLY");
+            try {
+                try (BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Leoo\\Desktop\\Nueva carpeta" + "\\" + "AddAppToCodojoConfig.config.properties"))) {
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        if (line.contains("APPLICATION.FILEPATH")) {
+                            lines = line.substring(22, line.length());
+                        }
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            Main main = new Main();
+            main.implementacion(lines.toString(), userkey, sendjson);
+            // System.out.println(prop.getProperty("db.password"));
 
         } catch (IOException ex) {
             ex.printStackTrace();
         }
 
-
     }
 }
-          
-        
-        
-        
-    
-//    public static void main(String[] args) {
-//        Main mainclass=new Main();
-//        mainclass.implementacion(args, db);
-//    }
-
-

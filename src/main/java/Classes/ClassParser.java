@@ -7,7 +7,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import javax.swing.JOptionPane;
 
@@ -16,6 +18,9 @@ public class ClassParser {
 //import solutionparser.handlers.ClassDiscriptor.Member;
     private Path file;
     private ClassDiscriptor discriptor;
+    Object key=new Object();
+    Object value=new Object();
+    
     //private DatabaseDescriptor dbDescriptor;
 
     public ClassParser(File file) {
@@ -162,9 +167,12 @@ public class ClassParser {
             discriptor.packageName = "default";
         }
     }
+    
 
     // Este metodo obtiene el nombre de cada clase y clasifica si es class o interface ademas dde obtener los extends e implements.
     public boolean getClassName(String line) {
+        HashMap<String,String> map=new HashMap<>();
+    
         line = line.trim();
         int cont = 0;
         if (line.contains("class") || line.contains("interface")) {
@@ -176,28 +184,72 @@ public class ClassParser {
                 discriptor.interfaz = true;
             }
             //Este if es para leer cuando las clase tiene un extends e implements al mismo tiempo
+//            if (parts[0].concat(" ").concat(parts[1]).equalsIgnoreCase("public interface")) {
+//                System.out.println(parts[2]);
+//                System.out.println(discriptor.packageName);
+//                System.out.println(parts[2]+discriptor.packageName);
+//                map.put(parts[2],discriptor.packageName);
+//                for (Map.Entry<String, String> entry : map.entrySet()) {
+//                    String llave = entry.getKey();
+//                    key=llave;
+//                    System.out.println(key+"key");
+//                    Object valor = entry.getValue();
+//                    value=valor;
+//                    
+////                    System.out.println(value+"value");
+////                    
+////                }
+//               // System.out.println(parts[0].concat(" ").concat(parts[1]));
+//            }
+//            }
+         
             if (line.contains("extends") && line.contains("implements")) {
+//                for (Map.Entry<String, Object> entry : map.entrySet()) {
+//                        String key = entry.getKey();
+//                        System.out.println(key+"1");
+//                        Object value = entry.getValue();
+//                        System.out.println(value+"2");
+//                }
                 cont = +1;
+                discriptor.implement = discriptor.packageName + "."+ parts[6].substring(0, parts[6].length());
                 discriptor.name = discriptor.packageName + "." + parts[2].substring(0, parts[2].length());
                 if (parts[3].equals("extends")) {
                     discriptor.extend = discriptor.packageName + "." + parts[4].substring(0, parts[4].length());
-                    System.out.println(discriptor.extend);
+                    //System.out.println(discriptor.extend);
 
                 }
-                if (parts[5].equals("implements")) {
-                    discriptor.implement = discriptor.packageName + "." + parts[6].substring(0, parts[6].length());
-                    System.out.println(discriptor.implement);
-                }
+                System.out.println(parts[5]);
+                
+//                if (lol==5) {
+//                    System.out.println("Entro");
+//                    for (Map.Entry<String, Object> entry : map.entrySet()) {
+//                        String key = entry.getKey();
+//                        System.out.println(key+"1");
+//                        Object value = entry.getValue();
+//                        System.out.println(value+"2");
+////                        if(key.equalsIgnoreCase(parts[6].substring(0, parts[6].length()))){
+////                          discriptor.implement = value.toString() + "." + parts[6].substring(0, parts[6].length());
+////                            System.out.println(discriptor.implement);
+////                        }
+//                        
+//                    }
+                    //discriptor.implement = discriptor.packageName + "." + parts[6].substring(0, parts[6].length());
+                    //System.out.println(discriptor.implement);
+                
+//                     discriptor.implement = parts[6].substring(0, parts[6].length());
+//                     System.out.println(discriptor.implement);
             }
+               
+            
             //Este if tiene un contador para que no entre 2 veces ya que las condiciones en el if de extend de arriba son similares a este
             //por eso tiene una contador para verificar si entro en el if anterior y si entro que aca no entre.
-            if (parts[3].equals("extends") && cont<=0) {
+            if (parts[3].equals("extends") && cont <= 0) {
                 discriptor.extend = discriptor.packageName + "." + parts[4].substring(0, parts[4].length() - 1);
             } else if (parts[3].equals("implements")) {
                 discriptor.implement = discriptor.packageName + "." + parts[4].substring(0, parts[4].length() - 1);
             }
 //    
-
+            
             System.out.println(line.split("\\s+"));
             if (parts.length == 2 && isClassOrInterface(parts[0])) {
                 if (parts[1].endsWith("{")) {
@@ -210,53 +262,40 @@ public class ClassParser {
 
             } else if (parts.length == 3 && isClassOrInterface(parts[1])) {
                 if (parts[2].endsWith("{")) {
-                    discriptor.name =  discriptor.packageName + "."+ parts[2].substring(0, parts[1].length() - 1);
+                    discriptor.name = discriptor.packageName + "." + parts[2].substring(0, parts[1].length() - 1);
 
                 } else {
-                    discriptor.name = discriptor.packageName + "."+parts[2];
+                    discriptor.name = discriptor.packageName + "." + parts[2];
                 }
-               // discriptor.modifier = parts[0];
+                // discriptor.modifier = parts[0];
             } else if (parts.length == 3 && isClassOrInterface(parts[0]) && parts[2].equals("{")) {
                 discriptor.name = discriptor.packageName + "." + parts[1];
                 //	discriptor.modifier=Constants.MODIFIER_DEFAULT;
             } else if (parts.length == 4 && isClassOrInterface(parts[1]) && parts[3].equals("{")) {
-                discriptor.name =  discriptor.packageName+ "." + parts[2];
+                discriptor.name = discriptor.packageName + "." + parts[2];
 //                //	discriptor.modifier=parts[0];
-           } else if (parts.length == 5 && isClassOrInterface(parts[1]) && isParentLinker(parts[3])) {
-              discriptor.name =  discriptor.packageName + "."+ parts[2];
+            } else if (parts.length == 5 && isClassOrInterface(parts[1]) && isParentLinker(parts[3])) {
+                discriptor.name = discriptor.packageName + "." + parts[2];
 
 //            } else {
 //                discriptor.extend = parts[4];
 //                discriptor.implement = parts[4];
-           }
-          // discriptor.modifier = parts[0];
-                if (discriptor.name != null) {
+            }
+            // discriptor.modifier = parts[0];
+            if (discriptor.name != null) {
 //                if (discriptor.extend == null) {
 //                    discriptor.extend = "java.lang.Object";
 //                }
-                    /*	if(discriptor.modifier==null) {
+                /*	if(discriptor.modifier==null) {
 				discriptor.modifier=Constants.MODIFIER_DEFAULT;
 			}*/
-                    return true;
-                }
+                return true;
             }
- return false;
         }
         
-    public void filereader() throws IOException{
-        File files=new File("C:\\Users\\Leoo\\Downloads\\AddAppToCodojoConfig.txt");
-         String[] parts;
-         List<String> lines = Files.readAllLines(files.toPath());
-         for (int i = 0; i < lines.size(); i++) {
-            parts=lines.get(i).split("\\s+");
-             System.out.println(parts[i]);
-        }
-          
-        
-        
-        
+    
+        return false;
     }
-
     //compara entre extends e implements
     public boolean isParentLinker(String line) {
         return line.trim().equals("extends") || line.trim().equals("implements");
