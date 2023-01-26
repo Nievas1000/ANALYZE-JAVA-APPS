@@ -17,7 +17,7 @@ public class ClassDiscriptor {
     public String userkey;
     public String extend;
     public String implement;
-    
+    public String lauticapo;
     
     //public String lastModified;
 
