@@ -210,7 +210,7 @@ public class Main {
     public void fileReader() throws IOException {
         Object lines = new Object();
 
-        try (InputStream input = new FileInputStream("C:\\Users\\Leoo\\Desktop\\Nueva carpeta" + "\\" + "AddAppToCodojoConfig.config.properties")) {
+        try (InputStream input = new FileInputStream(System.getProperty("user.dir") + "\\" + "AddAppToCodojoConfig.config.properties")) {
             System.out.println(System.getProperty("user.dir"));
             Properties prop = new Properties();
 
@@ -221,7 +221,7 @@ public class Main {
             String userkey = prop.getProperty("USER.APPLICATION.KEY");
             String sendjson = prop.getProperty("SEND.JSON.TO.SAAS.AUTOMATICALLY");
             try {
-                try (BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Leoo\\Desktop\\Nueva carpeta" + "\\" + "AddAppToCodojoConfig.config.properties"))) {
+                try (BufferedReader br = new BufferedReader(new FileReader(System.getProperty("user.dir") + "\\" + "AddAppToCodojoConfig.config.properties"))) {
                     String line;
                     while ((line = br.readLine()) != null) {
                         if (line.contains("APPLICATION.FILEPATH")) {

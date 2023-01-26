@@ -204,12 +204,12 @@ public class ClassParser {
 //            }
          
             if (line.contains("extends") && line.contains("implements")) {
-//                for (Map.Entry<String, Object> entry : map.entrySet()) {
-//                        String key = entry.getKey();
-//                        System.out.println(key+"1");
-//                        Object value = entry.getValue();
-//                        System.out.println(value+"2");
-//                }
+                for (Map.Entry<String, String> entry : map.entrySet()) {
+                        String key = entry.getKey();
+                        System.out.println(key+"1");
+                        Object value = entry.getValue();
+                        System.out.println(value+"2");
+                }
                 cont = +1;
                 discriptor.implement = discriptor.packageName + "."+ parts[6].substring(0, parts[6].length());
                 discriptor.name = discriptor.packageName + "." + parts[2].substring(0, parts[2].length());
