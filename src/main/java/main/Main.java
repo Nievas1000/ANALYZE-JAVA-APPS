@@ -46,11 +46,11 @@ public class Main {
         // System.out.println(args + "Dsa");
         //trae la direccion del archivo
         String sCarpAct = System.getProperty(args, args);
-        System.out.println(sCarpAct + "1");
+       
         //System.out.println(sCarpAct);
         //Se crea un nuevo file y se le pasa como argumento la direccion del archivo
         File filename = new File(sCarpAct);
-        File file = new File(sCarpAct + File.separator + "src");//+ File.separator + "main" + File.separator + "java" + File.separator + "com");
+        File file = new File(sCarpAct + File.separator + File.separator + "src" + File.separator + "main" + File.separator + "java" + File.separator + "com" );
         System.out.println(file);
         System.out.println(filename.getName());
         files = new ArrayList();
@@ -61,13 +61,18 @@ public class Main {
 
         //se hace una list con todos lo atributos de classdiscriptor
         List<ClassDiscriptor> cdList = new ArrayList();
+        HashMap<String,String> map=new HashMap<>();
         //Itera cada file si tiene name y no es null se agrega a una lista
+        int cont=0;
+        for (int i = 0; i < 2; i++) {
+            
         for (File f : files) {
+           
             System.out.println("File: " + f.getAbsolutePath());
-            ClassParser parser = new ClassParser(f);
+            ClassParser parser = new ClassParser(f,map,i,cont);
             ClassDiscriptor cd = parser.getDiscriptor();
             cd.setPackageName(null);
-            if (cd != null && cd.name != null) {
+            if (cd != null && cd.name != null && i==1) {
                 cdList.add(cd);
             }
 //              DatabaseDescriptor db = parser.getDBDescriptor();
@@ -75,6 +80,11 @@ public class Main {
 //                dbList.add(db);
 //            }
         }
+         cont=cont+1;
+        
+        }
+        
+        
 
 //        if (!db.getDb().isEmpty() && !db.getHost().isEmpty() && !db.getPort().isEmpty() && !db.getPassword().isEmpty() && !db.getUsername().isEmpty()) {
 //            try {
@@ -91,8 +101,7 @@ public class Main {
         StringBuilder builder = new StringBuilder();
         for (ClassDiscriptor cd : cdList) {
             builder.append("\r\nName: " + cd.name);
-            builder.append("\r\n\tInterfaz: " + cd.interfaz);
-            cd.setConstructor("null");
+            builder.append("\r\n\tInterfaz: " + cd.interfaz);          
             builder.append("\r\n\tConstructors: ").append(cd.getConstructor());
             builder.append("\r\n\tExtends: " + cd.extend);
             builder.append("\r\n\tImplements: " + cd.implement);
@@ -134,10 +143,10 @@ public class Main {
 //                builder.append("\r\n\t\t Type: " + m.type);
 //
 //            }
-        }
+       }
         try {
             //Hashmap Generico
-            HashMap<String, Object> map = new HashMap();
+            HashMap<String, Object> mapjson = new HashMap();
             //comprobacion de si el usuario ingreso sus datos de la db
 //            if (!db.getDb().isEmpty() && !db.getHost().isEmpty() && !db.getPort().isEmpty() && !db.getPassword().isEmpty() && !db.getUsername().isEmpty()) {
 //                //trae las tablas de la db
@@ -146,12 +155,12 @@ public class Main {
 //                map.put("classes", cdList);
 //                map.put("tables", lista);
 //            } else {
-            map.put("UserApplicationKey", userkey);
-            map.put("ApplicationName", filename.getName());
-            map.put("classes", cdList);
+            mapjson.put("UserApplicationKey", userkey);
+            mapjson.put("ApplicationName", filename.getName());
+            mapjson.put("classes", cdList);
 
             //}
-            String json = toJSON(map, sendjson);
+            String json = toJSON(mapjson, sendjson);
             StringSelection selection = new StringSelection(json);
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             clipboard.setContents(selection, selection);
@@ -210,7 +219,7 @@ public class Main {
     public void fileReader() throws IOException {
         Object lines = new Object();
 
-        try (InputStream input = new FileInputStream(System.getProperty("user.dir") + "\\" + "AddAppToCodojoConfig.config.properties")) {
+        try (InputStream input = new FileInputStream("C:\\Users\\Leoo\\Downloads"+ "\\" + "AddAppToCodojoConfig.config.properties")) {
             System.out.println(System.getProperty("user.dir"));
             Properties prop = new Properties();
 
@@ -220,8 +229,14 @@ public class Main {
             // get the property value and print it out
             String userkey = prop.getProperty("USER.APPLICATION.KEY");
             String sendjson = prop.getProperty("SEND.JSON.TO.SAAS.AUTOMATICALLY");
+//            String typedb=prop.getProperty("TYPE.DB");
+//            String hostdb=prop.getProperty("HOST.DB");
+//            String portdb=prop.getProperty("PORT.DB");
+//            String namedb=prop.getProperty("NAME.DB");
+//            String userdb=prop.getProperty("USER.DB");
+//            String password=prop.getProperty("PASSWORD.DB");
             try {
-                try (BufferedReader br = new BufferedReader(new FileReader(System.getProperty("user.dir") + "\\" + "AddAppToCodojoConfig.config.properties"))) {
+                try (BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Leoo\\Downloads"+ "\\" + "AddAppToCodojoConfig.config.properties"))) {
                     String line;
                     while ((line = br.readLine()) != null) {
                         if (line.contains("APPLICATION.FILEPATH")) {
@@ -232,6 +247,10 @@ public class Main {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            
+            DataBaseData db=new DataBaseData();
+            
+           
 
             Main main = new Main();
             main.implementacion(lines.toString(), userkey, sendjson);

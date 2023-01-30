@@ -4,42 +4,55 @@ package Classes;
 
 import java.lang.*;
 import java.util.HashMap;
-
+import java.util.List;
 
 public class ClassDiscriptor {
 
     public String packageName;
     public String name;
     public Boolean interfaz;
-    public String constructor;
     //public String modifier;
     public String pathfile;
     public String userkey;
     public String extend;
     public String implement;
-    public String lauticapo;
-    
-    //public String lastModified;
+    public List<String> constructor;
+    public HashMap<String, List> datasources;
 
+    //public String lastModified;
     public ClassDiscriptor() {
 
     }
 
-    public ClassDiscriptor(String packageName, String name, Boolean interfaz, String constructor, String pathfile, String userkey, String extend, String implement) {
+    public ClassDiscriptor(String packageName, String name, Boolean interfaz, String pathfile, String userkey, String extend, String implement, List<String> constructor, HashMap<String, List> datasources) {
         this.packageName = packageName;
         this.name = name;
         this.interfaz = interfaz;
-        this.constructor = constructor;
         this.pathfile = pathfile;
         this.userkey = userkey;
         this.extend = extend;
         this.implement = implement;
+        this.constructor = constructor;
+        this.datasources = datasources;
+    }
+
+    public HashMap<String, List> getDatasources() {
+        return datasources;
+    }
+
+    public void setDatasources(HashMap<String, List> datasources) {
+        this.datasources = datasources;
+    }
+
+    public List<String> getConstructor() {
+        return constructor;
+    }
+
+    public void setConstructor(List<String> constructor) {
+        this.constructor = constructor;
     }
 
     
-
-    
-
     public String getPathfile() {
         return pathfile;
     }
@@ -56,9 +69,6 @@ public class ClassDiscriptor {
         this.userkey = userkey;
     }
 
-    
-
-    
     public String getPackageName() {
         return packageName;
     }
@@ -83,13 +93,6 @@ public class ClassDiscriptor {
         this.interfaz = interfaz;
     }
 
-    public String getConstructor() {
-        return constructor;
-    }
-
-    public void setConstructor(String constructor) {
-        this.constructor = constructor;
-    }
 
     public String getExtend() {
         return extend;
@@ -107,6 +110,7 @@ public class ClassDiscriptor {
         this.implement = implement;
     }
 
+   
 //	public static class Member{
 //		public String modifier;
 //		public String type;
@@ -118,4 +122,8 @@ public class ClassDiscriptor {
 //			map.put("member", member);
 //			return map;
 //		}
+    void setDatasources(String relation, List<String> tables) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

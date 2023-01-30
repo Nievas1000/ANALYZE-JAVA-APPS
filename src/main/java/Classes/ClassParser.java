@@ -4,13 +4,22 @@
 package Classes;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class ClassParser {
@@ -18,20 +27,21 @@ public class ClassParser {
 //import solutionparser.handlers.ClassDiscriptor.Member;
     private Path file;
     private ClassDiscriptor discriptor;
-    Object key=new Object();
-    Object value=new Object();
     
-    //private DatabaseDescriptor dbDescriptor;
 
-    public ClassParser(File file) {
+    //private DatabaseDescriptor dbDescriptor;
+    public ClassParser() {
+    }
+
+    public ClassParser(File file, HashMap<String, String> map,int i,int cont) {
         this.file = file.toPath();
 
         this.discriptor = new ClassDiscriptor();
         //this.dbDescriptor=new DatabaseDescriptor();
 //        discriptor.lastModified = String.valueOf(file.lastModified());
-//        discriptor.members = new ArrayList();
+//discriptor.members = new ArrayList();
         try {
-            parse();
+            parse(map,i,cont);
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, e.getMessage());
@@ -43,9 +53,46 @@ public class ClassParser {
     }
 
     //Este metodo lee linea por linea cada clase
-    public void parse() throws Exception {
+    public void parse(HashMap<String, String> map,int a,int cont) throws Exception {
         List<String> lines = Files.readAllLines(file);
+        HashMap<String, List> mapdb = new HashMap<>();
+        List<String> list=new ArrayList<>();
         for (int i = 0; i < lines.size(); i++) {
+            if (discriptor.packageName == null) {
+                getPackageName(lines.get(i), map);
+                continue;
+            }
+
+            if (lines.get(i).contains("public interface")) {
+                System.out.println("ENTRAA");
+                savevalues(lines.get(i), map, discriptor.packageName);
+            }
+
+            if (lines.get(i).contains("public class")) {
+                System.out.println("ENTRAA");
+                savevalues(lines.get(i), map, discriptor.packageName);
+            }
+        }
+
+//        for (Map.Entry<String, String> entry : map.entrySet()) {
+//            String key = entry.getKey();
+//            String value = entry.getValue();
+//            System.out.println(key + value + "VALORES FOR");
+//
+//        }
+        for (int i = 0; i < lines.size(); i++) {
+
+            if ((a==1)) {
+                if(searchrelationjpa(lines, lines.get(i), i, mapdb).equals("true")){
+                    
+                }
+                
+            }
+            
+           
+                searchrelation(lines,lines.get(i),map,list);
+            
+
             if (isCommented(lines.get(i))) {
                 continue;
             }
@@ -53,14 +100,17 @@ public class ClassParser {
 //				System.out.println("DB CODE DETECTED!!!");
 //				parseDB(lines);
 //			}
-            if (discriptor.packageName == null) {
-                getPackageName(lines.get(i));
-                continue;
-            }
+//            if (discriptor.packageName == null) {
+//                getPackageName(lines.get(i), map);
+//                continue;
+//            }
+
             if (discriptor.name == null) {
-                getClassName(lines.get(i));
+                
+                getClassName(lines.get(i), map);
                 continue;
             }
+
 //            findMembers(lines.get(i));
         }
     }
@@ -124,32 +174,31 @@ public class ClassParser {
 //        }
 //        discriptor.members.add(m);
 //    }
-//
 //    public void findMembers(String line) {
 //        line = line.trim();
 //        String[] parts = line.split("\\s+");
 //        if (parts.length == 2 && parts[1].endsWith(";")) {
 //            Member m = new Member();
-//            m.modifier = Constants.MODIFIER_DEFAULT;
+//           
 //            m.type = parts[0];
 //            m.member = parts[1].substring(0, parts[1].length() - 1);
 //            addMember(m);
-//        } else if (parts.length == 3 && isModifier(parts[0]) && parts[2].endsWith(";")) {
+//        } else if (parts.length == 3 && parts[2].endsWith(";")) {
 //            Member m = new Member();
-//            m.modifier = parts[0];
+//            ;
 //            m.type = parts[1];
 //            m.member = parts[2].substring(0, parts[2].length() - 1);
 //            addMember(m);
-//        }else if(parts.length > 3 && isModifier(parts[0]) && line.endsWith(";")){
+//        }else if(parts.length > 3  && line.endsWith(";")){
 //            Member m = new Member();
-//            m.modifier = parts[0];
+//            
 //            m.type = parts[1];
 //            m.member = parts[2]+parts[3];
 //            addMember(m);
 //        }
 //    }
     //Este metodo obtiene el nombre del package donde estan las clases
-    public void getPackageName(String line) {
+    public void getPackageName(String line, HashMap<String, String> map) {
         line = line.trim();
         if (line.startsWith("package")) {
             //divide cada linea en partes y los agrega a un array de strings
@@ -163,17 +212,15 @@ public class ClassParser {
             } else if (parts.length == 3 && parts[2].equals(";")) {
                 discriptor.packageName = parts[1];
             }
-        } else if (getClassName(line)) {
+        } else if (getClassName(line, map)) {
             discriptor.packageName = "default";
         }
     }
-    
 
     // Este metodo obtiene el nombre de cada clase y clasifica si es class o interface ademas dde obtener los extends e implements.
-    public boolean getClassName(String line) {
-        HashMap<String,String> map=new HashMap<>();
-    
+    public boolean getClassName(String line, HashMap<String, String> map) {
         line = line.trim();
+
         int cont = 0;
         if (line.contains("class") || line.contains("interface")) {
             String[] parts = line.split("\\s+");
@@ -183,43 +230,52 @@ public class ClassParser {
             if (line.contains("interface")) {
                 discriptor.interfaz = true;
             }
+
             //Este if es para leer cuando las clase tiene un extends e implements al mismo tiempo
 //            if (parts[0].concat(" ").concat(parts[1]).equalsIgnoreCase("public interface")) {
-//                System.out.println(parts[2]);
-//                System.out.println(discriptor.packageName);
-//                System.out.println(parts[2]+discriptor.packageName);
-//                map.put(parts[2],discriptor.packageName);
-//                for (Map.Entry<String, String> entry : map.entrySet()) {
-//                    String llave = entry.getKey();
-//                    key=llave;
-//                    System.out.println(key+"key");
-//                    Object valor = entry.getValue();
-//                    value=valor;
+//                map.put(parts[2], discriptor.packageName);
+//                 
+//                
+//            }
+//                    System.out.println(value+"value");
 //                    
-////                    System.out.println(value+"value");
-////                    
-////                }
-//               // System.out.println(parts[0].concat(" ").concat(parts[1]));
+            // System.out.println(parts[0].concat(" ").concat(parts[1]));
+//            if (line.contains("OneToOne")) {
+//
+//                System.out.println(line.toString());
+//                System.out.println("hola");
+//
 //            }
-//            }
-         
             if (line.contains("extends") && line.contains("implements")) {
-                for (Map.Entry<String, String> entry : map.entrySet()) {
-                        String key = entry.getKey();
-                        System.out.println(key+"1");
-                        Object value = entry.getValue();
-                        System.out.println(value+"2");
-                }
+
+//               
                 cont = +1;
-                discriptor.implement = discriptor.packageName + "."+ parts[6].substring(0, parts[6].length());
+                discriptor.implement = discriptor.packageName + "." + parts[6].substring(0, parts[6].length());
                 discriptor.name = discriptor.packageName + "." + parts[2].substring(0, parts[2].length());
                 if (parts[3].equals("extends")) {
-                    discriptor.extend = discriptor.packageName + "." + parts[4].substring(0, parts[4].length());
+
+                    if (map.containsKey(parts[4].replace("{", ""))) {
+
+                        discriptor.extend = map.get(parts[4]) + "." + parts[4].substring(0, parts[4].length());
+                    } else {
+
+                        discriptor.extend = discriptor.packageName + "." + parts[4].substring(0, parts[4].length());
+                    }
                     //System.out.println(discriptor.extend);
 
                 }
-                System.out.println(parts[5]);
-                
+
+                if (parts[5].equals("implements")) {
+                    if (map.containsKey(parts[6])) {
+                    discriptor.implement = map.get(parts[6]) + "." + parts[6].substring(0, parts[6].length());
+
+                } else {
+                    discriptor.implement = map.get(parts[6]);
+                }
+                    
+
+                }
+            }
 //                if (lol==5) {
 //                    System.out.println("Entro");
 //                    for (Map.Entry<String, Object> entry : map.entrySet()) {
@@ -233,23 +289,58 @@ public class ClassParser {
 ////                        }
 //                        
 //                    }
-                    //discriptor.implement = discriptor.packageName + "." + parts[6].substring(0, parts[6].length());
-                    //System.out.println(discriptor.implement);
-                
+            //discriptor.implement = discriptor.packageName + "." + parts[6].substring(0, parts[6].length());
+            //System.out.println(discriptor.implement);
 //                     discriptor.implement = parts[6].substring(0, parts[6].length());
 //                     System.out.println(discriptor.implement);
-            }
-               
-            
+
             //Este if tiene un contador para que no entre 2 veces ya que las condiciones en el if de extend de arriba son similares a este
             //por eso tiene una contador para verificar si entro en el if anterior y si entro que aca no entre.
             if (parts[3].equals("extends") && cont <= 0) {
-                discriptor.extend = discriptor.packageName + "." + parts[4].substring(0, parts[4].length() - 1);
+
+                if (map.containsKey(parts[4].replace("{", ""))) {
+
+                    discriptor.extend = map.get(parts[4]) + "." + parts[4].substring(0, parts[4].length());
+                } else {
+//
+                    discriptor.extend = discriptor.packageName + "." + parts[4].substring(0, parts[4].length() - 1);
+                }
             } else if (parts[3].equals("implements")) {
-                discriptor.implement = discriptor.packageName + "." + parts[4].substring(0, parts[4].length() - 1);
+                //System.out.println(map.containsKey(parts[4]));
+                //discriptor.implement = discriptor.packageName + "." + parts[4].substring(0, parts[4].length());
+                System.out.println(discriptor.packageName);
+//                for (Map.Entry<String, String> entry : map.entrySet()) {
+//                    String key = entry.getKey();
+//                    String value = entry.getValue();
+//                    System.out.println(key + value + "VALORES");
+//                }
+                System.out.println(parts[4]);
+                if (map.containsKey(parts[4])) {
+                    System.out.println("entro");
+                    discriptor.implement = map.get(parts[4]) + "." + parts[4].substring(0, parts[4].length());
+
+                } else {
+                    discriptor.implement = parts[4];
+                }
             }
-//    
-            
+
+//            if (parts[3].equals("implements")) {
+//                System.out.println("entro");
+//                for (Map.Entry<String, String> entry : map.entrySet()) {
+//                    String key = entry.getKey();
+//                    String value = entry.getValue();
+//                    System.out.println(key+" "+value+"mapamigo");
+//                    if (parts[4].equals(key)) {
+//
+//                        discriptor.implement = value.concat(parts[4].substring(0, parts[4].length() - 1));
+//
+//                        System.out.println(discriptor.implement);
+////                     
+//                    }
+//
+////                }
+//                    //discriptor.implement = discriptor.packageName + "." + parts[4].substring(0, parts[4].length() - 1);
+//                }
             System.out.println(line.split("\\s+"));
             if (parts.length == 2 && isClassOrInterface(parts[0])) {
                 if (parts[1].endsWith("{")) {
@@ -276,12 +367,10 @@ public class ClassParser {
 //                //	discriptor.modifier=parts[0];
             } else if (parts.length == 5 && isClassOrInterface(parts[1]) && isParentLinker(parts[3])) {
                 discriptor.name = discriptor.packageName + "." + parts[2];
+            } else {
 
-//            } else {
-//                discriptor.extend = parts[4];
-//                discriptor.implement = parts[4];
+                discriptor.name = discriptor.packageName + "." + parts[2];
             }
-            // discriptor.modifier = parts[0];
             if (discriptor.name != null) {
 //                if (discriptor.extend == null) {
 //                    discriptor.extend = "java.lang.Object";
@@ -292,10 +381,10 @@ public class ClassParser {
                 return true;
             }
         }
-        
-    
+
         return false;
     }
+
     //compara entre extends e implements
     public boolean isParentLinker(String line) {
         return line.trim().equals("extends") || line.trim().equals("implements");
@@ -306,4 +395,148 @@ public class ClassParser {
         return part.trim().equals("class") || part.trim().equals("interface");
     }
 
+    public void savevalues(String line, HashMap<String, String> map, String dp) {
+        line = line.trim();
+        String[] parts = line.split("\\s+");
+
+        map.put(parts[2], dp);
+
+    }
+    int i=0;
+     
+    public void searchrelation(List<String> lines, String line, HashMap<String, String> map,List<String> list){
+         line = line.trim();
+         line=line.replace(".", " ");
+         
+       
+     
+            
+        
+         if(line.contains("import")){
+             
+              String[] parts = line.split("\\s+");
+              line=parts[parts.length-1].replace(";", "");
+              if(map.containsKey(line)){
+                   list.add(map.get(line).concat(".").concat(line));
+              }
+              
+              
+             
+                 discriptor.constructor=list;
+                 
+             if(list.isEmpty()){
+                 
+             discriptor.constructor=null;
+         
+         
+             }
+         }
+         }
+         
+             
+                
+                 
+             
+             
+         
+        
+         
+        
+    
+
+    public String searchrelationjpa(List<String> lines, String line, int i, HashMap<String, List> mapdb) throws FileNotFoundException, IOException {
+        String entidad;
+        String relation = "";
+        
+
+        List<String> tables = new ArrayList();
+
+        try (InputStream input = new FileInputStream("C:\\Users\\Leoo\\Downloads" + "\\" + "AddAppToCodojoConfig.config.properties")) {
+
+            Properties prop = new Properties();
+
+            // load a properties file
+            prop.load(input);
+
+            // get the property value and print it out
+            String typedb = prop.getProperty("TYPE.DB");
+            String hostdb = prop.getProperty("HOST.DB");
+            String portdb = prop.getProperty("PORT.DB");
+            String namedb = prop.getProperty("NAME.DB");
+            String userdb = prop.getProperty("USER.DB");
+            String password = prop.getProperty("PASSWORD.DB");
+
+            if (line.contains("@OneToOne") || line.contains("@OneToMany") || line.contains("@ManyToMany")
+                    || line.contains("@ManyToOne")) {
+
+                if (line.contains("@OneToOne")) {
+                    relation = "OneToOne";
+                }
+                if (line.contains("@OneToMany")) {
+                    relation = "OneToMany";
+                }
+                if (line.contains("@ManyToMany")) {
+                    relation = "ManyToMany";
+                }
+                if (line.contains("@ManyToOne")) {
+
+                    relation = "ManyToOne";
+                }
+
+                entidad = lines.get(i + 1);
+
+                DataBaseData db = new DataBaseData();
+                try {
+                    String[] parts1 = entidad.split("\\s+");
+                    entidad = parts1[2].replace(";", "");
+                    List<String> tablas = db.getTables(typedb, hostdb, portdb, namedb, userdb, password);
+                    Boolean res = tablas.contains(entidad);
+                    System.out.println(entidad);
+                    if (res) {
+                        tables.add(entidad);
+                        mapdb.put(relation, tables);
+                        discriptor.setDatasources(mapdb);
+                        // System.out.println(entidad);
+                    }
+//                    for (Map.Entry<String, List> entry : mapdb.entrySet()) {
+//                        String key = entry.getKey();
+//                        List value = entry.getValue();
+//                        System.out.println(key + value + "map");
+//
+//                    }
+//                    mapdb.put(relation, tables);
+                    //discriptor.setDatasources(mapdb);
+//                }
+
+                    // System.out.println(res);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+                //Boolean res=tablas.contains(entidad);
+
+//                   tables.add(entidad);
+//                   System.out.println(entidad);
+//                   discriptor.setDatasources(tables);
+//                   if(res==true){
+//                     tables.add(entidad);
+//                     discriptor.datasources.add(entidad);
+//                      for (String table : tables) {
+//                System.out.println(table);
+//            }
+//                   }
+//                    
+//                } catch (ClassNotFoundException ex) {
+//                    Logger.getLogger(ClassParser.class.getName()).log(Level.SEVERE, null, ex);
+//                } catch (SQLException ex) {
+//                    Logger.getLogger(ClassParser.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//          for (String table : tables) {
+//                System.out.println(table);
+                //  }
+                return "true";
+
+            }
+            return "false";
+        }
+    }
 }
