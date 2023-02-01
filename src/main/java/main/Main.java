@@ -50,7 +50,7 @@ public class Main {
         //System.out.println(sCarpAct);
         //Se crea un nuevo file y se le pasa como argumento la direccion del archivo
         File filename = new File(sCarpAct);
-        File file = new File(sCarpAct + File.separator + File.separator + "src" + File.separator + "main" + File.separator + "java" + File.separator + "com" );
+        File file = new File(sCarpAct);// +  File.separator + "src" + File.separator + "main" + File.separator + "java" + File.separator + "com" );
         System.out.println(file);
         System.out.println(filename.getName());
         files = new ArrayList();
@@ -155,9 +155,11 @@ public class Main {
 //                map.put("classes", cdList);
 //                map.put("tables", lista);
 //            } else {
-            mapjson.put("UserApplicationKey", userkey);
-            mapjson.put("ApplicationName", filename.getName());
+           
+            mapjson.put("userApplicationKey", userkey);
+            mapjson.put("applicationName", filename.getName());
             mapjson.put("classes", cdList);
+            
 
             //}
             String json = toJSON(mapjson, sendjson);
@@ -241,6 +243,7 @@ public class Main {
                     while ((line = br.readLine()) != null) {
                         if (line.contains("APPLICATION.FILEPATH")) {
                             lines = line.substring(22, line.length());
+                            System.out.println(lines+"LINES");
                         }
                     }
                 }

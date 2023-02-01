@@ -68,7 +68,7 @@ public class ClassParser {
                 savevalues(lines.get(i), map, discriptor.packageName);
             }
 
-            if (lines.get(i).contains("public class")) {
+            if (lines.get(i).contains("public class") || lines.get(i).contains("class")) {
                 System.out.println("ENTRAA");
                 savevalues(lines.get(i), map, discriptor.packageName);
             }
@@ -117,7 +117,8 @@ public class ClassParser {
 
     //Comprueba si el codigo esta comentado para analizarlo o no
     public boolean isCommented(String line) {
-        return (line.trim().startsWith("//") || line.trim().startsWith("/*"));
+        return (line.trim().startsWith("//") || line.trim().startsWith("/*") || line.trim().startsWith("/**")
+                || line.trim().startsWith("*"));
     }
     //public DatabaseDescriptor getDBDescriptor() {
     //return this.dbDescriptor;
@@ -220,6 +221,7 @@ public class ClassParser {
     // Este metodo obtiene el nombre de cada clase y clasifica si es class o interface ademas dde obtener los extends e implements.
     public boolean getClassName(String line, HashMap<String, String> map) {
         line = line.trim();
+        
 
         int cont = 0;
         if (line.contains("class") || line.contains("interface")) {
@@ -252,6 +254,8 @@ public class ClassParser {
                 cont = +1;
                 discriptor.implement = discriptor.packageName + "." + parts[6].substring(0, parts[6].length());
                 discriptor.name = discriptor.packageName + "." + parts[2].substring(0, parts[2].length());
+                if(parts.length >=3){
+                    System.out.println(parts[4] + "PARTE 4");
                 if (parts[3].equals("extends")) {
 
                     if (map.containsKey(parts[4].replace("{", ""))) {
@@ -259,18 +263,19 @@ public class ClassParser {
                         discriptor.extend = map.get(parts[4]) + "." + parts[4].substring(0, parts[4].length());
                     } else {
 
-                        discriptor.extend = discriptor.packageName + "." + parts[4].substring(0, parts[4].length());
+                        discriptor.extend = parts[4].substring(0, parts[4].length());
                     }
                     //System.out.println(discriptor.extend);
 
                 }
-
+                }
+                  
                 if (parts[5].equals("implements")) {
                     if (map.containsKey(parts[6])) {
                     discriptor.implement = map.get(parts[6]) + "." + parts[6].substring(0, parts[6].length());
 
                 } else {
-                    discriptor.implement = map.get(parts[6]);
+                    discriptor.implement = parts[6];
                 }
                     
 
@@ -296,14 +301,25 @@ public class ClassParser {
 
             //Este if tiene un contador para que no entre 2 veces ya que las condiciones en el if de extend de arriba son similares a este
             //por eso tiene una contador para verificar si entro en el if anterior y si entro que aca no entre.
+//            System.out.println(line);
+            System.out.println(parts.length);
+            if(parts.length >=4){
+                 
             if (parts[3].equals("extends") && cont <= 0) {
 
+              
                 if (map.containsKey(parts[4].replace("{", ""))) {
+                    System.out.println(parts[4] + "PARTE4EX");
+                    
 
                     discriptor.extend = map.get(parts[4]) + "." + parts[4].substring(0, parts[4].length());
                 } else {
-//
-                    discriptor.extend = discriptor.packageName + "." + parts[4].substring(0, parts[4].length() - 1);
+                     if(parts.length>=6){
+                     discriptor.extend = parts[4]+parts[5].replace("{", "");
+                     }else{
+                         discriptor.extend = parts[4].replace("{", "");
+                     }
+                   // discriptor.extend = parts[4]+parts[5];
                 }
             } else if (parts[3].equals("implements")) {
                 //System.out.println(map.containsKey(parts[4]));
@@ -314,16 +330,17 @@ public class ClassParser {
 //                    String value = entry.getValue();
 //                    System.out.println(key + value + "VALORES");
 //                }
-                System.out.println(parts[4]);
+                
                 if (map.containsKey(parts[4])) {
-                    System.out.println("entro");
-                    discriptor.implement = map.get(parts[4]) + "." + parts[4].substring(0, parts[4].length());
+                   
+                    discriptor.implement = map.get(parts[4]) + "." + parts[4].substring(0, parts[4].length()).replace("{", "");
 
                 } else {
-                    discriptor.implement = parts[4];
+                    discriptor.implement = parts[4].replace("{", "");
                 }
             }
-
+            
+            }
 //            if (parts[3].equals("implements")) {
 //                System.out.println("entro");
 //                for (Map.Entry<String, String> entry : map.entrySet()) {
@@ -368,8 +385,9 @@ public class ClassParser {
             } else if (parts.length == 5 && isClassOrInterface(parts[1]) && isParentLinker(parts[3])) {
                 discriptor.name = discriptor.packageName + "." + parts[2];
             } else {
-
+                if(parts.length>=3){
                 discriptor.name = discriptor.packageName + "." + parts[2];
+                }
             }
             if (discriptor.name != null) {
 //                if (discriptor.extend == null) {
@@ -397,13 +415,17 @@ public class ClassParser {
 
     public void savevalues(String line, HashMap<String, String> map, String dp) {
         line = line.trim();
+        System.out.println(line);
         String[] parts = line.split("\\s+");
-
+         if(parts.length>=3){
+    
         map.put(parts[2], dp);
 
+          }
     }
     int i=0;
      
+    
     public void searchrelation(List<String> lines, String line, HashMap<String, String> map,List<String> list){
          line = line.trim();
          line=line.replace(".", " ");
@@ -431,9 +453,41 @@ public class ClassParser {
          
              }
          }
-         }
-         
+         if((line.contains("public") || line.contains("private") || line.contains("final")) && ((!line.contains("class")) && !line.contains("interface")) ){
+              String[] parts = line.split("\\s+");
+              //line=parts[parts.length-1].replace(";", "");
+              if(parts.length==4){
+                  if(map.containsKey(parts[2].replace(">", "").replace("<", "").replace(",", ""))){
+                     
+                          
+                      
+                          list.add(map.get(parts[2].replace(">", "").replace("<", "").replace(",", "")).concat(".").concat(parts[2].replace(">", "").replace("<", "").replace(",", "")));
+                      
+                   //list.add(map.get(parts[2].replace(">", "")).concat(".").concat(parts[2].replace(">", "").replace("<", "").replace(",", "")));
+              }else if(parts.length==3){
+                  if(map.containsKey(parts[1].replace(">", "").replace("<", "").replace(",", ""))){
+                      
+                          list.add(map.get(parts[1].replace(">", "").replace("<", "").replace(",", "")).concat(".").concat(parts[2].replace("<", "").replace(",", "")));
+                      
+                   
+              }
+              
              
+         }
+         }
+              if(map.containsKey(parts[2]) || map.containsKey(parts[1]) ){
+                   discriptor.constructor=list;
+              }
+              
+              if(list.isEmpty()){
+                  discriptor.constructor=null;
+              }
+                  
+              }
+        
+         }
+    
+
                 
                  
              
@@ -445,9 +499,9 @@ public class ClassParser {
     
 
     public String searchrelationjpa(List<String> lines, String line, int i, HashMap<String, List> mapdb) throws FileNotFoundException, IOException {
-        String entidad;
+        String entidad="";
         String relation = "";
-        
+         DataBaseData db = new DataBaseData();
 
         List<String> tables = new ArrayList();
 
@@ -469,6 +523,7 @@ public class ClassParser {
             if (line.contains("@OneToOne") || line.contains("@OneToMany") || line.contains("@ManyToMany")
                     || line.contains("@ManyToOne")) {
 
+               
                 if (line.contains("@OneToOne")) {
                     relation = "OneToOne";
                 }
@@ -482,22 +537,37 @@ public class ClassParser {
 
                     relation = "ManyToOne";
                 }
+                
+                
+                do{
+                if(!lines.get(i+1).contains("@")){
+                   entidad = lines.get(i + 1);
+                }
+                i++;
+                }while(lines.get(i).contains("@"));
+                
+                
 
-                entidad = lines.get(i + 1);
-
-                DataBaseData db = new DataBaseData();
+               
                 try {
                     String[] parts1 = entidad.split("\\s+");
-                    entidad = parts1[2].replace(";", "");
-                    List<String> tablas = db.getTables(typedb, hostdb, portdb, namedb, userdb, password);
-                    Boolean res = tablas.contains(entidad);
-                    System.out.println(entidad);
-                    if (res) {
+                    if(parts1.length>=3){
+                         entidad = parts1[3].replace(";", "");
+                    }else{
+                         entidad = parts1[2].replace(";", "");
+                    }
+                    
+//                    List<String> tablas = db.getTables(typedb, hostdb, portdb, namedb, userdb, password);
+//                    Boolean res = tablas.contains(entidad);
+                    
+//                    if (res) {
+//                        
                         tables.add(entidad);
                         mapdb.put(relation, tables);
                         discriptor.setDatasources(mapdb);
+//                    }
                         // System.out.println(entidad);
-                    }
+//                   }
 //                    for (Map.Entry<String, List> entry : mapdb.entrySet()) {
 //                        String key = entry.getKey();
 //                        List value = entry.getValue();
@@ -534,9 +604,11 @@ public class ClassParser {
 //                System.out.println(table);
                 //  }
                 return "true";
-
+                }
+        
             }
+            
             return "false";
         }
     }
-}
+
