@@ -84,14 +84,15 @@ public class DataBaseData {
     }
 
     //Este metodo hace una consulta sql a la db del cliente para obtener sus tablas.
-    public List getTables(DataBaseData db) throws ClassNotFoundException, SQLException {
+    public List getTables(String typedb,String host,String port,String name,String user,String password) throws ClassNotFoundException, SQLException {
         List<String> tables = new ArrayList();
         Class.forName("com.mysql.jdbc.Driver");
+        
         Connection conexion = DriverManager.getConnection(
-                "jdbc:mysql://" + db.getHost() + ":".concat(db.getPort()) + "/" + db.getDb(), db.getUsername(), db.getPassword());
+                "jdbc:mysql://" + host + ":".concat(port) + "/" + name, user, password);
 
         Statement statement = conexion.createStatement();
-        ResultSet rs = statement.executeQuery("show tables from " + db.getDb());
+        ResultSet rs = statement.executeQuery("show tables from " + name);
 
         while (rs.next()) {
             tables.add(rs.getString(1));
@@ -100,4 +101,7 @@ public class DataBaseData {
 
         return tables;
     }
+    
+
+    
 }
