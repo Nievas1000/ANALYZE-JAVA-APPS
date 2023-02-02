@@ -553,8 +553,17 @@ public class ClassParser {
                     String[] parts1 = entidad.split("\\s+");
                     if(parts1.length>=3){
                          entidad = parts1[3].replace(";", "");
+                         if(relation.equals("OneToMany")){
+                             String trim=discriptor.name.trim();
+                             trim=trim.replace(".", " ");
+                             String[] parts = trim.split("\\s+");
+                          entidad=parts[parts.length-1].toLowerCase() + "_" + parts1[3].replace(";", "");   
+                         }
                     }else{
-                         entidad = parts1[2].replace(";", "");
+                        if(relation.equals("OneToMany")){
+                          entidad=discriptor.name + "_" + parts1[2].replace(";", "");   
+                         }
+                       
                     }
                     
 //                    List<String> tablas = db.getTables(typedb, hostdb, portdb, namedb, userdb, password);
