@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ClassDiscriptor {
+    
 
     public String packageName;
     public String name;
