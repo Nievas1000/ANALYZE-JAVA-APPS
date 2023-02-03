@@ -5,6 +5,7 @@ package Classes;
 import java.lang.*;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 public class ClassDiscriptor {
     
@@ -12,12 +13,12 @@ public class ClassDiscriptor {
     public String packageName;
     public String name;
     public Boolean interfaz;
-    //public String modifier;
     public String pathfile;
     public String userkey;
     public String extend;
     public String implement;
-    public List<String> constructor;
+    //se define un hashset para que no haya valores repetidos
+    public Set<String> constructor;
     public HashMap<String, List> datasources;
 
     //public String lastModified;
@@ -25,7 +26,7 @@ public class ClassDiscriptor {
 
     }
 
-    public ClassDiscriptor(String packageName, String name, Boolean interfaz, String pathfile, String userkey, String extend, String implement, List<String> constructor, HashMap<String, List> datasources) {
+    public ClassDiscriptor(String packageName, String name, Boolean interfaz, String pathfile, String userkey, String extend, String implement, Set<String> constructor, HashMap<String, List> datasources) {
         this.packageName = packageName;
         this.name = name;
         this.interfaz = interfaz;
@@ -37,6 +38,8 @@ public class ClassDiscriptor {
         this.datasources = datasources;
     }
 
+    
+
     public HashMap<String, List> getDatasources() {
         return datasources;
     }
@@ -45,13 +48,15 @@ public class ClassDiscriptor {
         this.datasources = datasources;
     }
 
-    public List<String> getConstructor() {
+    public Set<String> getConstructor() {
         return constructor;
     }
 
-    public void setConstructor(List<String> constructor) {
+    public void setConstructor(Set<String> constructor) {
         this.constructor = constructor;
     }
+
+
 
     
     public String getPathfile() {
