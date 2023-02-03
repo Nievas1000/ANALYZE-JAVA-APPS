@@ -61,9 +61,12 @@ public class Main {
 
         //se hace una list con todos lo atributos de classdiscriptor
         List<ClassDiscriptor> cdList = new ArrayList();
+        //map global 
         HashMap<String,String> map=new HashMap<>();
         //Itera cada file si tiene name y no es null se agrega a una lista
         int cont=0;
+        //este for se recorre 2 veces para que primero haga un paneo de todas las clases y guarde sus nombres y package en el map.
+        //y despues la ultima iteracion es donde hace el parse de todos los datos obtenidos aparte de obtener mas data.
         for (int i = 0; i < 2; i++) {
             
         for (File f : files) {
@@ -231,12 +234,9 @@ public class Main {
             // get the property value and print it out
             String userkey = prop.getProperty("USER.APPLICATION.KEY");
             String sendjson = prop.getProperty("SEND.JSON.TO.SAAS.AUTOMATICALLY");
-//            String typedb=prop.getProperty("TYPE.DB");
-//            String hostdb=prop.getProperty("HOST.DB");
-//            String portdb=prop.getProperty("PORT.DB");
-//            String namedb=prop.getProperty("NAME.DB");
-//            String userdb=prop.getProperty("USER.DB");
-//            String password=prop.getProperty("PASSWORD.DB");
+
+//este bloque de codigo obtiene el filepath por medio del escaneo de linea por linea ya que no se puede usar el getproperty porque
+//no considera "/" entonces la direccion del archivo sin / es erronea
             try {
                 try (BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Leoo\\Downloads"+ "\\" + "AddAppToCodojoConfig.config.properties"))) {
                     String line;
