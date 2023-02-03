@@ -236,7 +236,7 @@ public class Main {
             String sendjson = prop.getProperty("SEND.JSON.TO.SAAS.AUTOMATICALLY");
 
 //este bloque de codigo obtiene el filepath por medio del escaneo de linea por linea ya que no se puede usar el getproperty porque
-//no considera "/" entonces la direccion del archivo sin / es erronea
+//no considera "/" entonces la direccion del archivo sin / es erronea.
             try {
                 try (BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Leoo\\Downloads"+ "\\" + "AddAppToCodojoConfig.config.properties"))) {
                     String line;
