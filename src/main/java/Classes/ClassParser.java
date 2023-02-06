@@ -259,30 +259,60 @@ public class ClassParser {
                 cont = +1;
                 discriptor.implement = discriptor.packageName + "." + parts[6].substring(0, parts[6].length());
                 discriptor.name = discriptor.packageName + "." + parts[2].substring(0, parts[2].length());
-                if (parts.length >= 3) {
+                if (parts.length >= 6) {
                     System.out.println(parts[4] + "PARTE 4");
-                    if (parts[3].equals("extends")) {
+                    if(parts.length==9){
+                    if (parts[4].equals("extends")) {
+
+                        if (map.containsKey(parts[5].replace("{", ""))) {
+
+                            discriptor.extend = map.get(parts[5]) + "." + parts[5];
+                        } else {
+
+                            discriptor.extend = null;
+                        }
+                      
+
+                    }
+                
+
+                if (parts[6].equals("implements")) {
+                    if (map.containsKey(parts[7])) {
+                        discriptor.implement = map.get(parts[7]) + "." + parts[7];
+
+                    } else {
+                        discriptor.implement = null;
+                    }
+
+                }
+                    }else{
+                        System.out.println(parts[3]+" PARTES EXTENDS 3333");
+                         if (parts[3].equals("extends")) {
 
                         if (map.containsKey(parts[4].replace("{", ""))) {
 
-                            discriptor.extend = map.get(parts[4]) + "." + parts[4].substring(0, parts[4].length());
+                            discriptor.extend = map.get(parts[4]) + "." + parts[4];
                         } else {
 
-                            discriptor.extend = parts[4].substring(0, parts[4].length());
+                            discriptor.extend = null;
                         }
-                        //System.out.println(discriptor.extend);
+                      
 
                     }
-                }
+                
 
                 if (parts[5].equals("implements")) {
                     if (map.containsKey(parts[6])) {
-                        discriptor.implement = map.get(parts[6]) + "." + parts[6].substring(0, parts[6].length());
+                        discriptor.implement = map.get(parts[6]) + "." + parts[6];
 
                     } else {
-                        discriptor.implement = parts[6];
+                        discriptor.implement = null;
                     }
 
+                }
+                        
+                    }
+                    
                 }
             }
 //                if (lol==5) {
@@ -309,21 +339,16 @@ public class ClassParser {
             System.out.println(parts.length);
             if (parts.length >= 4) {
 
-                if (parts[3].equals("extends") && cont <= 0) {
+                if (parts[parts.length-3].equals("extends") && cont <= 0) {
 
-                    if (map.containsKey(parts[4].replace("{", ""))) {
-                        System.out.println(parts[4] + "PARTE4EX");
+                    if (map.containsKey(parts[parts.length-2].replace("{", ""))) {
 
-                        discriptor.extend = map.get(parts[4]) + "." + parts[4].substring(0, parts[4].length());
+                        discriptor.extend = map.get(parts[parts.length-2]) + "." + parts[parts.length-2].substring(0, parts[4].length());
                     } else {
-                        if (parts.length >= 6) {
-                            discriptor.extend = parts[4] + parts[5].replace("{", "");
-                        } else {
-                            discriptor.extend = parts[4].replace("{", "");
-                        }
-                        // discriptor.extend = parts[4]+parts[5];
+                       discriptor.extend = null;
+                       
                     }
-                } else if (parts[3].equals("implements")) {
+                } else if (parts[parts.length-3].equals("implements")) {
                     //System.out.println(map.containsKey(parts[4]));
                     //discriptor.implement = discriptor.packageName + "." + parts[4].substring(0, parts[4].length());
                     System.out.println(discriptor.packageName);
@@ -333,12 +358,13 @@ public class ClassParser {
 //                    System.out.println(key + value + "VALORES");
 //                }
 
-                    if (map.containsKey(parts[4])) {
+                    System.out.println(parts[parts.length-2] + "PARTE");
+                    if (map.containsKey(parts[parts.length-2])) {
 
-                        discriptor.implement = map.get(parts[4]) + "." + parts[4].substring(0, parts[4].length()).replace("{", "");
+                        discriptor.implement = map.get(parts[parts.length-2]) + "." + parts[parts.length-2];//.substring(0, parts[4].length()).replace("{", "");
 
                     } else {
-                        discriptor.implement = parts[4].replace("{", "");
+                        discriptor.implement = null;
                     }
                 }
 
@@ -387,10 +413,28 @@ public class ClassParser {
             } else if (parts.length == 5 && isClassOrInterface(parts[1]) && isParentLinker(parts[3])) {
                 discriptor.name = discriptor.packageName + "." + parts[2];
             } else {
-                if (parts.length >= 3) {
+                System.out.println(parts.length+ "PARTESASSSSSSSS");
+                if (parts.length >= 3 && parts.length<=9) {
+                    if(parts.length==4){
+                    discriptor.name = discriptor.packageName + "." + parts[1];
+                    }
+                     if(parts.length==7){
+               
+                    discriptor.name = discriptor.packageName + "." + parts[2];
+               }
+                      if(parts.length==9){
+                   discriptor.name = discriptor.packageName + "." + parts[3];
+                   
+               
+                }else{
                     discriptor.name = discriptor.packageName + "." + parts[2];
                 }
+              
+               
+               
             }
+            }
+            
             if (discriptor.name != null) {
 //                if (discriptor.extend == null) {
 //                    discriptor.extend = "java.lang.Object";
