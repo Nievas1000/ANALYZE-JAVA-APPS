@@ -165,7 +165,7 @@ public class Main {
             
 
             //}
-            String json = toJSON(mapjson, sendjson);
+            String json = toJSON(mapjson, sendjson,userkey);
             StringSelection selection = new StringSelection(json);
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             clipboard.setContents(selection, selection);
@@ -188,7 +188,7 @@ public class Main {
 
         } catch (Exception e2) {
             e2.printStackTrace();
-            JOptionPane.showMessageDialog(null, e2.getMessage());
+           // JOptionPane.showMessageDialog(null, e2.getMessage());
 
         }
 
@@ -196,15 +196,20 @@ public class Main {
 
     //esta funcion 
     //Este metodo transforma un hashmap a json mediante la dependencia de google.gson
-    public String toJSON(HashMap map, String sendjson) throws Exception {
+    public String toJSON(HashMap map, String sendjson,String userkey) throws Exception {
 
         Gson gson = new Gson();
         JsonObject json = gson.toJsonTree(map).getAsJsonObject();
 
-        if (sendjson.equalsIgnoreCase("yes")) {
+        
+        if(PostRequest.VerificationKey(userkey)==200){
+            if (sendjson.equalsIgnoreCase("yes")) {
             PostRequest.PostRequest(json);
             JOptionPane.showMessageDialog(null, "Json send");
         }
+        }
+        
+       
         return json.toString();
     }
 
