@@ -61,12 +61,17 @@ public class ClassParser {
         HashMap<String, List> mapdb = new HashMap<>();
         List<String> list = new ArrayList<>();
         Set<String> set = new HashSet<String>();
-        
+
         //este es el for donde itera todas las clases e interfaces y hacen un paneo de sus nombres y package
         for (int i = 0; i < lines.size(); i++) {
             if (discriptor.packageName == null) {
                 getPackageName(lines.get(i), map);
                 continue;
+            }
+            
+            if (lines.get(i).contains("public enum")) {
+                System.out.println("ENTRAA");
+                savevalues(lines.get(i), map, discriptor.packageName);
             }
 
             if (lines.get(i).contains("public interface")) {
@@ -86,8 +91,7 @@ public class ClassParser {
 //            System.out.println(key + value + "VALORES FOR");
 //
 //        }
-
-   //este for es donde se parsea toda la data obtenida anteriormente y se obtiene data nueva(relaciones,constructs,etc)
+        //este for es donde se parsea toda la data obtenida anteriormente y se obtiene data nueva(relaciones,constructs,etc)
         for (int i = 0; i < lines.size(); i++) {
 
             if ((a == 1)) {
@@ -261,58 +265,54 @@ public class ClassParser {
                 discriptor.name = discriptor.packageName + "." + parts[2].substring(0, parts[2].length());
                 if (parts.length >= 6) {
                     System.out.println(parts[4] + "PARTE 4");
-                    if(parts.length==9){
-                    if (parts[4].equals("extends")) {
+                    if (parts.length == 9) {
+                        if (parts[4].equals("extends")) {
 
-                        if (map.containsKey(parts[5].replace("{", ""))) {
+                            if (map.containsKey(parts[5].replace("{", ""))) {
 
-                            discriptor.extend = map.get(parts[5]) + "." + parts[5];
-                        } else {
+                                discriptor.extend = map.get(parts[5]) + "." + parts[5];
+                            } else {
 
-                            discriptor.extend = null;
+                                discriptor.extend = null;
+                            }
+
                         }
-                      
 
-                    }
-                
+                        if (parts[6].equals("implements")) {
+                            if (map.containsKey(parts[7])) {
+                                discriptor.implement = map.get(parts[7]) + "." + parts[7];
 
-                if (parts[6].equals("implements")) {
-                    if (map.containsKey(parts[7])) {
-                        discriptor.implement = map.get(parts[7]) + "." + parts[7];
+                            } else {
+                                discriptor.implement = null;
+                            }
 
-                    } else {
-                        discriptor.implement = null;
-                    }
-
-                }
-                    }else{
-                        System.out.println(parts[3]+" PARTES EXTENDS 3333");
-                         if (parts[3].equals("extends")) {
-
-                        if (map.containsKey(parts[4].replace("{", ""))) {
-
-                            discriptor.extend = map.get(parts[4]) + "." + parts[4];
-                        } else {
-
-                            discriptor.extend = null;
                         }
-                      
-
-                    }
-                
-
-                if (parts[5].equals("implements")) {
-                    if (map.containsKey(parts[6])) {
-                        discriptor.implement = map.get(parts[6]) + "." + parts[6];
-
                     } else {
-                        discriptor.implement = null;
+                        System.out.println(parts[3] + " PARTES EXTENDS 3333");
+                        if (parts[3].equals("extends")) {
+
+                            if (map.containsKey(parts[4].replace("{", ""))) {
+
+                                discriptor.extend = map.get(parts[4]) + "." + parts[4];
+                            } else {
+
+                                discriptor.extend = null;
+                            }
+
+                        }
+
+                        if (parts[5].equals("implements")) {
+                            if (map.containsKey(parts[6])) {
+                                discriptor.implement = map.get(parts[6]) + "." + parts[6];
+
+                            } else {
+                                discriptor.implement = null;
+                            }
+
+                        }
+
                     }
 
-                }
-                        
-                    }
-                    
                 }
             }
 //                if (lol==5) {
@@ -339,16 +339,16 @@ public class ClassParser {
             System.out.println(parts.length);
             if (parts.length >= 4) {
 
-                if (parts[parts.length-3].equals("extends") && cont <= 0) {
+                if (parts[parts.length - 3].equals("extends") && cont <= 0) {
 
-                    if (map.containsKey(parts[parts.length-2].replace("{", ""))) {
+                    if (map.containsKey(parts[parts.length - 2].replace("{", ""))) {
 
-                        discriptor.extend = map.get(parts[parts.length-2]) + "." + parts[parts.length-2].substring(0, parts[4].length());
+                        discriptor.extend = map.get(parts[parts.length - 2]) + "." + parts[parts.length - 2].substring(0, parts[4].length());
                     } else {
-                       discriptor.extend = null;
-                       
+                        discriptor.extend = null;
+
                     }
-                } else if (parts[parts.length-3].equals("implements")) {
+                } else if (parts[parts.length - 3].equals("implements")) {
                     //System.out.println(map.containsKey(parts[4]));
                     //discriptor.implement = discriptor.packageName + "." + parts[4].substring(0, parts[4].length());
                     System.out.println(discriptor.packageName);
@@ -358,10 +358,10 @@ public class ClassParser {
 //                    System.out.println(key + value + "VALORES");
 //                }
 
-                    System.out.println(parts[parts.length-2] + "PARTE");
-                    if (map.containsKey(parts[parts.length-2])) {
+                    System.out.println(parts[parts.length - 2] + "PARTE");
+                    if (map.containsKey(parts[parts.length - 2])) {
 
-                        discriptor.implement = map.get(parts[parts.length-2]) + "." + parts[parts.length-2];//.substring(0, parts[4].length()).replace("{", "");
+                        discriptor.implement = map.get(parts[parts.length - 2]) + "." + parts[parts.length - 2];//.substring(0, parts[4].length()).replace("{", "");
 
                     } else {
                         discriptor.implement = null;
@@ -413,28 +413,38 @@ public class ClassParser {
             } else if (parts.length == 5 && isClassOrInterface(parts[1]) && isParentLinker(parts[3])) {
                 discriptor.name = discriptor.packageName + "." + parts[2];
             } else {
-                System.out.println(parts.length+ "PARTESASSSSSSSS");
-                if (parts.length >= 3 && parts.length<=9) {
-                    if(parts.length==4){
-                    discriptor.name = discriptor.packageName + "." + parts[1];
+                System.out.println(parts.length + "PARTESASSSSSSSS");
+                if (parts.length == 4 || parts.length == 7 || parts.length == 9 || parts.length == 5) {
+                    if (parts.length == 4) {
+                        discriptor.name = discriptor.packageName + "." + parts[1];
                     }
-                     if(parts.length==7){
-               
-                    discriptor.name = discriptor.packageName + "." + parts[2];
-               }
-                      if(parts.length==9){
-                   discriptor.name = discriptor.packageName + "." + parts[3];
-                   
-               
-                }else{
-                    discriptor.name = discriptor.packageName + "." + parts[2];
+
+                    if (parts.length == 5) {
+                        discriptor.name = discriptor.packageName + "." + parts[3];
+                    }
+                    if (parts.length == 7) {
+
+                        discriptor.name = discriptor.packageName + "." + parts[3];
+                    }
+                    if (parts.length == 9) {
+                        discriptor.name = discriptor.packageName + "." + parts[3];
+
+                    }
+
+                } else {
+                    if(parts.length==1){
+                        discriptor.name = discriptor.packageName + "." + parts[0];
+                    }
+                    if(parts.length==2){
+                        discriptor.name = discriptor.packageName + "." + parts[1];
+                    }
+                    if(parts.length>2){
+                        discriptor.name = discriptor.packageName + "." + parts[2];
+                    }
+                    
                 }
-              
-               
-               
             }
-            }
-            
+
             if (discriptor.name != null) {
 //                if (discriptor.extend == null) {
 //                    discriptor.extend = "java.lang.Object";
@@ -466,15 +476,14 @@ public class ClassParser {
         String[] parts = line.split("\\s+");
         if (parts.length >= 3) {
 
-        //guarda nombre de la clase y package en un hashmap.
+            //guarda nombre de la clase y package en un hashmap.
             map.put(parts[2], dp);
 
         }
     }
     int i = 0;
-    
-    
- //busca en un clases el llamado a otras clases por medio de los import o declaraciones de variables que referencian a una clase.
+
+    //busca en un clases el llamado a otras clases por medio de los import o declaraciones de variables que referencian a una clase.
     public void searchrelation(List<String> lines, String line, HashMap<String, String> map, Set<String> set) {
         line = line.trim();
         line = line.replace(".", " ");
@@ -491,7 +500,6 @@ public class ClassParser {
                 set.add(map.get(line).concat(".").concat(line));
             }
 
-            
 //guarda el hashset en el atributo constructor de la clase discriptor
             discriptor.constructor = set;
 
@@ -502,9 +510,9 @@ public class ClassParser {
 
             }
         }
-        
+
         //este if es para buscar en una clase las declaraciones de otra clase en un variable
-        if ((line.contains("public") || line.contains("private") || line.contains("final")) && ((!line.contains("class")) && !line.contains("interface"))) {
+        if ((line.contains("public") || line.contains("private") || line.contains("final")) && ((!line.contains("class")) && !line.contains("interface") && !line.contains("enum"))) {
             String[] parts = line.split("\\s+");
             //line=parts[parts.length-1].replace(";", "");
             if (parts.length == 4) {
@@ -514,8 +522,8 @@ public class ClassParser {
 
                     set.add(map.get(parts[2].replace(">", "").replace("<", "").replace(",", "")).concat(".").concat(parts[2].replace(">", "").replace("<", "").replace(",", "")));
 
-         //list.add(map.get(parts[2].replace(">", "")).concat(".").concat(parts[2].replace(">", "").replace("<", "").replace(",", "")));
-         //mismo patron
+                    //list.add(map.get(parts[2].replace(">", "")).concat(".").concat(parts[2].replace(">", "").replace("<", "").replace(",", "")));
+                    //mismo patron
                 } else if (parts.length == 3) {
                     if (map.containsKey(parts[1].replace(">", "").replace("<", "").replace(",", "")) && !discriptor.name.contains(parts[1])) {
 
@@ -528,8 +536,14 @@ public class ClassParser {
 
             //si algun nombre de la clase coincide con una key del map donde se mapearon todas los nombres de las clases y package guarda
             //en el atributo constructor de la clase discriptor
-            if (map.containsKey(parts[2]) || map.containsKey(parts[1])) {
-                discriptor.constructor = set;
+            if (parts.length < 2) {
+                if (map.containsKey(parts[1])) {
+                    discriptor.constructor = set;
+                } else {
+                    if (map.containsKey(parts[2])) {
+                        discriptor.constructor = set;
+                    }
+                }
 
             }
 //si el hashset no tiene nada guarda un valor en null
@@ -549,7 +563,7 @@ public class ClassParser {
         DataBaseData db = new DataBaseData();
 
         List<String> tables = new ArrayList();
-        
+
 //aca se identifica el archivo de propiedades pasandole el user.dir que seria el directorio donde esta parado ahora el usuario.
         try (InputStream input = new FileInputStream("C:\\Users\\Leoo\\Downloads" + "\\" + "AddAppToCodojoConfig.config.properties")) {
 
@@ -587,7 +601,6 @@ public class ClassParser {
 
                 //este bucle es para que ignore todas las anotaciones que no sean las relaciones de jpa
                 //y busque la declaracion de la clase donde se definio la relacion.
-                
                 do {
                     if (!lines.get(i + 1).contains("@")) {
                         entidad = lines.get(i + 1);
