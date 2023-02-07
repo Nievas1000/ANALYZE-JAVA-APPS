@@ -56,7 +56,7 @@ public class Main {
         files = new ArrayList();
         if (file != null && file.exists()) {
             //trae el archivo
-            getFiles(file);
+            mostrarCarpeta(file);
         }
 
         //se hace una list con todos lo atributos de classdiscriptor
@@ -70,7 +70,6 @@ public class Main {
         for (int i = 0; i < 2; i++) {
             
         for (File f : files) {
-           
             System.out.println("File: " + f.getAbsolutePath());
             ClassParser parser = new ClassParser(f,map,i,cont);
             ClassDiscriptor cd = parser.getDiscriptor();
@@ -202,16 +201,38 @@ public class Main {
         JsonObject json = gson.toJsonTree(map).getAsJsonObject();
 
         
-        if(PostRequest.VerificationKey(userkey)==200){
-            if (sendjson.equalsIgnoreCase("yes")) {
-            PostRequest.PostRequest(json);
-            JOptionPane.showMessageDialog(null, "Json send");
-        }
-        }
+//        if(PostRequest.VerificationKey(userkey)==200){
+//            if (sendjson.equalsIgnoreCase("yes")) {
+//            PostRequest.PostRequest(json);
+//            JOptionPane.showMessageDialog(null, "Json send");
+//        }
+        //}
         
        
         return json.toString();
     }
+    
+     public void mostrarCarpeta(File fichero) {
+     if (fichero.isDirectory()) {
+      File[] lista = fichero.listFiles();
+      for (int i = 0; i < lista.length; i++) {
+       // System.out.println(lista[i].getName());
+        if (lista[i].isDirectory()) {
+          
+              mostrarCarpeta(lista[i]);
+        }
+            if(lista[i].isFile() && lista[i].getName().endsWith(".java")){
+                
+            files.add(lista[i]);
+            
+            }
+         
+                    
+        }
+      }
+    }
+  
+
 
     //Obtiene cada archivo y los agrega a una lista de files.
     public void getFiles(File file) {
