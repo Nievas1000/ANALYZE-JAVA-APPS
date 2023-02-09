@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringReader;
 import java.nio.file.Files;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.swing.JOptionPane;
@@ -84,6 +85,16 @@ public class Main {
         }
          cont=cont+1;
         
+        }
+        
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            
+                    System.out.println(key+" "+value + " MAP");
+            
+            //System.out.println(key+" "+value + " MAP");
+            
         }
         
         
@@ -206,8 +217,8 @@ public class Main {
 //            PostRequest.PostRequest(json);
 //            JOptionPane.showMessageDialog(null, "Json send");
 //        }
-        //}
-        
+//        }
+//        
        
         return json.toString();
     }
@@ -235,16 +246,16 @@ public class Main {
 
 
     //Obtiene cada archivo y los agrega a una lista de files.
-    public void getFiles(File file) {
-        File[] subdir = file.listFiles();
-        for (File f : subdir) {
-            if (f.isFile() && f.getName().endsWith(".java")) {
-                files.add(f);
-            } else {
-                getFiles(f);
-            }
-        }
-    }
+//    public void getFiles(File file) {
+//        File[] subdir = file.listFiles();
+//        for (File f : subdir) {
+//            if (f.isFile() && f.getName().endsWith(".java")) {
+//                files.add(f);
+//            } else {
+//                getFiles(f);
+//            }
+//        }
+//    }
 
     //Este metodo obtiene los datos del archivo de propiedades y llama al metodo implementacion que desencadena todo el programa
     public void fileReader() throws IOException {

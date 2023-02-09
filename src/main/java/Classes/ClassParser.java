@@ -65,10 +65,10 @@ public class ClassParser {
         //este es el for donde itera todas las clases e interfaces y hacen un paneo de sus nombres y package
         for (int i = 0; i < lines.size(); i++) {
             if (discriptor.packageName == null) {
-                getPackageName(lines.get(i), map);
+                getPackageName(lines.get(i), lines, map);
                 continue;
             }
-            
+
             if (lines.get(i).contains("public enum")) {
                 System.out.println("ENTRAA");
                 savevalues(lines.get(i), map, discriptor.packageName);
@@ -117,7 +117,7 @@ public class ClassParser {
 
             if (discriptor.name == null) {
 
-                getClassName(lines.get(i), map);
+                getClassName(lines.get(i), lines, i, map);
                 continue;
             }
 
@@ -209,7 +209,7 @@ public class ClassParser {
 //        }
 //    }
     //Este metodo obtiene el nombre del package donde estan las clases
-    public void getPackageName(String line, HashMap<String, String> map) {
+    public void getPackageName(String line, List<String> lines, HashMap<String, String> map) {
         line = line.trim();
         if (line.startsWith("package")) {
             //divide cada linea en partes y los agrega a un array de strings
@@ -223,14 +223,15 @@ public class ClassParser {
             } else if (parts.length == 3 && parts[2].equals(";")) {
                 discriptor.packageName = parts[1];
             }
-        } else if (getClassName(line, map)) {
+        } else if (getClassName(line, lines, i, map)) {
             discriptor.packageName = "default";
         }
     }
 
     // Este metodo obtiene el nombre de cada clase y clasifica si es class o interface ademas dde obtener los extends e implements.
-    public boolean getClassName(String line, HashMap<String, String> map) {
+    public boolean getClassName(String line, List<String> lines, int i, HashMap<String, String> map) {
         line = line.trim();
+        String ex = null;
 
         int cont = 0;
         if (line.contains("class") || line.contains("interface")) {
@@ -263,58 +264,81 @@ public class ClassParser {
                 cont = +1;
                 discriptor.implement = discriptor.packageName + "." + parts[6].substring(0, parts[6].length());
                 discriptor.name = discriptor.packageName + "." + parts[2].substring(0, parts[2].length());
-                if (parts.length >= 6) {
-                    System.out.println(parts[4] + "PARTE 4");
-                    if (parts.length == 9) {
-                        if (parts[4].equals("extends")) {
 
-                            if (map.containsKey(parts[5].replace("{", ""))) {
+                for (int j = 0; j < parts.length - 1; j++) {
+                    if (parts[j].equalsIgnoreCase("extends")) {
+                        if (map.containsKey(parts[j + 1].replace("{", ""))) {
 
-                                discriptor.extend = map.get(parts[5]) + "." + parts[5];
-                            } else {
-
-                                discriptor.extend = null;
-                            }
-
-                        }
-
-                        if (parts[6].equals("implements")) {
-                            if (map.containsKey(parts[7])) {
-                                discriptor.implement = map.get(parts[7]) + "." + parts[7];
-
-                            } else {
-                                discriptor.implement = null;
-                            }
-
-                        }
-                    } else {
-                        System.out.println(parts[3] + " PARTES EXTENDS 3333");
-                        if (parts[3].equals("extends")) {
-
-                            if (map.containsKey(parts[4].replace("{", ""))) {
-
-                                discriptor.extend = map.get(parts[4]) + "." + parts[4];
-                            } else {
-
-                                discriptor.extend = null;
-                            }
-
-                        }
-
-                        if (parts[5].equals("implements")) {
-                            if (map.containsKey(parts[6])) {
-                                discriptor.implement = map.get(parts[6]) + "." + parts[6];
-
-                            } else {
-                                discriptor.implement = null;
-                            }
-
+                            discriptor.extend = map.get(parts[j + 1]) + "." + parts[j + 1];
+                        } else {
+                            discriptor.extend = null;
                         }
 
                     }
+                }
 
+                for (int j = 0; j < parts.length - 1; j++) {
+                    if (parts[j].equalsIgnoreCase("implements")) {
+                        if (map.containsKey(parts[j + 1].replace("{", ""))) {
+
+                            discriptor.implement = map.get(parts[j + 1]) + "." + parts[j + 1];
+                        } else {
+                            discriptor.implement = null;
+                        }
+                    }
                 }
             }
+//                if (parts.length >= 6) {
+//                    System.out.println(parts[4] + "PARTE 4");
+//                    if (parts.length == 9) {
+//                        if (parts[4].equals("extends")) {
+//
+//                            if (map.containsKey(parts[5].replace("{", ""))) {
+//
+//                                discriptor.extend = map.get(parts[5]) + "." + parts[5];
+//                            } else {
+//
+//                                discriptor.extend = null;
+//                            }
+//
+//                        }
+//
+//                        if (parts[6].equals("implements")) {
+//                            if (map.containsKey(parts[7])) {
+//                                discriptor.implement = map.get(parts[7]) + "." + parts[7];
+//
+//                            } else {
+//                                discriptor.implement = null;
+//                            }
+//
+//                        }
+//                    } else {
+//                     
+//                        if (parts[3].equals("extends")) {
+//
+//                            if (map.containsKey(parts[4].replace("{", ""))) {
+//
+//                                discriptor.extend = map.get(parts[4]) + "." + parts[4];
+//                            } else {
+//
+//                                discriptor.extend = null;
+//                            }
+//
+//                        }
+
+//                        if (parts[5].equals("implements")) {
+//                            if (map.containsKey(parts[6])) {
+//                                discriptor.implement = map.get(parts[6]) + "." + parts[6];
+//
+//                            } else {
+//                                discriptor.implement = null;
+//                            }
+//
+//                        }
+//
+//                    }
+//
+//                }
 //                if (lol==5) {
 //                    System.out.println("Entro");
 //                    for (Map.Entry<String, Object> entry : map.entrySet()) {
@@ -332,43 +356,88 @@ public class ClassParser {
             //System.out.println(discriptor.implement);
 //                     discriptor.implement = parts[6].substring(0, parts[6].length());
 //                     System.out.println(discriptor.implement);
-
             //Este if tiene un contador para que no entre 2 veces ya que las condiciones en el if de extend de arriba son similares a este
             //por eso tiene una contador para verificar si entro en el if anterior y si entro que aca no entre.
 //            System.out.println(line);
             System.out.println(parts.length);
-            if (parts.length >= 4) {
 
-                if (parts[parts.length - 3].equals("extends") && cont <= 0) {
+            if (line.contains("extends")) {
+                List<String> array = new ArrayList<>();
+                if (!line.endsWith("{")) {
+                    String lineif = lines.get(i + 1);
+                    lineif = lineif.replace("<", " ").replace(">", " ");
+                    String[] partsif = lineif.split("\\s+");
+                    discriptor.extend = map.get(partsif[0]) + "." + partsif[0];
+                    for (int j = 0; j < partsif.length - 1; j++) {
+                        if (map.containsKey(partsif[j].replace("{", ""))) {
+                            System.out.println(map.get(partsif[j]) + "PARTSIFFF");
 
-                    if (map.containsKey(parts[parts.length - 2].replace("{", ""))) {
-
-                        discriptor.extend = map.get(parts[parts.length - 2]) + "." + parts[parts.length - 2].substring(0, parts[4].length());
-                    } else {
-                        discriptor.extend = null;
-
+                            array.add(map.get(partsif[j]) + "." + partsif[j]);
+                            //discriptor.extend= map.get(partsif[j]) + "." + partsif[j];
+                        } else {
+                            discriptor.extend = null;
+                        }
                     }
-                } else if (parts[parts.length - 3].equals("implements")) {
-                    //System.out.println(map.containsKey(parts[4]));
-                    //discriptor.implement = discriptor.packageName + "." + parts[4].substring(0, parts[4].length());
-                    System.out.println(discriptor.packageName);
-//                for (Map.Entry<String, String> entry : map.entrySet()) {
-//                    String key = entry.getKey();
-//                    String value = entry.getValue();
-//                    System.out.println(key + value + "VALORES");
-//                }
+                    discriptor.extend = array.toString();
+                } else {
 
-                    System.out.println(parts[parts.length - 2] + "PARTE");
-                    if (map.containsKey(parts[parts.length - 2])) {
+                    for (int j = 0; j < parts.length - 1; j++) {
+                        if (parts[j].equalsIgnoreCase("extends") && cont <= 0 && line.endsWith("{")) {
 
-                        discriptor.implement = map.get(parts[parts.length - 2]) + "." + parts[parts.length - 2];//.substring(0, parts[4].length()).replace("{", "");
+                            if (map.containsKey(parts[j + 1].replace("{", ""))) {
 
-                    } else {
-                        discriptor.implement = null;
+                                discriptor.extend = map.get(parts[j + 1]) + "." + parts[j + 1];
+                            } else {
+                                discriptor.extend = null;
+                            }
+                        }
                     }
                 }
+            } else if (line.contains("implements")) {
+                for (int j = 0; j < parts.length - 1; j++) {
+                    if (parts[j].equalsIgnoreCase("implements")) {
+                        if (map.containsKey(parts[j + 1].replace("{", ""))) {
 
+                            discriptor.implement = map.get(parts[j + 1]) + "." + parts[j + 1];
+                        } else {
+                            discriptor.implement = null;
+                        }
+                    }
+                }
             }
+
+//            if (parts.length >= 4) {
+//
+//                if (parts[parts.length - 3].equals("extends") && cont <= 0) {
+//
+//                    if (map.containsKey(parts[parts.length - 2].replace("{", ""))) {
+//
+//                        discriptor.extend = map.get(parts[parts.length - 2]) + "." + parts[parts.length - 2];
+//                    } else {
+//                        discriptor.extend = null;
+//
+//                    }
+//                } else if (parts[parts.length - 3].equals("implements")) {
+//                    //System.out.println(map.containsKey(parts[4]));
+//                    //discriptor.implement = discriptor.packageName + "." + parts[4].substring(0, parts[4].length());
+//                    System.out.println(discriptor.packageName);
+////                for (Map.Entry<String, String> entry : map.entrySet()) {
+////                    String key = entry.getKey();
+////                    String value = entry.getValue();
+////                    System.out.println(key + value + "VALORES");
+////                }
+//
+//                    System.out.println(parts[parts.length - 2] + "PARTE");
+//                    if (map.containsKey(parts[parts.length - 2])) {
+//
+//                        discriptor.implement = map.get(parts[parts.length - 2]) + "." + parts[parts.length - 2];//.substring(0, parts[4].length()).replace("{", "");
+//
+//                    } else {
+//                        discriptor.implement = null;
+//                    }
+//                }
+//
+//            }
 //            if (parts[3].equals("implements")) {
 //                System.out.println("entro");
 //                for (Map.Entry<String, String> entry : map.entrySet()) {
@@ -413,47 +482,19 @@ public class ClassParser {
             } else if (parts.length == 5 && isClassOrInterface(parts[1]) && isParentLinker(parts[3])) {
                 discriptor.name = discriptor.packageName + "." + parts[2];
             } else {
-                System.out.println(parts.length + "PARTESASSSSSSSS");
-                if (parts.length == 4 || parts.length == 7 || parts.length == 9 || parts.length == 5) {
-                    if (parts.length == 4) {
-                        discriptor.name = discriptor.packageName + "." + parts[1];
+
+                for (int j = 0; j < parts.length; j++) {
+
+                    if (parts[j].equalsIgnoreCase("class")) {
+                        discriptor.name = discriptor.packageName + "." + parts[j + 1];
+                        break;
                     }
 
-                    if (parts.length == 5) {
-                        discriptor.name = discriptor.packageName + "." + parts[3];
-                    }
-                    if (parts.length == 7) {
-
-                        discriptor.name = discriptor.packageName + "." + parts[3];
-                    }
-                    if (parts.length == 9) {
-                        discriptor.name = discriptor.packageName + "." + parts[3];
-
-                    }
-
-                } else {
-                    if(parts.length==1){
-                        discriptor.name = discriptor.packageName + "." + parts[0];
-                    }
-                    if(parts.length==2){
-                        discriptor.name = discriptor.packageName + "." + parts[1];
-                    }
-                    if(parts.length>2){
-                        discriptor.name = discriptor.packageName + "." + parts[2];
-                    }
-                    
                 }
-            }
 
-            if (discriptor.name != null) {
-//                if (discriptor.extend == null) {
-//                    discriptor.extend = "java.lang.Object";
-//                }
-                /*	if(discriptor.modifier==null) {
-				discriptor.modifier=Constants.MODIFIER_DEFAULT;
-			}*/
-                return true;
+                //return true;
             }
+            return true;
         }
 
         return false;
@@ -475,9 +516,13 @@ public class ClassParser {
         System.out.println(line);
         String[] parts = line.split("\\s+");
         if (parts.length >= 3) {
-
+            for (int j = 0; j < parts.length - 1; j++) {
+                if (parts[j].equalsIgnoreCase("class") || parts[j].equalsIgnoreCase("interface") || parts[j].equalsIgnoreCase("enum")) {
+                    map.put(parts[j + 1].replace("<", "").replace(">", "").replace("T", "").replace(")", "").replace("(", "").replace(";", "").replace(",", ""), dp);
+                }
+            }
             //guarda nombre de la clase y package en un hashmap.
-            map.put(parts[2], dp);
+            //map.put(parts[2], dp);
 
         }
     }
@@ -536,16 +581,17 @@ public class ClassParser {
 
             //si algun nombre de la clase coincide con una key del map donde se mapearon todas los nombres de las clases y package guarda
             //en el atributo constructor de la clase discriptor
-            if (parts.length < 2) {
-                if (map.containsKey(parts[1])) {
-                    discriptor.constructor = set;
-                } else {
-                    if (map.containsKey(parts[2])) {
-                        discriptor.constructor = set;
-                    }
-                }
-
-            }
+            discriptor.constructor = set;
+//            if (parts.length < 1) {
+//                if (map.containsKey(parts[1])) {
+//                    discriptor.constructor = set;
+//                }
+//
+//            }else{
+//                  if (map.containsKey(parts[2])) {
+//                        discriptor.constructor = set;
+//                    }
+//            }
 //si el hashset no tiene nada guarda un valor en null
             if (set.isEmpty()) {
                 discriptor.constructor = null;
