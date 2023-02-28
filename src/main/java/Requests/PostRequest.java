@@ -86,9 +86,9 @@ public class PostRequest {
 
                
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("USERKEY INVALID");
             JOptionPane.showMessageDialog(null, "USERKEY INVALID");
-            
+            return null;
         }
 
     

@@ -7,7 +7,7 @@
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <maven.compiler.release>11</maven.compiler.release>
+<!--        <maven.compiler.release>11</maven.compiler.release>-->
         <sonar.projectKey>Codojoio_AppCodojo</sonar.projectKey>
         <sonar.organization>codojoio</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
@@ -99,7 +99,7 @@
                 <configuration>
                     <obfuscate>true</obfuscate>
                     <injar>${project.build.finalName}.jar</injar>               
-                    <outjar>Codojo.jar</outjar>
+                    <outjar>SendToCodojo.jar</outjar>
                     <outputDirectory>${project.build.directory}</outputDirectory>
                     <proguardInclude>${project.basedir}/proguard.conf</proguardInclude>
                     <exclusions>
