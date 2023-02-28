@@ -50,6 +50,17 @@ jobs:
           with:
             name: Fileproperties
             path: src/AddAppToCodojoConfig.config.properties
+        - name: Upload scriptsh
+          uses: actions/upload-artifact@v2
+          with:
+            name: scriptbat
+            path: src/SendCodojo.bat
+        - name: Upload scriptsh
+          uses: actions/upload-artifact@v2
+          with:
+            name: scriptsh
+            path: src/SendCodojo.sh
+        
   
   slack_pull_request:
     runs-on: ubuntu-latest
@@ -95,6 +106,14 @@ jobs:
         with:
            name: Fileproperties
            path: staging
+      - uses: actions/download-artifact@v3
+        with:
+           name: scriptbat
+           path: staging
+      - uses: actions/download-artifact@v3
+        with:
+           name: scriptsh
+           path: staging     
       - name: Deploy to S3 Bucket
         run: aws s3 sync --delete staging s3://appcodojo
     
