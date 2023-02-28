@@ -75,6 +75,7 @@ jobs:
       uses: jun3453/slack-pr-open-notification-action@v1.3.0
 
   deploy:
+    if: ${{ github.event_name == 'push' }}
     needs: [build]
     runs-on: ubuntu-latest
     steps:
@@ -95,7 +96,6 @@ jobs:
            name: Fileproperties
            path: staging
       - name: Deploy to S3 Bucket
-        if: ${{ github.event_name == 'push' }}
         run: aws s3 sync --delete staging s3://appcodojo
     
   activate-workflow:
