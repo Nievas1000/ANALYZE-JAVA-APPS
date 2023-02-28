@@ -70,7 +70,7 @@ jobs:
         MAKE_PRETTY : true
         MAKE_COMPACT : true
         IS_PR_FROM_FORK: false
-        uses: jun3453/slack-pr-open-notification-action@v1.3.0
+      uses: jun3453/slack-pr-open-notification-action@v1.3.0
 
   deploy:
     needs: [build]
