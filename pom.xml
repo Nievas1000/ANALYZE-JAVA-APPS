@@ -23,11 +23,11 @@
             <artifactId>maven-plugin-api</artifactId>
             <version>3.8.6</version>
         </dependency>
-        <dependency>
+<!--        <dependency>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
             <version>3.8.1</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -99,7 +99,7 @@
                 <configuration>
                     <obfuscate>true</obfuscate>
                     <injar>${project.build.finalName}.jar</injar>               
-                    <outjar>Codojo.jar</outjar>
+                    <outjar>SendToCodojo.jar</outjar>
                     <outputDirectory>${project.build.directory}</outputDirectory>
                     <proguardInclude>${project.basedir}/proguard.conf</proguardInclude>
                     <exclusions>

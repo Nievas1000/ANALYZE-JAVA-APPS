@@ -70,17 +70,17 @@ public class ClassParser {
             }
 
             if (lines.get(i).contains("public enum")) {
-                System.out.println("ENTRAA");
+//                System.out.println("ENTRAA");
                 savevalues(lines.get(i), map, discriptor.packageName);
             }
 
             if (lines.get(i).contains("public interface")) {
-                System.out.println("ENTRAA");
+//                System.out.println("ENTRAA");
                 savevalues(lines.get(i), map, discriptor.packageName);
             }
 
             if (lines.get(i).contains("public class") || lines.get(i).contains("class")) {
-                System.out.println("ENTRAA");
+//                System.out.println("ENTRAA");
                 savevalues(lines.get(i), map, discriptor.packageName);
             }
         }
@@ -359,7 +359,7 @@ public class ClassParser {
             //Este if tiene un contador para que no entre 2 veces ya que las condiciones en el if de extend de arriba son similares a este
             //por eso tiene una contador para verificar si entro en el if anterior y si entro que aca no entre.
 //            System.out.println(line);
-            System.out.println(parts.length);
+//            System.out.println(parts.length);
 
             if (line.contains("extends")) {
                 List<String> array = new ArrayList<>();
@@ -370,7 +370,7 @@ public class ClassParser {
                     discriptor.extend = map.get(partsif[0]) + "." + partsif[0];
                     for (int j = 0; j < partsif.length - 1; j++) {
                         if (map.containsKey(partsif[j].replace("{", ""))) {
-                            System.out.println(map.get(partsif[j]) + "PARTSIFFF");
+//                            System.out.println(map.get(partsif[j]) + "PARTSIFFF");
 
                             array.add(map.get(partsif[j]) + "." + partsif[j]);
                             //discriptor.extend= map.get(partsif[j]) + "." + partsif[j];
@@ -455,7 +455,7 @@ public class ClassParser {
 ////                }
 //                    //discriptor.implement = discriptor.packageName + "." + parts[4].substring(0, parts[4].length() - 1);
 //                }
-            System.out.println(line.split("\\s+"));
+//            
             if (parts.length == 2 && isClassOrInterface(parts[0])) {
                 if (parts[1].endsWith("{")) {
                     discriptor.name = discriptor.packageName + "." + parts[1].substring(0, parts[1].length() - 1);
@@ -512,8 +512,9 @@ public class ClassParser {
 
     //guarda los valores que se le pasan desde el primer for de esta clase
     public void savevalues(String line, HashMap<String, String> map, String dp) {
+        try{
         line = line.trim();
-        System.out.println(line);
+//        System.out.println(line);
         String[] parts = line.split("\\s+");
         if (parts.length >= 3) {
             for (int j = 0; j < parts.length - 1; j++) {
@@ -524,6 +525,9 @@ public class ClassParser {
             //guarda nombre de la clase y package en un hashmap.
             //map.put(parts[2], dp);
 
+        }
+        }catch(Exception e){
+            System.out.println(e.getMessage());
         }
     }
     int i = 0;
@@ -611,7 +615,7 @@ public class ClassParser {
         List<String> tables = new ArrayList();
 
 //aca se identifica el archivo de propiedades pasandole el user.dir que seria el directorio donde esta parado ahora el usuario.
-        try (InputStream input = new FileInputStream("C:\\Users\\Leoo\\Downloads" + "\\" + "AddAppToCodojoConfig.config.properties")) {
+        try (InputStream input = new FileInputStream(System.getProperty("user.dir") + "\\" + "SendToCodojo.config.properties")) {
 
             Properties prop = new Properties();
 
@@ -662,7 +666,7 @@ public class ClassParser {
                     if (parts1.length <= 3) {
                         entidad = parts1[2].replace(";", "");
                         if (relation.equals("ManyToMany") && parts1.length <= 3) {
-                            System.out.println(relation);
+                            
                             String trim = discriptor.name.trim();
                             trim = trim.replace(".", " ");
                             String[] parts = trim.split("\\s+");
@@ -690,7 +694,7 @@ public class ClassParser {
                         }
                         //mismo patron
                         if (relation.equals("ManyToMany")) {
-                            System.out.println(relation);
+                           
                             String trim = discriptor.name.trim();
                             trim = trim.replace(".", " ");
                             String[] parts = trim.split("\\s+");
