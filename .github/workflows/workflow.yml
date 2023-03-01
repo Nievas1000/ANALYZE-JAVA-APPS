@@ -15,6 +15,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: vimtor/action-zip@v1
         with:
+          name: result.zip
           files: src/SendCodojo.bat
           dest: result.zip
 
