@@ -64,8 +64,8 @@ jobs:
           with:
             name: scriptbat
             path: src/SendCodojo.bat
-        - name: Upload scriptsh
-          uses: actions/upload-artifact@v1
+        - name: Upload zip
+          uses: actions/upload-artifact@v2
           with:
             name: result.zip
             path: ${{ github.workspace }}/result.zip
