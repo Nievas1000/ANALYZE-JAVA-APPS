@@ -212,7 +212,7 @@ public class Main {
         Gson gson = new Gson();
         JsonObject json = gson.toJsonTree(map).getAsJsonObject();
 
-        if(PostRequest.VerificationKey(userkey)==200){
+//        if(PostRequest.VerificationKey(userkey)==200){
         if (sendjson.equalsIgnoreCase("yes")) {
               PostRequest.PostRequest(json);
             System.out.println("The results are now viewable at app.codojo.io. Press Enter key to continue...");
@@ -225,7 +225,7 @@ public class Main {
                     + "To send the results to Codojo, open the <SendToCodojo.config.properties>, set the variable “SEND_RESULTS_TO_CODOJO = true”, and rerun this application. Press Enter key to continue...”");
             scan.nextLine();
         }
-        }
+//        }
         
 //        
         return json.toString();
