@@ -9,6 +9,7 @@ on:
 
 jobs:
 #Este job analiza si hay un error de sintaxis en el codigo y sus vulnerabilidades (Linter).
+ 
 
   sonarcloud:
       runs-on: ubuntu-latest
@@ -55,13 +56,7 @@ jobs:
           with:
             name: scriptbat
             path: src/SendCodojo.bat
-        - name: Upload scriptsh
-          uses: actions/upload-artifact@v2
-          with:
-            name: scriptsh
-            path: src/SendCodojo.sh
-        
-  
+     
   slack_pull_request:
     runs-on: ubuntu-latest
     steps:
