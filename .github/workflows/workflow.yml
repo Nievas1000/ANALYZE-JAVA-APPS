@@ -50,7 +50,7 @@ jobs:
           uses: actions/upload-artifact@v2
           with:
             name: Fileproperties
-            path: src/AddAppToCodojoConfig.config.properties
+            path: src/SendToCodojo.config.properties
         - name: Upload scriptsh
           uses: actions/upload-artifact@v2
           with:
