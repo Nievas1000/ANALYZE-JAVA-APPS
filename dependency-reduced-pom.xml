@@ -95,7 +95,6 @@
   <properties>
     <sonar.projectKey>Codojoio_AppCodojo</sonar.projectKey>
     <sonar.organization>codojoio</sonar.organization>
-    <maven.compiler.release>11</maven.compiler.release>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>

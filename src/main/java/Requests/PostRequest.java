@@ -34,7 +34,7 @@ public class PostRequest {
             output.close();
             //trae la response de la db
             Reader in = new BufferedReader(new InputStreamReader(conexion.getInputStream(), "UTF-8"));
-            System.out.println(conexion.getResponseCode());
+            //System.out.println(conexion.getResponseCode());
 //            JOptionPane.showMessageDialog(null, conexion.getResponseCode());
             //itera la response
             for (int c; (c = in.read()) >= 0;) {
