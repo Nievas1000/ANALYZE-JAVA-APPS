@@ -360,14 +360,15 @@ public class ClassParser {
             //por eso tiene una contador para verificar si entro en el if anterior y si entro que aca no entre.
 //            System.out.println(line);
 //            System.out.println(parts.length);
-
+            String lineif;
             if (line.contains("extends")) {
                 List<String> array = new ArrayList<>();
                 if (!line.endsWith("{")) {
-                    String lineif = lines.get(i + 1);
+                    lineif = lines.get(i + 1);
                     lineif = lineif.replace("<", " ").replace(">", " ");
                     String[] partsif = lineif.split("\\s+");
                     discriptor.extend = map.get(partsif[0]) + "." + partsif[0];
+
                     for (int j = 0; j < partsif.length - 1; j++) {
                         if (map.containsKey(partsif[j].replace("{", ""))) {
 //                            System.out.println(map.get(partsif[j]) + "PARTSIFFF");
@@ -379,19 +380,27 @@ public class ClassParser {
                         }
                     }
                     discriptor.extend = array.toString();
+
                 } else {
+                    lineif = lines.get(i);
+                    lineif = lineif.replace("<", " ").replace(">", " ").replace(",", " ");
+                    String[] partsif = lineif.split("\\s+");
 
-                    for (int j = 0; j < parts.length - 1; j++) {
-                        if (parts[j].equalsIgnoreCase("extends") && cont <= 0 && line.endsWith("{")) {
+                    for (int j = 0; j < partsif.length - 1; j++) {
+                        if (partsif[j].equalsIgnoreCase("extends") && cont <= 0 && line.endsWith("{")) {
 
-                            if (map.containsKey(parts[j + 1].replace("{", ""))) {
+                            if (map.containsKey(partsif[j + 2].replace("{", ""))) {
+                                discriptor.extend = map.get(partsif[j + 2]) + "." + partsif[j + 2];
 
-                                discriptor.extend = map.get(parts[j + 1]) + "." + parts[j + 1];
+                            } else if (map.containsKey(partsif[j + 1].replace("{", ""))) {
+
+                                discriptor.extend = map.get(partsif[j + 1]) + "." + partsif[j + 1];
                             } else {
                                 discriptor.extend = null;
                             }
                         }
                     }
+
                 }
             } else if (line.contains("implements")) {
                 for (int j = 0; j < parts.length - 1; j++) {
@@ -482,10 +491,9 @@ public class ClassParser {
             } else if (parts.length == 5 && isClassOrInterface(parts[1]) && isParentLinker(parts[3])) {
                 discriptor.name = discriptor.packageName + "." + parts[2];
             } else {
-
                 for (int j = 0; j < parts.length; j++) {
 
-                    if (parts[j].equalsIgnoreCase("class")) {
+                    if (parts[j].equalsIgnoreCase("class") || parts[j].equalsIgnoreCase("interface")) {
                         discriptor.name = discriptor.packageName + "." + parts[j + 1];
                         break;
                     }
@@ -512,21 +520,21 @@ public class ClassParser {
 
     //guarda los valores que se le pasan desde el primer for de esta clase
     public void savevalues(String line, HashMap<String, String> map, String dp) {
-        try{
-        line = line.trim();
+        try {
+            line = line.trim();
 //        System.out.println(line);
-        String[] parts = line.split("\\s+");
-        if (parts.length >= 3) {
-            for (int j = 0; j < parts.length - 1; j++) {
-                if (parts[j].equalsIgnoreCase("class") || parts[j].equalsIgnoreCase("interface") || parts[j].equalsIgnoreCase("enum")) {
-                    map.put(parts[j + 1].replace("<", "").replace(">", "").replace("T", "").replace(")", "").replace("(", "").replace(";", "").replace(",", ""), dp);
+            String[] parts = line.split("\\s+");
+            if (parts.length >= 3) {
+                for (int j = 0; j < parts.length - 1; j++) {
+                    if (parts[j].equalsIgnoreCase("class") || parts[j].equalsIgnoreCase("interface") || parts[j].equalsIgnoreCase("enum")) {
+                        map.put(parts[j + 1].replace("<", "").replace(">", "").replace("T", "").replace(")", "").replace("(", "").replace(";", "").replace(",", ""), dp);
+                    }
                 }
-            }
-            //guarda nombre de la clase y package en un hashmap.
-            //map.put(parts[2], dp);
+                //guarda nombre de la clase y package en un hashmap.
+                //map.put(parts[2], dp);
 
-        }
-        }catch(Exception e){
+            }
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
@@ -615,7 +623,7 @@ public class ClassParser {
         List<String> tables = new ArrayList();
 
 //aca se identifica el archivo de propiedades pasandole el user.dir que seria el directorio donde esta parado ahora el usuario.
-        try (InputStream input = new FileInputStream(System.getProperty("user.dir") + "\\" + "SendToCodojo.config.properties")) {
+        try (InputStream input = new FileInputStream("C:\\Users\\Leoo\\Desktop\\Nueva carpeta" + "\\" + "SendToCodojo.config.properties")) {
 
             Properties prop = new Properties();
 
@@ -666,7 +674,7 @@ public class ClassParser {
                     if (parts1.length <= 3) {
                         entidad = parts1[2].replace(";", "");
                         if (relation.equals("ManyToMany") && parts1.length <= 3) {
-                            
+
                             String trim = discriptor.name.trim();
                             trim = trim.replace(".", " ");
                             String[] parts = trim.split("\\s+");
@@ -694,7 +702,7 @@ public class ClassParser {
                         }
                         //mismo patron
                         if (relation.equals("ManyToMany")) {
-                           
+
                             String trim = discriptor.name.trim();
                             trim = trim.replace(".", " ");
                             String[] parts = trim.split("\\s+");

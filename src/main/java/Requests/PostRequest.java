@@ -64,11 +64,12 @@ public class PostRequest {
             conexion.setRequestMethod("POST");
             conexion.setRequestProperty("Content-Type", "application/json");
             //conexion.setRequestProperty("authorizationToken", "cLIclvsgcawKWDwkYszKw73ph25pJl");
-            //conexion.setRequestProperty("x-api-key", "zEba5xqtOz98eYdZ2GJWh4SBxMlGo4cM37C2rxSN");
+            conexion.setRequestProperty("x-api-key", "EqxfNm57Pn4OFEwE2NGIn5SE2r7jGUHj1WjeVvTc");
             conexion.setDoOutput(true);
             OutputStream output = conexion.getOutputStream();
             output.write(json.toString().getBytes());
              response=conexion.getResponseCode();
+             System.out.println(response);
             //limpia
             output.flush();
             //cierra la conexion
@@ -81,7 +82,7 @@ public class PostRequest {
             for (int c; (c = in.read()) >= 0;) {
                 str = str + (char) c;
             }
-           
+
 //            JOptionPane.showMessageDialog(null, str);
 
                
