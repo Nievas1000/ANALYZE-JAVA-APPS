@@ -626,7 +626,7 @@ public class ClassParser {
         List<String> tables = new ArrayList();
 
 //aca se identifica el archivo de propiedades pasandole el user.dir que seria el directorio donde esta parado ahora el usuario.
-        try (InputStream input = new FileInputStream(System.getProperty("user.dir") + "\\" + "SendToCodojo.config.properties")) {
+        try (InputStream input = new FileInputStream(System.getProperty("user.dir") + "/" + "SendToCodojo.config.properties")) {
 
             Properties prop = new Properties();
 

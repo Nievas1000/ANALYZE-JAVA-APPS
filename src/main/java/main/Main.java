@@ -268,7 +268,7 @@ public class Main {
         System.out.println("The program is running...");
         Object lines = new Object();
 
-        try (InputStream input = new FileInputStream(System.getProperty("user.dir") + "\\" + "SendToCodojo.config.properties")) {
+        try (InputStream input = new FileInputStream(System.getProperty("user.dir") + "/" + "SendToCodojo.config.properties")) {
 //            System.out.println(System.getProperty("user.dir"));
             Properties prop = new Properties();
 
@@ -282,7 +282,7 @@ public class Main {
 //este bloque de codigo obtiene el filepath por medio del escaneo de linea por linea ya que no se puede usar el getproperty porque
 //no considera "/" entonces la direccion del archivo sin / es erronea.
             try {
-                try (BufferedReader br = new BufferedReader(new FileReader(System.getProperty("user.dir") + "\\" + "SendToCodojo.config.properties"))) {
+                try (BufferedReader br = new BufferedReader(new FileReader(System.getProperty("user.dir") + "/" + "SendToCodojo.config.properties"))) {
                     String line;
                     while ((line = br.readLine()) != null) {
                         if (line.contains("APPLICATION.FILEPATH")) {
