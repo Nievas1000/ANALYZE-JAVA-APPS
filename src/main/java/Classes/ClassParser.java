@@ -8,8 +8,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -623,7 +626,7 @@ public class ClassParser {
         List<String> tables = new ArrayList();
 
 //aca se identifica el archivo de propiedades pasandole el user.dir que seria el directorio donde esta parado ahora el usuario.
-        try (InputStream input = new FileInputStream("C:\\Users\\Leoo\\Desktop\\Nueva carpeta" + "\\" + "SendToCodojo.config.properties")) {
+        try (InputStream input = new FileInputStream(System.getProperty("user.dir") + "\\" + "SendToCodojo.config.properties")) {
 
             Properties prop = new Properties();
 
@@ -781,5 +784,27 @@ public class ClassParser {
         }
 
         return "false";
+    }
+    
+    
+    public String ObtenerHASHMD5(String textoEntrada) {
+        if (textoEntrada.equals("")) {
+            return "";
+        } else {
+            try {
+                MessageDigest HashMD5 = MessageDigest.getInstance("MD5");
+                byte[] mensajeMatriz = HashMD5.digest(textoEntrada.getBytes());
+                BigInteger numero = new BigInteger(1, mensajeMatriz);
+                StringBuilder hashMD5Salida = new StringBuilder(numero.toString(16));
+ 
+                while (hashMD5Salida.length() < 32) {
+                    hashMD5Salida.insert(0, "0");
+                }
+                return hashMD5Salida.toString();
+            } catch (NoSuchAlgorithmException e) {
+                System.out.println("Error al obtener el hash: " + e.getMessage());
+                return "";
+            }
+        }
     }
 }
