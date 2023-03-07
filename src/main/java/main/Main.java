@@ -115,12 +115,13 @@ public class Main {
 //        }
 //        StringBuilder builder = new StringBuilder();
 //        for (ClassDiscriptor cd : cdList) {
-//            builder.append("\r\nName: " + cd.name);
+//           builder.append("\r\nName: " + cd.name);
 //            builder.append("\r\n\tInterfaz: " + cd.interfaz);          
 //            builder.append("\r\n\tConstructors: ").append(cd.getConstructor());
 //            builder.append("\r\n\tExtends: " + cd.extend);
 //            builder.append("\r\n\tImplements: " + cd.implement);
-        //builder.append("\r\n\tPackage: " + cd.packageName);
+//        builder.append("\r\n\tPackage: " + cd.packageName);
+//        }
         // builder.append("\r\n\tLast Modified: " + cd.lastModified);
 //            Long myLong = Long.parseLong(cd.lastModified);
 //            Date dateD = new Date(myLong);
@@ -182,7 +183,7 @@ public class Main {
             String user = System.getProperty("user.name");
             String dir = System.getProperty("user.dir");
 
-            String pathFile = dir + "\\" + filename.getName() + ".json";
+            String pathFile =dir + "\\" + filename.getName() + ".json";
             try {
                 //se escribe el json en el pathfile del usuario y se guarda alli
                 FileWriter jsonFile = new FileWriter(pathFile);
@@ -193,7 +194,7 @@ public class Main {
                 JOptionPane.showMessageDialog(null, e.getMessage());
 
             }
-            System.out.println("JSON file created");
+            
             
 //            System.out.println("JSON: " + json);
 
@@ -212,7 +213,7 @@ public class Main {
         Gson gson = new Gson();
         JsonObject json = gson.toJsonTree(map).getAsJsonObject();
 
-//        if(PostRequest.VerificationKey(userkey)==200){
+        if(PostRequest.VerificationKey(userkey)==200){
         if (sendjson.equalsIgnoreCase("yes")) {
               PostRequest.PostRequest(json);
             System.out.println("The results are now viewable at app.codojo.io. Press Enter key to continue...");
@@ -225,7 +226,7 @@ public class Main {
                     + "To send the results to Codojo, open the <SendToCodojo.config.properties>, set the variable “SEND_RESULTS_TO_CODOJO = true”, and rerun this application. Press Enter key to continue...”");
             scan.nextLine();
         }
-//        }
+        }
         
 //        
         return json.toString();
@@ -266,7 +267,7 @@ public class Main {
         System.out.println("The program is running...");
         Object lines = new Object();
 
-        try (InputStream input = new FileInputStream(System.getProperty("user.dir") + "\\" + "SendToCodojo.config.properties")) {
+        try (InputStream input = new FileInputStream("C:\\Users\\Leoo\\Desktop\\Nueva carpeta" + "\\" + "SendToCodojo.config.properties")) {
 //            System.out.println(System.getProperty("user.dir"));
             Properties prop = new Properties();
 
@@ -280,12 +281,12 @@ public class Main {
 //este bloque de codigo obtiene el filepath por medio del escaneo de linea por linea ya que no se puede usar el getproperty porque
 //no considera "/" entonces la direccion del archivo sin / es erronea.
             try {
-                try (BufferedReader br = new BufferedReader(new FileReader(System.getProperty("user.dir") + "\\" + "SendToCodojo.config.properties"))) {
+                try (BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Leoo\\Desktop\\Nueva carpeta" + "\\" + "SendToCodojo.config.properties"))) {
                     String line;
                     while ((line = br.readLine()) != null) {
                         if (line.contains("APPLICATION.FILEPATH")) {
                             lines = line.substring(22, line.length());
-//                            System.out.println(lines + "LINES");
+//                            
                         }
                     }
                     
