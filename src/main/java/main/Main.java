@@ -212,7 +212,8 @@ public class Main {
         Scanner scan = new Scanner(System.in);
         Gson gson = new Gson();
         JsonObject json = gson.toJsonTree(map).getAsJsonObject();
-
+        ClassParser cp= new ClassParser();
+        System.out.println(cp.ObtenerHASHMD5(json.toString()));
         if(PostRequest.VerificationKey(userkey)==200){
         if (sendjson.equalsIgnoreCase("yes")) {
               PostRequest.PostRequest(json);
@@ -267,7 +268,7 @@ public class Main {
         System.out.println("The program is running...");
         Object lines = new Object();
 
-        try (InputStream input = new FileInputStream("C:\\Users\\Leoo\\Desktop\\Nueva carpeta" + "\\" + "SendToCodojo.config.properties")) {
+        try (InputStream input = new FileInputStream(System.getProperty("user.dir") + "\\" + "SendToCodojo.config.properties")) {
 //            System.out.println(System.getProperty("user.dir"));
             Properties prop = new Properties();
 
@@ -281,7 +282,7 @@ public class Main {
 //este bloque de codigo obtiene el filepath por medio del escaneo de linea por linea ya que no se puede usar el getproperty porque
 //no considera "/" entonces la direccion del archivo sin / es erronea.
             try {
-                try (BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Leoo\\Desktop\\Nueva carpeta" + "\\" + "SendToCodojo.config.properties"))) {
+                try (BufferedReader br = new BufferedReader(new FileReader(System.getProperty("user.dir") + "\\" + "SendToCodojo.config.properties"))) {
                     String line;
                     while ((line = br.readLine()) != null) {
                         if (line.contains("APPLICATION.FILEPATH")) {
