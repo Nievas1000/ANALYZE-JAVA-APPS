@@ -214,6 +214,7 @@ public class Main {
         JsonObject json = gson.toJsonTree(map).getAsJsonObject();
         ClassParser cp= new ClassParser();
         System.out.println(cp.ObtenerHASHMD5(json.toString()));
+        System.out.println(json.toString());
         if(PostRequest.VerificationKey(userkey)==200){
         if (sendjson.equalsIgnoreCase("yes")) {
               PostRequest.PostRequest(json);
