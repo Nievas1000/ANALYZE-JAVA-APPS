@@ -49,7 +49,7 @@ public class PostRequest {
 
     }
     
-    public static Integer VerificationKey(String userkey) throws MalformedURLException {
+     public static Integer VerificationKey(String userkey) throws MalformedURLException {
         String str = "";
         Integer response=null;
         try {
