@@ -86,8 +86,17 @@ jobs:
           with:
             name: scriptsh
             path: src/SendCodojo.sh
-        - name: Maven Test
+  test:
+      if: ${{ github.event_name == 'push' }}
+      needs: [build]
+      runs-on: ubuntu-22.04
+      steps:
+        - name: Checkout main branch from GitHub 
+          uses: actions/checkout@v3
+        - name: tests
           run: mvn test
+
+ 
      
   slack_pull_request:
     runs-on: ubuntu-latest
