@@ -90,11 +90,12 @@ public class Testapp {
                 + "\"applicationName\":\"PruebaCI\"}";
         String hashexpected = null;
         String hashnow = null;
+        String path=System.getProperty("user.dir").concat("/PruebaCI");
         try {
-            json=main.fileReader();
+            json=main.implementacion(path, "j312312312gdfg", "no");
             hashexpected=cp.ObtenerHASHMD5(jsonexpected);
             hashnow=cp.ObtenerHASHMD5(json);
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         assertEquals(hashexpected, hashnow);

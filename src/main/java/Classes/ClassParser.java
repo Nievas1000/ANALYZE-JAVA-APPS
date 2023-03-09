@@ -734,7 +734,8 @@ public class ClassParser {
                     //se crea un array para que guarde lo que retorne gettables.
                     List<String> tablas = db.getTables(typedb, hostdb, portdb, namedb, userdb, password);
                     //si el array contiene una tabladb que sea igual que el nombre de la variable entidad que guardamos antes es true. 
-                    Boolean res = tablas.contains(entidad);              
+                    Boolean res = tablas.contains(entidad);
+                   
                     if (res) {
                         //si es true entra y guarda el valor de entidad en una tabla para luego asignarselo a datasources.
                         tables.add(entidad);
