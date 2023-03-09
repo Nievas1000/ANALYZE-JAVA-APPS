@@ -93,7 +93,7 @@ public class Testapp {
         String path=System.getProperty("user.dir").concat("/PruebaCI");
         try {
             json=main.implementacion(path, "j312312312gdfg", "no");
-            hashexpected=cp.ObtenerHASHMD5(jsonexpected);
+            hashexpected=cp.ObtenerHASHMD5(jsonexpected);           
             hashnow=cp.ObtenerHASHMD5(json);
         } catch (Exception ex) {
             ex.printStackTrace();
