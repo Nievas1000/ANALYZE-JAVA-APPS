@@ -22,6 +22,7 @@ jobs:
           run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar 
   
   linuxJava8:
+    if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -30,6 +31,7 @@ jobs:
           chmod +x ./scriptLinuxJava8.sh
           ./scriptLinuxJava8.sh
   linuxJava11:
+    if: ${{ github.event_name == 'push' }}
     needs: [linuxJava8]
     runs-on: ubuntu-latest
     steps:
@@ -39,6 +41,7 @@ jobs:
           chmod +x ./scriptLinuxJava11.sh
           ./scriptLinuxJava11.sh
   linuxJava17:
+    if: ${{ github.event_name == 'push' }}
     needs: [linuxJava11]
     runs-on: ubuntu-latest
     steps:
