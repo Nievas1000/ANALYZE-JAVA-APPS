@@ -85,7 +85,9 @@ jobs:
           uses: actions/upload-artifact@v2
           with:
             name: scriptsh
-            path: src/SendCodojo.sh    
+            path: src/SendCodojo.sh
+        - name: Maven Test
+          run: mvn test
      
   slack_pull_request:
     runs-on: ubuntu-latest
