@@ -8,9 +8,7 @@ on:
     branches: [main]  
 
 jobs:
-#Este job analiza si hay un error de sintaxis en el codigo y sus vulnerabilidades (Linter).
- 
-
+  #Este job analiza si hay un error de sintaxis en el codigo y sus vulnerabilidades (Linter).
   sonarcloud:
       runs-on: ubuntu-latest
       steps:
@@ -22,13 +20,40 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar 
+  
+  linuxJava8:
+    if: ${{ github.event_name == 'push' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run script
+        run: |
+          chmod +x ./scriptLinuxJava8.sh
+          ./scriptLinuxJava8.sh
+  linuxJava11:
+    if: ${{ github.event_name == 'push' }}
+    needs: [linuxJava8]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run script
+        run: |
+          chmod +x ./scriptLinuxJava11.sh
+          ./scriptLinuxJava11.sh
+  linuxJava17:
+    if: ${{ github.event_name == 'push' }}
+    needs: [linuxJava11]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run script
+        run: |
+          chmod +x ./scriptLinuxJava17.sh
+          ./scriptLinuxJava17.sh
 
   build:
       if: ${{ github.event_name == 'push' }}
-      strategy:
-          matrix:
-            os: [ubuntu-latest, macos-latest, windows-latest]
-      runs-on: ${{ matrix.os }}
+      runs-on: ubuntu-22.04
       steps:
         - name: Checkout main branch from GitHub 
           uses: actions/checkout@v3
@@ -87,7 +112,7 @@ jobs:
 
   deploy:
     if: ${{ github.event_name == 'push' }}
-    needs: [build]
+    needs: [build, linuxJava17]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout main branch from GitHub 
