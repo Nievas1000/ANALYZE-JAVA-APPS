@@ -39,7 +39,7 @@ public class Main {
 //        
 //    }
     //Metodo principal que desencadena todo los procesos
-    public void implementacion(String args, String userkey, String sendjson) throws Exception {
+    public String implementacion(String args, String userkey, String sendjson) throws Exception {
         // DataBaseData db=new DataBaseData();
 //        try{
 //            filereader();
@@ -159,6 +159,7 @@ public class Main {
 //
 //            }
 //       }
+ String json = null;
         try {
             //Hashmap Generico
             HashMap<String, Object> mapjson = new HashMap();
@@ -176,7 +177,7 @@ public class Main {
             mapjson.put("classes", cdList);
 
             //}
-            String json = toJSON(mapjson, sendjson, userkey,filename);
+            json = toJSON(mapjson, sendjson, userkey,filename);
             StringSelection selection = new StringSelection(json);
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             clipboard.setContents(selection, selection);
@@ -204,7 +205,7 @@ public class Main {
             // JOptionPane.showMessageDialog(null, e2.getMessage());
         }
 
-    
+    return json.toString();
     }
     //esta funcion 
     //Este metodo transforma un hashmap a json mediante la dependencia de google.gson
@@ -213,20 +214,19 @@ public class Main {
         Gson gson = new Gson();
         JsonObject json = gson.toJsonTree(map).getAsJsonObject();
         ClassParser cp= new ClassParser();
+        PostRequest p = new PostRequest();
         System.out.println(cp.ObtenerHASHMD5(json.toString()));
-        System.out.println(json.toString());
-        if(PostRequest.VerificationKey(userkey)==200){
+        if(p.VerificationKey(userkey)==200){
         if (sendjson.equalsIgnoreCase("yes")) {
-              PostRequest.PostRequest(json);
-            System.out.println("The results are now viewable at app.codojo.io. Press Enter key to continue...");
+              p.PostRequest(json);
+            System.out.println("The results are now viewable at app.codojo.io");
 
-            scan.nextLine();
-//            JOptionPane.showMessageDialog(null, "Json send");
+
              }else{
             System.out.println("See <"+filename.getName()+"> to view application results. \n"
                     + "This file was not sent to Codojo. \n"
-                    + "To send the results to Codojo, open the <SendToCodojo.config.properties>, set the variable “SEND_RESULTS_TO_CODOJO = true”, and rerun this application. Press Enter key to continue...”");
-            scan.nextLine();
+                    + "To send the results to Codojo, open the <SendToCodojo.config.properties>, set the variable “SEND_RESULTS_TO_CODOJO = true”, and rerun this application");
+
         }
         }
         
@@ -265,11 +265,12 @@ public class Main {
 //        }
 //    }
     //Este metodo obtiene los datos del archivo de propiedades y llama al metodo implementacion que desencadena todo el programa
-    public void fileReader() throws IOException {
+    public String fileReader() throws IOException {
+        String json = null;
         System.out.println("The program is running...");
         Object lines = new Object();
-
         try (InputStream input = new FileInputStream(System.getProperty("user.dir") + "/" + "SendToCodojo.config.properties")) {
+            
 //            System.out.println(System.getProperty("user.dir"));
             Properties prop = new Properties();
 
@@ -303,7 +304,7 @@ public class Main {
 
             Main main = new Main();
            
-                main.implementacion(lines.toString(), userkey, sendjson);
+                json=main.implementacion(lines.toString(), userkey, sendjson);
                 // System.out.println(prop.getProperty("db.password"));
           
 
@@ -313,6 +314,6 @@ public class Main {
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
-
+return json.toString();
     }
 }

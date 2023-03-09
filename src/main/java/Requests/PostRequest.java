@@ -16,7 +16,8 @@ import javax.swing.JOptionPane;
 public class PostRequest {
     //Este metodo manda el json a la api de aws
 
-    public static void PostRequest(JsonObject json) throws MalformedURLException {
+    public Integer PostRequest(JsonObject json) throws MalformedURLException {
+        Integer response = null;
         try {
             String str = "";
             URL url = new URL("https://3itqr368e0.execute-api.us-east-1.amazonaws.com/test/codojo");
@@ -27,6 +28,7 @@ public class PostRequest {
             conexion.setRequestProperty("x-api-key", "zEba5xqtOz98eYdZ2GJWh4SBxMlGo4cM37C2rxSN");
             conexion.setDoOutput(true);
             OutputStream output = conexion.getOutputStream();
+            response=conexion.getResponseCode();
             output.write(json.toString().getBytes());
             //limpia
             output.flush();
@@ -46,10 +48,10 @@ public class PostRequest {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
-
+return response;
     }
     
-     public static Integer VerificationKey(String userkey) throws MalformedURLException {
+     public Integer VerificationKey(String userkey) throws MalformedURLException {
         String str = "";
         Integer response=null;
         try {
@@ -68,8 +70,7 @@ public class PostRequest {
             conexion.setDoOutput(true);
             OutputStream output = conexion.getOutputStream();
             output.write(json.toString().getBytes());
-             response=conexion.getResponseCode();
-             System.out.println(response);
+             response=conexion.getResponseCode();             
             //limpia
             output.flush();
             //cierra la conexion
@@ -88,7 +89,7 @@ public class PostRequest {
                
         } catch (Exception e) {
             System.out.println("USERKEY INVALID");
-            JOptionPane.showMessageDialog(null, "USERKEY INVALID");
+//            JOptionPane.showMessageDialog(null, "USERKEY INVALID");
             return null;
         }
 

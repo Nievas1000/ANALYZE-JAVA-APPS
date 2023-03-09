@@ -1,1 +1,0 @@
-{"userApplicationKey":"j312312312gdfg","classes":[{"name":"pruebaci.classes.Auto"},{"name":"pruebaci.classes.Moto","extend":"pruebaci.classes.Auto","constructor":["pruebaci.classes.Auto"]},{"name":"pruebaci.PruebaCI"}],"applicationName":"PruebaCI"}

@@ -85,6 +85,7 @@ public class DataBaseData {
 
     //Este metodo hace una consulta sql a la db del cliente para obtener sus tablas.
     public List getTables(String typedb,String host,String port,String name,String user,String password) throws ClassNotFoundException, SQLException {
+        try{
         List<String> tables = new ArrayList();
         Class.forName("com.mysql.jdbc.Driver");
         
@@ -98,10 +99,13 @@ public class DataBaseData {
             tables.add(rs.getString(1));
 
         }
-
         return tables;
+        }catch(Exception ex){
+            System.out.println("error getting tables from database");
+        }
+       
+       return null;
+    
+    
     }
-    
-
-    
 }

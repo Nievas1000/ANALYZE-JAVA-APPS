@@ -19,7 +19,7 @@ public class MainEjecute {
             Main main=new Main();
             main.fileReader();
         } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage());
+            System.out.println("error running the program");
         }
     }
 
