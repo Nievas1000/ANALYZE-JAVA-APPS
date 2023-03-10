@@ -2,9 +2,11 @@ package main;
 
 import Classes.ClassDiscriptor;
 import Classes.ClassParser;
+import Classes.Credentials;
 import Classes.DataBaseData;
 import java.awt.Toolkit;
 import Requests.PostRequest;
+import Requests.SlackIntegration;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.io.File;
@@ -32,7 +34,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class Main {
-
+    SlackIntegration sl=new SlackIntegration();
     List<File> files;
 
 //    public static void main(String[] args) {
@@ -54,7 +56,10 @@ public class Main {
         //System.out.println(sCarpAct);
         //Se crea un nuevo file y se le pasa como argumento la direccion del archivo
         File filename = new File(sCarpAct);
-        File file = new File(sCarpAct);// +  File.separator + "src" + File.separator + "main" + File.separator + "java" + File.separator + "com" );
+        File file = new File(sCarpAct);
+        
+        
+// +  File.separator + "src" + File.separator + "main" + File.separator + "java" + File.separator + "com" );
 //        System.out.println(file);
 //        System.out.println(filename.getName());
         files = new ArrayList();
@@ -98,7 +103,10 @@ public class Main {
 
         }
         if(files.isEmpty()){
+            sl.send("ERROR: No project found");
             throw new Exception("ERROR: No project found");
+            
+           
         }
 
 //        if (!db.getDb().isEmpty() && !db.getHost().isEmpty() && !db.getPort().isEmpty() && !db.getPassword().isEmpty() && !db.getUsername().isEmpty()) {
@@ -192,7 +200,8 @@ public class Main {
                 jsonFile.close();
             } catch (IOException e) {
                 System.out.println(e.getMessage());
-                JOptionPane.showMessageDialog(null, e.getMessage());
+                sl.send(e.getMessage());
+               
 
             }
             
@@ -201,6 +210,7 @@ public class Main {
 
         } catch (Exception e2) {
             System.out.println(e2.getMessage());
+            sl.send(e2.getMessage());
 
             // JOptionPane.showMessageDialog(null, e2.getMessage());
         }
@@ -209,13 +219,15 @@ public class Main {
     }
     //esta funcion 
     //Este metodo transforma un hashmap a json mediante la dependencia de google.gson
-    public String toJSON(HashMap map, String sendjson, String userkey,File filename) throws Exception {
+    public String toJSON(HashMap map, String sendjson, String userkey,File filename){
+        
         Scanner scan = new Scanner(System.in);
         Gson gson = new Gson();
         JsonObject json = gson.toJsonTree(map).getAsJsonObject();
         ClassParser cp= new ClassParser();
         PostRequest p = new PostRequest();
         System.out.println(cp.ObtenerHASHMD5(json.toString()));
+        try{
         if(p.VerificationKey(userkey)==200){
         if (sendjson.equalsIgnoreCase("yes")) {
               p.PostRequest(json);
@@ -229,12 +241,15 @@ public class Main {
 
         }
         }
-        
+        }catch(Exception e){
+            return null;
+        }
 //        
         return json.toString();
     }
 
     public void mostrarCarpeta(File fichero) {
+        try{
         if (fichero.isDirectory()) {
             File[] lista = fichero.listFiles();
             for (int i = 0; i < lista.length; i++) {
@@ -251,6 +266,10 @@ public class Main {
 
             }
         }
+        }catch(Exception ex){
+            sl.send(ex.getMessage());
+            
+        }
     }
 
     //Obtiene cada archivo y los agrega a una lista de files.
@@ -265,7 +284,7 @@ public class Main {
 //        }
 //    }
     //Este metodo obtiene los datos del archivo de propiedades y llama al metodo implementacion que desencadena todo el programa
-    public String fileReader() throws IOException {
+    public void fileReader() throws IOException {
         String json = null;
         System.out.println("The program is running...");
         Object lines = new Object();
@@ -297,6 +316,7 @@ public class Main {
                 }
             } catch (IOException e) {
                 //e.printStackTrace();
+                sl.send(e.getMessage());
                 System.out.println(e.getMessage());
             }
 
@@ -309,11 +329,13 @@ public class Main {
           
 
         } catch (IOException ex) {
+            sl.send(ex.getMessage());
             System.out.println(ex.getMessage());
              
         } catch (Exception ex) {
+              sl.send(ex.getMessage());
             System.out.println(ex.getMessage());
         }
-return json.toString();
+
     }
 }
