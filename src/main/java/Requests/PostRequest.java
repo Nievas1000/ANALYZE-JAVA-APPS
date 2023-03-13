@@ -32,9 +32,11 @@ public class PostRequest {
     //Este metodo manda el json a la api de aws
 
     public Integer PostRequest(JsonObject json) throws Exception  {
-        Integer response = null;
+         String str = "";
+         
         
-            String str = "";
+        
+            
             URL url = new URL("https://3itqr368e0.execute-api.us-east-1.amazonaws.com/test/codojo");
             HttpURLConnection conexion = (HttpURLConnection) url.openConnection();
             conexion.setRequestMethod("POST");
@@ -42,8 +44,7 @@ public class PostRequest {
             conexion.setRequestProperty("authorizationToken", "cLIclvsgcawKWDwkYszKw73ph25pJl");
             conexion.setRequestProperty("x-api-key", "zEba5xqtOz98eYdZ2GJWh4SBxMlGo4cM37C2rxSN");
             conexion.setDoOutput(true);
-            OutputStream output = conexion.getOutputStream();
-            response = conexion.getResponseCode();
+            OutputStream output = conexion.getOutputStream();     
             output.write(json.toString().getBytes());
             //limpia
             output.flush();
@@ -58,10 +59,10 @@ public class PostRequest {
                 str = str + (char) c;
             }
 //            JOptionPane.showMessageDialog(null, str);
-
+       return conexion.getResponseCode();
         
-        
-        return response;
+    
+      
     }
 
     public Integer VerificationKey(String userkey) throws MalformedURLException, IOException, SlackApiException {

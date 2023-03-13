@@ -218,7 +218,7 @@ public class Main {
     }
     //esta funcion 
     //Este metodo transforma un hashmap a json mediante la dependencia de google.gson
-    public String toJSON(HashMap map, String sendjson, String userkey,File filename){
+    public String toJSON(HashMap map, String sendjson, String userkey,File filename) throws IOException, Exception{
         
         Scanner scan = new Scanner(System.in);
         Gson gson = new Gson();
@@ -242,7 +242,7 @@ public class Main {
         }
         }catch(Exception e){
             sl.send(e.getMessage());
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
 //        
         return json.toString();
