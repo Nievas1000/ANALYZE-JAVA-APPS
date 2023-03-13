@@ -56,12 +56,16 @@ public class Testapp {
 
     }
 
-//    @Test
-//    public void verificationKey() throws MalformedURLException {
-//        
-//        Integer response=request.VerificationKey("c6j76d7931a0a04bed50");
-//        assertEquals(response.toString(), "200");
-//    }
+    @Test
+    public void verificationKey() {
+        
+        try{
+        Integer response=request.VerificationKey("c6j76d7931a0a04bed50");
+        assertEquals(response.toString(), "200");
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
     
     
 

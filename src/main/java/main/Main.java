@@ -2,7 +2,6 @@ package main;
 
 import Classes.ClassDiscriptor;
 import Classes.ClassParser;
-import Classes.Credentials;
 import Classes.DataBaseData;
 import java.awt.Toolkit;
 import Requests.PostRequest;
@@ -227,7 +226,6 @@ public class Main {
         ClassParser cp= new ClassParser();
         PostRequest p = new PostRequest();
         System.out.println(cp.ObtenerHASHMD5(json.toString()));
-        System.out.println(json.toString());
         try{
         if(p.VerificationKey(userkey)==200){
         if (sendjson.equalsIgnoreCase("yes")) {
@@ -243,7 +241,8 @@ public class Main {
         }
         }
         }catch(Exception e){
-            return null;
+            sl.send(e.getMessage());
+            e.printStackTrace();
         }
 //        
         return json.toString();
