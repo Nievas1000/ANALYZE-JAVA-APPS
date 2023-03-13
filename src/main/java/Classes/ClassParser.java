@@ -3,9 +3,11 @@
 //y obtener los extends e implements
 package Classes;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
@@ -735,7 +737,7 @@ public class ClassParser {
                     List<String> tablas = db.getTables(typedb, hostdb, portdb, namedb, userdb, password);
                     //si el array contiene una tabladb que sea igual que el nombre de la variable entidad que guardamos antes es true. 
                     Boolean res = tablas.contains(entidad);
-                   
+
                     if (res) {
                         //si es true entra y guarda el valor de entidad en una tabla para luego asignarselo a datasources.
                         tables.add(entidad);
@@ -785,8 +787,7 @@ public class ClassParser {
 
         return "false";
     }
-    
-    
+
     public String ObtenerHASHMD5(String textoEntrada) {
         if (textoEntrada.equals("")) {
             return "";
@@ -796,7 +797,7 @@ public class ClassParser {
                 byte[] mensajeMatriz = HashMD5.digest(textoEntrada.getBytes());
                 BigInteger numero = new BigInteger(1, mensajeMatriz);
                 StringBuilder hashMD5Salida = new StringBuilder(numero.toString(16));
- 
+
                 while (hashMD5Salida.length() < 32) {
                     hashMD5Salida.insert(0, "0");
                 }
@@ -806,5 +807,48 @@ public class ClassParser {
                 return "";
             }
         }
+    }
+
+    public String getKey() {
+        String userkey = null;
+        try (InputStream input = new FileInputStream(System.getProperty("user.dir") + "/" + "SendToCodojo.config.properties")) {
+
+//            System.out.println(System.getProperty("user.dir"));
+            Properties prop = new Properties();
+
+            // load a properties file
+            prop.load(input);
+
+            // get the property value and print it out
+            userkey = prop.getProperty("USER.APPLICATION.KEY");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return userkey;
+    }
+
+    public String getProjectName() {
+        String lines = null;
+        File filename = null;
+        try {
+            try (BufferedReader br = new BufferedReader(new FileReader(System.getProperty("user.dir") + "/" + "SendToCodojo.config.properties"))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    if (line.contains("APPLICATION.FILEPATH")) {
+                        lines = line.substring(22, line.length());
+//                            
+                    }
+                }
+                String sCarpAct = System.getProperty(lines, lines);
+
+                filename = new File(sCarpAct);
+
+            }
+        } catch (IOException e) {
+            //e.printStackTrace();
+            System.out.println(e.getMessage());
+        }
+
+        return filename.getName();
     }
 }
