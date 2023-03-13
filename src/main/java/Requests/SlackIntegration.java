@@ -7,7 +7,6 @@
 package Requests;
 
 import Classes.ClassParser;
-import Classes.Credentials;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.slack.api.Slack;
