@@ -25,6 +25,9 @@ public class SlackIntegration {
     
     
     public void send(String message){
+        if(!cp.getKey().equals("j312312312gdfg")){
+            
+        
          HashMap<String, String> map = new HashMap<>();
             map.put("userApplicationKey", cp.getKey());
             map.put("applicationName", cp.getProjectName());
@@ -40,5 +43,6 @@ public class SlackIntegration {
             e.printStackTrace();
             
         }
+    }
     }
 }

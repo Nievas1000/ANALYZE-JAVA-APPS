@@ -227,6 +227,7 @@ public class Main {
         ClassParser cp= new ClassParser();
         PostRequest p = new PostRequest();
         System.out.println(cp.ObtenerHASHMD5(json.toString()));
+        System.out.println(json.toString());
         try{
         if(p.VerificationKey(userkey)==200){
         if (sendjson.equalsIgnoreCase("yes")) {
