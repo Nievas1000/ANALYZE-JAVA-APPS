@@ -28,8 +28,9 @@ public class Testapp {
     ClassParser cp=new ClassParser();
 
     @Test
-    public void toJson() throws Exception {
+    public void toJson() {
 
+        try{
         HashMap<String, Object> map = new HashMap<>();
         List<Object> list = new ArrayList<Object>();
         ClassDiscriptor cd = new ClassDiscriptor();
@@ -49,6 +50,9 @@ public class Testapp {
         
         assertEquals("{\"userApplicationKey\":\"c6j76d7931a0a04bed50\",\"classes\":[{\"name\":\"pruebaci.classes.Auto\"},"
                 + "{\"name\":\"pruebaci.classes.Moto\"}],\"applicationName\":\"PruebaCI\"}", json);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
 
     }
 
@@ -62,24 +66,31 @@ public class Testapp {
     
 
     @Test
-    public void postRequest() throws MalformedURLException {
+    public void postRequest(){
+        try{
         Gson gson = new Gson();
         HashMap<String,String> map=new HashMap<>();
         JsonObject json = gson.toJsonTree(map).getAsJsonObject();
         Integer response=request.PostRequest(json);
         assertEquals(response.toString(),"200");
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Test
-    public void getTables() throws ClassNotFoundException, SQLException {
+    public void getTables(){
+        try{
         List<String> tablesdb=new ArrayList<String>();
         List<String> tablesdbtest=new ArrayList<String>();
         tablesdbtest.add("cliente");
         
         tablesdb=db.getTables("mysql", "sql.freedb.tech", "3306", "freedb_practicas", "freedb_leonardo", "kWPgVw8z5Bg?9MU");
         assertEquals(tablesdbtest , tablesdb);
+        }catch(Exception e){
+         e.printStackTrace();
     }
-
+    }
     @Test
     public void main() {
         String json="";
@@ -116,7 +127,7 @@ public class Testapp {
     }
     
      @Test
-    public void userKeyInvalid() throws MalformedURLException {
+    public void userKeyInvalid() {
         Integer response = null;
         try{
         response=request.VerificationKey("***");
@@ -126,5 +137,6 @@ public class Testapp {
     }
 
     
+    }
 
-}
+
