@@ -244,6 +244,7 @@ public class Main {
             sl.send(e.getMessage());
             System.out.println(e.getMessage());
         }
+        System.out.println(json.toString());
 //        
         return json.toString();
     }

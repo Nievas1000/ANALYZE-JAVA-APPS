@@ -643,8 +643,10 @@ public class ClassParser {
             String namedb = prop.getProperty("NAME.DB");
             String userdb = prop.getProperty("USER.DB");
             String password = prop.getProperty("PASSWORD.DB");
+//             List<String> tablas = db.getTables(typedb, hostdb, portdb, namedb, userdb, password);
 
             //si la linea contiene alguna de las anotaciones de jpa entra.
+           
             if (line.contains("@OneToOne") || line.contains("@OneToMany") || line.contains("@ManyToMany")
                     || line.contains("@ManyToOne")) {
 
@@ -662,6 +664,8 @@ public class ClassParser {
                     relation = "ManyToOne";
                 }
 
+               
+                
                 //este bucle es para que ignore todas las anotaciones que no sean las relaciones de jpa
                 //y busque la declaracion de la clase donde se definio la relacion.
                 do {
@@ -735,6 +739,7 @@ public class ClassParser {
 //                             
                     //se crea un array para que guarde lo que retorne gettables.
                     List<String> tablas = db.getTables(typedb, hostdb, portdb, namedb, userdb, password);
+                    
                     //si el array contiene una tabladb que sea igual que el nombre de la variable entidad que guardamos antes es true. 
                     Boolean res = tablas.contains(entidad);
 
@@ -783,6 +788,8 @@ public class ClassParser {
                 return "true";
             }
 
+        }catch(Exception e){
+            e.printStackTrace();
         }
 
         return "false";

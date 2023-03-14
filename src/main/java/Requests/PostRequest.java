@@ -58,6 +58,8 @@ public class PostRequest {
             for (int c; (c = in.read()) >= 0;) {
                 str = str + (char) c;
             }
+            
+            System.out.println(str);
 //            JOptionPane.showMessageDialog(null, str);
        return conexion.getResponseCode();
         
