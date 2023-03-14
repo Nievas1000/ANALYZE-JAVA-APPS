@@ -11,6 +11,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.MessageDigest;
@@ -61,7 +62,8 @@ public class ClassParser {
 
     //Este metodo lee linea por linea cada clase
     public void parse(HashMap<String, String> map, int a, int cont) throws Exception {
-        List<String> lines = Files.readAllLines(file);
+        List<String> lines = Files.readAllLines(file,Charset.forName("ISO-8859-1"));
+        
         //se crean list y hashmap globales.
         HashMap<String, List> mapdb = new HashMap<>();
         List<String> list = new ArrayList<>();
@@ -392,8 +394,8 @@ public class ClassParser {
                     String[] partsif = lineif.split("\\s+");
 
                     for (int j = 0; j < partsif.length - 1; j++) {
-                        if (partsif[j].equalsIgnoreCase("extends") && cont <= 0 && line.endsWith("{")) {
-
+                        if (partsif[j].equalsIgnoreCase("extends") && cont <= 0 && line.endsWith("{") && partsif.length>5) {
+                            
                             if (map.containsKey(partsif[j + 2].replace("{", ""))) {
                                 discriptor.extend = map.get(partsif[j + 2]) + "." + partsif[j + 2];
 
