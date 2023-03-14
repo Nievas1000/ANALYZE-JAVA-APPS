@@ -58,6 +58,8 @@ public class PostRequest {
             for (int c; (c = in.read()) >= 0;) {
                 str = str + (char) c;
             }
+            
+//            System.out.println(str);
 //            JOptionPane.showMessageDialog(null, str);
        return conexion.getResponseCode();
         
@@ -103,7 +105,7 @@ public class PostRequest {
             System.out.println("USERKEY INVALID");
             sl.send("USERKEY INVALID");
 //            JOptionPane.showMessageDialog(null, "USERKEY INVALID");
-            return null;
+            return response;
         }
 
         return response;

@@ -244,6 +244,7 @@ public class Main {
             sl.send(e.getMessage());
             System.out.println(e.getMessage());
         }
+        System.out.println(json.toString());
 //        
         return json.toString();
     }
@@ -307,9 +308,16 @@ public class Main {
                     String line;
                     while ((line = br.readLine()) != null) {
                         if (line.contains("APPLICATION.FILEPATH")) {
-                            lines = line.substring(22, line.length());
+                            lines = line.substring(22, line.length()).trim();
+                            
 //                            
                         }
+                    }
+                    
+                    if(lines.toString().isEmpty()){
+                        sl.send("empty value(application.filepath)");
+                        throw new Exception("empty value(application.filepath)");
+                        
                     }
                     
                     System.out.println("Looking at the code in <" + lines + ">...");
