@@ -314,6 +314,12 @@ public class Main {
                         }
                     }
                     
+                    if(lines.toString().isEmpty()){
+                        sl.send("empty value(application.filepath)");
+                        throw new Exception("empty value(application.filepath)");
+                        
+                    }
+                    
                     System.out.println("Looking at the code in <" + lines + ">...");
                 }
             } catch (IOException e) {
