@@ -395,7 +395,7 @@ public class ClassParser {
 
                     for (int j = 0; j < partsif.length - 1; j++) {
                         if (partsif[j].equalsIgnoreCase("extends") && cont <= 0 && line.endsWith("{") && partsif.length>5) {
-                            System.out.println(partsif.length);
+                            
                             if (map.containsKey(partsif[j + 2].replace("{", ""))) {
                                 discriptor.extend = map.get(partsif[j + 2]) + "." + partsif[j + 2];
 
