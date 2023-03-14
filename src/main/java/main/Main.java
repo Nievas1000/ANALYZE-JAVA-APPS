@@ -308,7 +308,8 @@ public class Main {
                     String line;
                     while ((line = br.readLine()) != null) {
                         if (line.contains("APPLICATION.FILEPATH")) {
-                            lines = line.substring(22, line.length());
+                            lines = line.substring(22, line.length()).trim();
+                            
 //                            
                         }
                     }

@@ -24,7 +24,7 @@ public class SlackIntegration {
     
     
     public void send(String message){
-        if(!cp.getKey().equals("j312312312gdfg")){
+        if(!cp.getKey().equals("c6j76d7931a0a04bed50")){
             
         
          HashMap<String, String> map = new HashMap<>();
