@@ -84,6 +84,7 @@
             <option>-keep class com.** { *; }</option>
             <option>-keep class main.MainEjecute { *; }</option>
             <option>-keep class Classes.ClassDiscriptor { *; }</option>
+            <option>-keep class Requests.SlackIntegration</option>
             <option>-adaptclassstrings</option>
             <option>-ignorewarnings</option>
           </options>

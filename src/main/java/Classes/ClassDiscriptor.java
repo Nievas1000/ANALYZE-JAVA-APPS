@@ -15,18 +15,18 @@ public class ClassDiscriptor {
     public Boolean interfaz;
     public String pathfile;
     public String userkey;
-    public String extend;
+    public List<String> extend;
     public String implement;
     //se define un hashset para que no haya valores repetidos
     public Set<String> constructor;
-    public HashMap<String, List> datasources;
+    public List<String> datasources;
 
     //public String lastModified;
     public ClassDiscriptor() {
 
     }
 
-    public ClassDiscriptor(String packageName, String name, Boolean interfaz, String pathfile, String userkey, String extend, String implement, Set<String> constructor, HashMap<String, List> datasources) {
+    public ClassDiscriptor(String packageName, String name, Boolean interfaz, String pathfile, String userkey, List<String> extend, String implement, Set<String> constructor, List<String> datasources) {
         this.packageName = packageName;
         this.name = name;
         this.interfaz = interfaz;
@@ -38,15 +38,20 @@ public class ClassDiscriptor {
         this.datasources = datasources;
     }
 
-    
-
-    public HashMap<String, List> getDatasources() {
+    public List<String> getDatasources() {
         return datasources;
     }
 
-    public void setDatasources(HashMap<String, List> datasources) {
+    public void setDatasources(List<String> datasources) {
         this.datasources = datasources;
     }
+
+   
+
+    
+    
+
+   
 
     public Set<String> getConstructor() {
         return constructor;
@@ -99,14 +104,14 @@ public class ClassDiscriptor {
         this.interfaz = interfaz;
     }
 
-
-    public String getExtend() {
+    public List<String> getExtend() {
         return extend;
     }
 
-    public void setExtend(String extend) {
+    public void setExtend(List<String> extend) {
         this.extend = extend;
     }
+  
 
     public String getImplement() {
         return implement;
