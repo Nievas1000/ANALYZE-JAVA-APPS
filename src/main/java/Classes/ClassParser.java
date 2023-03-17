@@ -500,7 +500,7 @@ public class ClassParser {
                 //!discriptorname.contains es indicando que si en la clase se declara una variable con la misma clase en la que esta no guarda nada.
                 if(parts.length==4){
                 if (map.containsKey(parts[2].replace(">", "").replace("<", "").replace(",", "")) && !discriptor.name.contains(parts[2])) {
-                    System.out.println(parts[2]);
+                    
                     set.add(map.get(parts[2].replace(">", "").replace("<", "").replace(",", "")).concat(".").concat(parts[2].replace(">", "").replace("<", "").replace(",", "")));
 
                     //list.add(map.get(parts[2].replace(">", "")).concat(".").concat(parts[2].replace(">", "").replace("<", "").replace(",", "")));
@@ -517,7 +517,7 @@ public class ClassParser {
                 }
                     
                     if (parts.length == 2) {
-                        System.out.println(parts[0]);
+                        
                     if (map.containsKey(parts[0].replace(">", "").replace("<", "").replace(",", "")) && !discriptor.name.contains(parts[0])) {
 
                         set.add(map.get(parts[0].replace(">", "").replace("<", "").replace(",", "")).concat(".").concat(parts[1].replace("<", "").replace(",", "")));
