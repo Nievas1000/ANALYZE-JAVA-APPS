@@ -23,34 +23,33 @@ import org.junit.Test;
 public class Testapp {
 
     Main main = new Main();
-    PostRequest request= new PostRequest();
-    DataBaseData db=new DataBaseData();
-    ClassParser cp=new ClassParser();
+    PostRequest request = new PostRequest();
+    DataBaseData db = new DataBaseData();
+    ClassParser cp = new ClassParser();
 
     @Test
     public void toJson() {
 
-        try{
-        HashMap<String, Object> map = new HashMap<>();
-        List<Object> list = new ArrayList<Object>();
-        ClassDiscriptor cd = new ClassDiscriptor();
-        ClassDiscriptor cd1 = new ClassDiscriptor();
-        File file = new File("prueba");
-        cd.setName("pruebaci.classes.Auto");
-        list.add(cd);
-        cd1.setName("pruebaci.classes.Moto");
-        list.add(cd1);
+        try {
+            HashMap<String, Object> map = new HashMap<>();
+            List<Object> list = new ArrayList<Object>();
+            ClassDiscriptor cd = new ClassDiscriptor();
+            ClassDiscriptor cd1 = new ClassDiscriptor();
+            File file = new File("prueba");
+            cd.setName("pruebaci.classes.Auto");
+            list.add(cd);
+            cd1.setName("pruebaci.classes.Moto");
+            list.add(cd1);
 
-        map.put("userApplicationKey", "c6j76d7931a0a04bed50");
-        map.put("applicationName", "PruebaCI");
-        map.put("classes", list);
+            map.put("userApplicationKey", "c6j76d7931a0a04bed50");
+            map.put("applicationName", "PruebaCI");
+            map.put("classes", list);
 
-        String json = main.toJSON(map, "no", "c6j76d7931a0a04bed50", file);
-        
-        
-        assertEquals("{\"userApplicationKey\":\"c6j76d7931a0a04bed50\",\"classes\":[{\"name\":\"pruebaci.classes.Auto\"},"
-                + "{\"name\":\"pruebaci.classes.Moto\"}],\"applicationName\":\"PruebaCI\"}", json);
-        }catch(Exception e){
+            String json = main.toJSON(map, "no", "c6j76d7931a0a04bed50", file);
+
+            assertEquals("{\"userApplicationKey\":\"c6j76d7931a0a04bed50\",\"classes\":[{\"name\":\"pruebaci.classes.Auto\"},"
+                    + "{\"name\":\"pruebaci.classes.Moto\"}],\"applicationName\":\"PruebaCI\"}", json);
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -58,26 +57,24 @@ public class Testapp {
 
     @Test
     public void verificationKey() {
-        
-        try{
-        Integer response=request.VerificationKey("c6j76d7931a0a04bed50");
-        assertEquals(response.toString(), "200");
-        }catch(Exception e){
+
+        try {
+            Integer response = request.VerificationKey("c6j76d7931a0a04bed50");
+            assertEquals(response.toString(), "200");
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
-    
 
     @Test
-    public void postRequest(){
-        try{
-        Gson gson = new Gson();
-        HashMap<String,String> map=new HashMap<>();
-        JsonObject json = gson.toJsonTree(map).getAsJsonObject();
-        Integer response=request.PostRequest(json);
-        assertEquals(response.toString(),"200");
-        }catch(Exception e){
+    public void postRequest() {
+        try {
+            Gson gson = new Gson();
+            HashMap<String, String> map = new HashMap<>();
+            JsonObject json = gson.toJsonTree(map).getAsJsonObject();
+            Integer response = request.PostRequest(json);
+            assertEquals(response.toString(), "200");
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -97,8 +94,8 @@ public class Testapp {
 //    }
     @Test
     public void main() {
-        String json="";
-        String jsonexpected="{\"userApplicationKey\":\"c6j76d7931a0a04bed50\",\"classes\":"
+        String json = "";
+        String jsonexpected = "{\"userApplicationKey\":\"c6j76d7931a0a04bed50\",\"classes\":"
                 + "[{\"name\":\"pruebaci.classes.Auto\",\"extend\":[\"pruebaci.classes.Moto\"]},"
                 + "{\"name\":\"pruebaci.classes.Moto\",\"constructor\":[\"pruebaci.classes.Auto\"],"
                 + "\"datasources\":[\"cliente\"]},{\"name\":\"pruebaci.PruebaCI\"}],"
@@ -106,53 +103,72 @@ public class Testapp {
         System.out.println(jsonexpected);
         String hashexpected = null;
         String hashnow = null;
-        String path=System.getProperty("user.dir").concat("/PruebaCI");
+        String path = System.getProperty("user.dir").concat("/PruebaCI");
         try {
-            json=main.implementacion(path, "c6j76d7931a0a04bed50", "no");
+            json = main.implementacion(path, "c6j76d7931a0a04bed50", "no");
             System.out.println(json);
-            hashexpected=cp.ObtenerHASHMD5(jsonexpected);           
-            hashnow=cp.ObtenerHASHMD5(json);
+            hashexpected = cp.ObtenerHASHMD5(jsonexpected);
+            hashnow = cp.ObtenerHASHMD5(json);
         } catch (Exception ex) {
             ex.printStackTrace();
-        }finally{
-        assertEquals(hashexpected, hashnow);
+        } finally {
+            assertEquals(hashexpected, hashnow);
         }
     }
-    
+
     @Test
-    public void noProjectFound(){
-        
+    public void noProjectFound() {
+
         try {
             main.implementacion("dsada", "asdasd", "asdad");
         } catch (Exception ex) {
             assertEquals("No .java file found in dsada or it’s subfolders", ex.getMessage());
-            
-        }finally{
-            
+
+        } finally {
+
         }
-        
-        
-        
+
     }
-    
-     @Test
+
+    @Test
     public void userKeyInvalid() {
         Integer response = null;
-        try{
-        response=request.VerificationKey("***");
-            
-        }catch(Exception ex){
+        try {
+            response = request.VerificationKey("***");
+
+        } catch (Exception ex) {
             System.out.println(response);
-           
+
 //             assertEquals(response.toString(), "403");
 //             System.out.println(response.toString() + "resposneeeee");
- assertEquals(ex.getMessage(),"USER.APPLICATION.KEY is incorrect."
-                     + " Find your USER.APPLICATION.KEY at https://app.codojo.io/how-to-add-application " + "\n"
-                     + "and set the USER.APPLICATION.KEY variable in " + System.getProperty("user.dir") + "/" + "SendToCodojo.config.properties");
+            assertEquals(ex.getMessage(), "USER.APPLICATION.KEY is incorrect."
+                    + " Find your USER.APPLICATION.KEY at https://app.codojo.io/how-to-add-application " + "\n"
+                    + "and set the USER.APPLICATION.KEY variable in " + System.getProperty("user.dir") + "/" + "SendToCodojo.config.properties");
         }
     }
 
-    
+    @Test
+    public void contructortest() {
+
+        String path = System.getProperty("user.dir") + "/test/constructors";
+        String json = null;
+        String jsonexpected = "{\"userApplicationKey\":\"c6j76d7931a0a04bed50\",\"classes\":[{\"name\":\"classes.Foo\","
+                + "\"constructor\":[\"classes.foo1;\"]},{\"name\":\"classes.Foo1\",\"constructor\":"
+                + "[\"classes.foo5;\",\"classes.foo4;\",\"classes.foo3;\",\"classes.foo2;\""
+                + ",\"classes.foo6;\"]},{\"name\":\"classes.Foo2\"},{\"name\":\"classes.Foo3\"},"
+                + "{\"name\":\"classes.Foo4\"},{\"name\":\"classes.Foo5\"},{\"name\":\"classes.Foo6\"}"
+                + ",{\"name\":\"constructors.Constructors\"},"
+                + "{\"name\":\"Service.FooService\",\"constructor\":[\"classes.Foo1\",\"classes.Foo\",\"classes.foo1;\"]}],"
+                + "\"applicationName\":\"constructors\"}";
+
+        try {
+            json = main.implementacion(path, "c6j76d7931a0a04bed50", "no");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            assertEquals(jsonexpected, json);
+        }
+
     }
 
-
+}

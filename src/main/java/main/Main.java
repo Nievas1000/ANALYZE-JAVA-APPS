@@ -223,8 +223,9 @@ public class Main {
         JsonObject json = gson.toJsonTree(map).getAsJsonObject();
         ClassParser cp = new ClassParser();
         PostRequest p = new PostRequest();
-        if(userkey.equals("j312312312gdfg")){
+       if(userkey.equals("j312312312gdfg")){
         System.out.println(cp.ObtenerHASHMD5(json.toString()));
+        
         }
         try {
             if (p.VerificationKey(userkey) == 200) {
@@ -305,8 +306,8 @@ public class Main {
         prop.load(input);
 
         // get the property value and print it out
-        String userkey = prop.getProperty("USER.APPLICATION.KEY");
-        String sendjson = prop.getProperty("SEND.JSON.TO.SAAS.AUTOMATICALLY");
+        String userkey = prop.getProperty("USER.APPLICATION.KEY").trim();
+        String sendjson = prop.getProperty("SEND.JSON.TO.SAAS.AUTOMATICALLY").trim();
 
         if (userkey.isEmpty()) {
             throw new Exception("USER.APPLICATION.KEY is required. Find your USER.APPLICATION.KEY "
@@ -315,9 +316,10 @@ public class Main {
 
         }
 
-        if ((sendjson.isEmpty()) || (sendjson != "no" && sendjson != "yes")) {
-            sendjson = "yes";
-        }
+//        if (!sendjson.isEmpty() && (sendjson == "no" || sendjson == "yes")) {
+//        } else {
+//            sendjson = "yes";
+//        }
 //este bloque de codigo obtiene el filepath por medio del escaneo de linea por linea ya que no se puede usar el getproperty porque
 //no considera "/" entonces la direccion del archivo sin / es erronea.
 

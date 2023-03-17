@@ -10,6 +10,7 @@ on:
 jobs:
   #Este job analiza si hay un error de sintaxis en el codigo y sus vulnerabilidades (Linter).
   sonarcloud:
+      if: ${{ github.event_name == 'push' }}  
       runs-on: ubuntu-latest
       steps:
         - uses: actions/checkout@v3
