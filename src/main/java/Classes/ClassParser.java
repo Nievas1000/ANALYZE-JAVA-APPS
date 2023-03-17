@@ -92,7 +92,6 @@ public class ClassParser {
             }
         }
 
-
         //este for es donde se parsea toda la data obtenida anteriormente y se obtiene data nueva(relaciones,constructs,etc)
         for (int i = 0; i < lines.size(); i++) {
 
@@ -115,7 +114,7 @@ public class ClassParser {
                 getClassName(lines.get(i), lines, i, map);
                 continue;
             }
-           
+
         }
     }
 
@@ -124,12 +123,10 @@ public class ClassParser {
         return (line.trim().startsWith("//") || line.trim().startsWith("/*") || line.trim().startsWith("/**")
                 || line.trim().startsWith("*"));
     }
-    
 
     private boolean containsSQL(String line) {
         return line.trim().contains("java.sql");
     }
-
 
     //Este metodo obtiene el nombre del package donde estan las clases
     public void getPackageName(String line, List<String> lines, HashMap<String, String> map) throws Exception {
@@ -493,28 +490,43 @@ public class ClassParser {
         }
 
         //este if es para buscar en una clase las declaraciones de otra clase en un variable
-        if ((line.contains("public") || line.contains("private") || line.contains("final")) && ((!line.contains("class")) && !line.contains("interface") && !line.contains("enum"))) {
+        if ((line.contains("public") || line.contains("private") || line.contains("final") || line.contains("protected") || line.contains(";")) && ((!line.contains("class")) && !line.contains("interface") && !line.contains("enum"))) {
             String[] parts = line.split("\\s+");
+          
             //line=parts[parts.length-1].replace(";", "");
-            if (parts.length == 4) {
+            if (parts.length == 4 || parts.length == 3 || parts.length == 2) {
+
                 //este if sigue el mismo patron que el anterior y entra cuando length es 4 ya que al buscar la parts[2] nos trae el nombre de la clase
                 //!discriptorname.contains es indicando que si en la clase se declara una variable con la misma clase en la que esta no guarda nada.
+                if(parts.length==4){
                 if (map.containsKey(parts[2].replace(">", "").replace("<", "").replace(",", "")) && !discriptor.name.contains(parts[2])) {
-
+                    
                     set.add(map.get(parts[2].replace(">", "").replace("<", "").replace(",", "")).concat(".").concat(parts[2].replace(">", "").replace("<", "").replace(",", "")));
 
                     //list.add(map.get(parts[2].replace(">", "")).concat(".").concat(parts[2].replace(">", "").replace("<", "").replace(",", "")));
                     //mismo patron
-                } else if (parts.length == 3) {
+                }
+                }
+                if (parts.length == 3) {
+
                     if (map.containsKey(parts[1].replace(">", "").replace("<", "").replace(",", "")) && !discriptor.name.contains(parts[1])) {
 
                         set.add(map.get(parts[1].replace(">", "").replace("<", "").replace(",", "")).concat(".").concat(parts[2].replace("<", "").replace(",", "")));
 
                     }
+                }
+                    
+                    if (parts.length == 2) {
+                        
+                    if (map.containsKey(parts[0].replace(">", "").replace("<", "").replace(",", "")) && !discriptor.name.contains(parts[0])) {
+
+                        set.add(map.get(parts[0].replace(">", "").replace("<", "").replace(",", "")).concat(".").concat(parts[1].replace("<", "").replace(",", "")));
+
+                    }
 
                 }
             }
-
+            
             //si algun nombre de la clase coincide con una key del map donde se mapearon todas los nombres de las clases y package guarda
             //en el atributo constructor de la clase discriptor
             discriptor.constructor = set;
@@ -547,98 +559,97 @@ public class ClassParser {
         List<String> tables = new ArrayList();
 
 //aca se identifica el archivo de propiedades pasandole el user.dir que seria el directorio donde esta parado ahora el usuario.
-try{
-        InputStream input = new FileInputStream(System.getProperty("user.dir") + "/" + "SendToCodojo.config.properties");
+        try {
+            InputStream input = new FileInputStream(System.getProperty("user.dir") + "/" + "SendToCodojo.config.properties");
 
-        Properties prop = new Properties();
+            Properties prop = new Properties();
 
-        // load a properties file
-        prop.load(input);
+            // load a properties file
+            prop.load(input);
 
-        // get the property value and print it out
-        // trae los valores de las properties del archivo.
-        String typedb = prop.getProperty("TYPE.DB");
-        String hostdb = prop.getProperty("HOST.DB");
-        String portdb = prop.getProperty("PORT.DB");
-        String namedb = prop.getProperty("NAME.DB");
-        String userdb = prop.getProperty("USER.DB");
-        String password = prop.getProperty("PASSWORD.DB");
+            // get the property value and print it out
+            // trae los valores de las properties del archivo.
+            String typedb = prop.getProperty("TYPE.DB");
+            String hostdb = prop.getProperty("HOST.DB");
+            String portdb = prop.getProperty("PORT.DB");
+            String namedb = prop.getProperty("NAME.DB");
+            String userdb = prop.getProperty("USER.DB");
+            String password = prop.getProperty("PASSWORD.DB");
 //             List<String> tablas = db.getTables(typedb, hostdb, portdb, namedb, userdb, password);
 
-        //si la linea contiene alguna de las anotaciones de jpa entra.
-        
-        if ((line.contains("@OneToOne") || line.contains("@OneToMany") || line.contains("@ManyToMany")
-                || line.contains("@ManyToOne")) && !line.contains("line.contains")) {
-           
-            if (line.contains("@OneToOne")) {
-                relation = "OneToOne";
-            }
-            if (line.contains("@OneToMany")) {
-                relation = "OneToMany";
-            }
-            if (line.contains("@ManyToMany")) {
-                relation = "ManyToMany";
-            }
-            if (line.contains("@ManyToOne")) {
+            //si la linea contiene alguna de las anotaciones de jpa entra.
+            if ((line.contains("@OneToOne") || line.contains("@OneToMany") || line.contains("@ManyToMany")
+                    || line.contains("@ManyToOne")) && !line.contains("line.contains")) {
 
-                relation = "ManyToOne";
-            }
-
-            //este bucle es para que ignore todas las anotaciones que no sean las relaciones de jpa
-            //y busque la declaracion de la clase donde se definio la relacion.
-            do {
-                if (!lines.get(i + 1).contains("@")) {
-                    entidad = lines.get(i + 1);
+                if (line.contains("@OneToOne")) {
+                    relation = "OneToOne";
                 }
-                i++;
-            } while (lines.get(i).contains("@"));
-
-            //divide en partes la declaracion de la clase en la que se esta haciendo la relacion.
-            String[] parts1 = entidad.split("\\s+");
-
-            //si la longitud de todas las partes es menor o igual a 3 entra
-            if (parts1.length <= 3) {
-                entidad = parts1[2].replace(";", "");
-                if (relation.equals("ManyToMany") && parts1.length <= 3) {
-
-                    String trim = discriptor.name.trim();
-                    trim = trim.replace(".", " ");
-                    String[] parts = trim.split("\\s+");
-                    //aqui se trae el nombre de la clase atual se convierte a minuscula y luego se concatena
-                    //con la clase donde se hizo la relacion
-                    entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[2].replace(";", "");
-
+                if (line.contains("@OneToMany")) {
+                    relation = "OneToMany";
                 }
-                //mismo patron
-                if (relation.equals("OneToMany")) {
-                    String trim = discriptor.name.trim();
-                    trim = trim.replace(".", " ");
-                    String[] parts = trim.split("\\s+");
-                    entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[2].replace(";", "");
+                if (line.contains("@ManyToMany")) {
+                    relation = "ManyToMany";
+                }
+                if (line.contains("@ManyToOne")) {
+
+                    relation = "ManyToOne";
                 }
 
-            } else {
-                //mismo patron
-                entidad = parts1[parts1.length - 1].replace(";", "");
-                if (relation.equals("OneToMany")) {
-                    String trim = discriptor.name.trim();
-                    trim = trim.replace(".", " ");
-                    String[] parts = trim.split("\\s+");
-                    entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[3].replace(";", "");
+                //este bucle es para que ignore todas las anotaciones que no sean las relaciones de jpa
+                //y busque la declaracion de la clase donde se definio la relacion.
+                do {
+                    if (!lines.get(i + 1).contains("@")) {
+                        entidad = lines.get(i + 1);
+                    }
+                    i++;
+                } while (lines.get(i).contains("@"));
+
+                //divide en partes la declaracion de la clase en la que se esta haciendo la relacion.
+                String[] parts1 = entidad.split("\\s+");
+
+                //si la longitud de todas las partes es menor o igual a 3 entra
+                if (parts1.length <= 3) {
+                    entidad = parts1[2].replace(";", "");
+                    if (relation.equals("ManyToMany") && parts1.length <= 3) {
+
+                        String trim = discriptor.name.trim();
+                        trim = trim.replace(".", " ");
+                        String[] parts = trim.split("\\s+");
+                        //aqui se trae el nombre de la clase atual se convierte a minuscula y luego se concatena
+                        //con la clase donde se hizo la relacion
+                        entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[2].replace(";", "");
+
+                    }
+                    //mismo patron
+                    if (relation.equals("OneToMany")) {
+                        String trim = discriptor.name.trim();
+                        trim = trim.replace(".", " ");
+                        String[] parts = trim.split("\\s+");
+                        entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[2].replace(";", "");
+                    }
+
+                } else {
+                    //mismo patron
+                    entidad = parts1[parts1.length - 1].replace(";", "");
+                    if (relation.equals("OneToMany")) {
+                        String trim = discriptor.name.trim();
+                        trim = trim.replace(".", " ");
+                        String[] parts = trim.split("\\s+");
+                        entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[3].replace(";", "");
+                    }
+                    //mismo patron
+                    if (relation.equals("ManyToMany")) {
+
+                        String trim = discriptor.name.trim();
+                        trim = trim.replace(".", " ");
+                        String[] parts = trim.split("\\s+");
+                        entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[3].replace(";", "");
+
+                    }
+
                 }
-                //mismo patron
-                if (relation.equals("ManyToMany")) {
 
-                    String trim = discriptor.name.trim();
-                    trim = trim.replace(".", " ");
-                    String[] parts = trim.split("\\s+");
-                    entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[3].replace(";", "");
-
-                }
-
-            }
-
-            //String[] parts1 = entidad.split("\\s+");
+                //String[] parts1 = entidad.split("\\s+");
 //                    if(parts1.length>3){
 //                         entidad = parts1[3].replace(";", "");                          
 //                         if(relation.equals("OneToMany")){
@@ -654,14 +665,14 @@ try{
 //                             String[] parts = trim.split("\\s+");
 //                          entidad=parts[parts.length-1].toLowerCase() + "_" + parts1[3].replace(";", "");  
 //                             
-            //se crea un array para que guarde lo que retorne gettables.
-            //List<String> tablas = db.getTables(typedb, hostdb, portdb, namedb, userdb, password);
-            //si el array contiene una tabladb que sea igual que el nombre de la variable entidad que guardamos antes es true. 
-            // Boolean res = tablas.contains(entidad);
-            //si es true entra y guarda el valor de entidad en una tabla para luego asignarselo a datasources.
-            tables.add(entidad);
-            
-            discriptor.setDatasources(tables);
+                //se crea un array para que guarde lo que retorne gettables.
+                //List<String> tablas = db.getTables(typedb, hostdb, portdb, namedb, userdb, password);
+                //si el array contiene una tabladb que sea igual que el nombre de la variable entidad que guardamos antes es true. 
+                // Boolean res = tablas.contains(entidad);
+                //si es true entra y guarda el valor de entidad en una tabla para luego asignarselo a datasources.
+                tables.add(entidad);
+
+                discriptor.setDatasources(tables);
 
 //                    for (Map.Entry<String, List> entry : mapdb.entrySet()) {
 //                        String key = entry.getKey();
@@ -670,10 +681,10 @@ try{
 //
 //                    }
 //                    mapdb.put(relation, tables);
-            //discriptor.setDatasources(mapdb);
+                //discriptor.setDatasources(mapdb);
 //                }
-            // System.out.println(res);
-            //Boolean res=tablas.contains(entidad);
+                // System.out.println(res);
+                //Boolean res=tablas.contains(entidad);
 //                   tables.add(entidad);
 //                   System.out.println(entidad);
 //                   discriptor.setDatasources(tables);
@@ -692,11 +703,10 @@ try{
 //                }
 //          for (String table : tables) {
 //                System.out.println(table);
-            //  }
-        
-            return "true";
-        }
-        }catch(Exception e){
+                //  }
+                return "true";
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return "false";
