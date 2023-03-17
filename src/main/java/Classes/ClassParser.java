@@ -62,8 +62,8 @@ public class ClassParser {
 
     //Este metodo lee linea por linea cada clase
     public void parse(HashMap<String, String> map, int a, int cont) throws Exception {
-        List<String> lines = Files.readAllLines(file,Charset.forName("ISO-8859-1"));
-        
+        List<String> lines = Files.readAllLines(file, Charset.forName("ISO-8859-1"));
+
         //se crean list y hashmap globales.
         HashMap<String, List> mapdb = new HashMap<>();
         List<String> list = new ArrayList<>();
@@ -77,27 +77,22 @@ public class ClassParser {
             }
 
             if (lines.get(i).contains("public enum")) {
-//                System.out.println("ENTRAA");
+
                 savevalues(lines.get(i), map, discriptor.packageName);
             }
 
             if (lines.get(i).contains("public interface")) {
-//                System.out.println("ENTRAA");
+
                 savevalues(lines.get(i), map, discriptor.packageName);
             }
 
             if (lines.get(i).contains("public class") || lines.get(i).contains("class")) {
-//                System.out.println("ENTRAA");
+
                 savevalues(lines.get(i), map, discriptor.packageName);
             }
         }
 
-//        for (Map.Entry<String, String> entry : map.entrySet()) {
-//            String key = entry.getKey();
-//            String value = entry.getValue();
-//            System.out.println(key + value + "VALORES FOR");
-//
-//        }
+
         //este for es donde se parsea toda la data obtenida anteriormente y se obtiene data nueva(relaciones,constructs,etc)
         for (int i = 0; i < lines.size(); i++) {
 
@@ -113,22 +108,14 @@ public class ClassParser {
             if (isCommented(lines.get(i))) {
                 continue;
             }
-//			if(containsSQL(lines.get(i))) {
-//				System.out.println("DB CODE DETECTED!!!");
-//				parseDB(lines);
-//			}
-//            if (discriptor.packageName == null) {
-//                getPackageName(lines.get(i), map);
-//                continue;
-//            }
+//			
 
             if (discriptor.name == null) {
 
                 getClassName(lines.get(i), lines, i, map);
                 continue;
             }
-
-//            findMembers(lines.get(i));
+           
         }
     }
 
@@ -137,86 +124,15 @@ public class ClassParser {
         return (line.trim().startsWith("//") || line.trim().startsWith("/*") || line.trim().startsWith("/**")
                 || line.trim().startsWith("*"));
     }
-    //public DatabaseDescriptor getDBDescriptor() {
-    //return this.dbDescriptor;
-    //}
-//	private void parseDB(List<String> lines) {
-//		for(String line:lines) {
-//			if(line.contains("jdbc:")) {
-//				System.out.println("Detected line: "+line);
-//				int start=line.indexOf("\"");
-//				int end=line.substring(start+1).indexOf("\"");
-//				if(end>0)
-//					end+=start;
-//				System.out.println("Start point: "+start+", "+end);
-//				if(end>start) {
-//					String connectionString=line.substring(start+1,end+1);
-//					System.out.println("Connection String: "+connectionString);
-//					if(connectionString.contains(":")) {
-//						String[] params=connectionString.split(":");
-//						if(params.length==4) {
-//							String dbType=params[1];
-//							String host=params[2];
-//							String port="";
-//							String db="";
-//							if(params[3].contains("/")) {
-//								String[] pd=params[3].split("/");
-//								if(pd.length==2) {
-//									port=pd[0];
-//									db=pd[1];
-//								}
-//							}else {
-//								port=params[3];
-//								db="Unknown";
-//							}
-//							dbDescriptor.type=dbType;
-//							dbDescriptor.host=host;
-//							dbDescriptor.port=port;
-//							dbDescriptor.db=db;
-//							dbDescriptor.username="root";
-//							dbDescriptor.password="";
-//						}
-//					}
-//				}
-//			}
-//		}
-//	}
+    
 
     private boolean containsSQL(String line) {
         return line.trim().contains("java.sql");
     }
 
-//    private void addMember(Member m) {
-//        if (discriptor.members == null) {
-//            discriptor.members = new ArrayList();
-//        }
-//        discriptor.members.add(m);
-//    }
-//    public void findMembers(String line) {
-//        line = line.trim();
-//        String[] parts = line.split("\\s+");
-//        if (parts.length == 2 && parts[1].endsWith(";")) {
-//            Member m = new Member();
-//           
-//            m.type = parts[0];
-//            m.member = parts[1].substring(0, parts[1].length() - 1);
-//            addMember(m);
-//        } else if (parts.length == 3 && parts[2].endsWith(";")) {
-//            Member m = new Member();
-//            ;
-//            m.type = parts[1];
-//            m.member = parts[2].substring(0, parts[2].length() - 1);
-//            addMember(m);
-//        }else if(parts.length > 3  && line.endsWith(";")){
-//            Member m = new Member();
-//            
-//            m.type = parts[1];
-//            m.member = parts[2]+parts[3];
-//            addMember(m);
-//        }
-//    }
+
     //Este metodo obtiene el nombre del package donde estan las clases
-    public void getPackageName(String line, List<String> lines, HashMap<String, String> map) {
+    public void getPackageName(String line, List<String> lines, HashMap<String, String> map) throws Exception {
         line = line.trim();
         if (line.startsWith("package")) {
             //divide cada linea en partes y los agrega a un array de strings
@@ -236,7 +152,7 @@ public class ClassParser {
     }
 
     // Este metodo obtiene el nombre de cada clase y clasifica si es class o interface ademas dde obtener los extends e implements.
-    public boolean getClassName(String line, List<String> lines, int i, HashMap<String, String> map) {
+    public boolean getClassName(String line, List<String> lines, int i, HashMap<String, String> map) throws Exception {
         line = line.trim();
         String ex = null;
 
@@ -276,7 +192,7 @@ public class ClassParser {
                     if (parts[j].equalsIgnoreCase("extends")) {
                         if (map.containsKey(parts[j + 1].replace("{", ""))) {
 
-                            discriptor.extend = map.get(parts[j + 1]) + "." + parts[j + 1];
+                            discriptor.extend.add(map.get(parts[j + 1]) + "." + parts[j + 1]);
                         } else {
                             discriptor.extend = null;
                         }
@@ -374,8 +290,9 @@ public class ClassParser {
                     lineif = lines.get(i + 1);
                     lineif = lineif.replace("<", " ").replace(">", " ");
                     String[] partsif = lineif.split("\\s+");
-                    discriptor.extend = map.get(partsif[0]) + "." + partsif[0];
+                    //array.add(map.get(partsif[0]) + "." + partsif[0]);
 
+                    //   discriptor.extend=array;
                     for (int j = 0; j < partsif.length - 1; j++) {
                         if (map.containsKey(partsif[j].replace("{", ""))) {
 //                            System.out.println(map.get(partsif[j]) + "PARTSIFFF");
@@ -386,7 +303,8 @@ public class ClassParser {
                             discriptor.extend = null;
                         }
                     }
-                    discriptor.extend = array.toString();
+
+                    discriptor.extend = array;
 
                 } else {
                     lineif = lines.get(i);
@@ -394,16 +312,17 @@ public class ClassParser {
                     String[] partsif = lineif.split("\\s+");
 
                     for (int j = 0; j < partsif.length - 1; j++) {
-                        if (partsif[j].equalsIgnoreCase("extends") && cont <= 0 && line.endsWith("{") && partsif.length>5) {
-                            
+                        if (partsif[j].equalsIgnoreCase("extends") && cont <= 0 && line.endsWith("{") && partsif.length > 5) {
+
                             if (map.containsKey(partsif[j + 2].replace("{", ""))) {
-                                discriptor.extend = map.get(partsif[j + 2]) + "." + partsif[j + 2];
+                                array.add((map.get(partsif[j + 2]) + "." + partsif[j + 2]));
+                                discriptor.extend = array;
 
                             } else if (map.containsKey(partsif[j + 1].replace("{", ""))) {
-
-                                discriptor.extend = map.get(partsif[j + 1]) + "." + partsif[j + 1];
+                                array.add(map.get(partsif[j + 1]) + "." + partsif[j + 1]);
+                                discriptor.extend = array;
                             } else {
-                                discriptor.extend = null;
+
                             }
                         }
                     }
@@ -526,29 +445,27 @@ public class ClassParser {
     }
 
     //guarda los valores que se le pasan desde el primer for de esta clase
-    public void savevalues(String line, HashMap<String, String> map, String dp) {
-        try {
-            line = line.trim();
-//        System.out.println(line);
-            String[] parts = line.split("\\s+");
-            if (parts.length >= 3) {
-                for (int j = 0; j < parts.length - 1; j++) {
-                    if (parts[j].equalsIgnoreCase("class") || parts[j].equalsIgnoreCase("interface") || parts[j].equalsIgnoreCase("enum")) {
-                        map.put(parts[j + 1].replace("<", "").replace(">", "").replace("T", "").replace(")", "").replace("(", "").replace(";", "").replace(",", ""), dp);
-                    }
-                }
-                //guarda nombre de la clase y package en un hashmap.
-                //map.put(parts[2], dp);
+    public void savevalues(String line, HashMap<String, String> map, String dp) throws Exception {
 
+        line = line.trim();
+//        System.out.println(line);
+        String[] parts = line.split("\\s+");
+        if (parts.length >= 3) {
+            for (int j = 0; j < parts.length - 1; j++) {
+                if (parts[j].equalsIgnoreCase("class") || parts[j].equalsIgnoreCase("interface") || parts[j].equalsIgnoreCase("enum")) {
+                    map.put(parts[j + 1].replace("<", "").replace(">", "").replace("T", "").replace(")", "").replace("(", "").replace(";", "").replace(",", ""), dp);
+                }
             }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+            //guarda nombre de la clase y package en un hashmap.
+            //map.put(parts[2], dp);
+
         }
+
     }
     int i = 0;
 
     //busca en un clases el llamado a otras clases por medio de los import o declaraciones de variables que referencian a una clase.
-    public void searchrelation(List<String> lines, String line, HashMap<String, String> map, Set<String> set) {
+    public void searchrelation(List<String> lines, String line, HashMap<String, String> map, Set<String> set) throws Exception {
         line = line.trim();
         line = line.replace(".", " ");
 
@@ -621,7 +538,7 @@ public class ClassParser {
     }
 
     //este metodo busca las relaciones de jpa (@OneToOne,@OneToMany,@ManyToOne,@ManyToMany)
-    public String searchrelationjpa(List<String> lines, String line, int i, HashMap<String, List> mapdb) throws FileNotFoundException, IOException {
+    public String searchrelationjpa(List<String> lines, String line, int i, HashMap<String, List> mapdb) throws FileNotFoundException, Exception {
         String entidad = "";
         String relation = "";
 
@@ -630,100 +547,98 @@ public class ClassParser {
         List<String> tables = new ArrayList();
 
 //aca se identifica el archivo de propiedades pasandole el user.dir que seria el directorio donde esta parado ahora el usuario.
-        try (InputStream input = new FileInputStream(System.getProperty("user.dir") + "/" + "SendToCodojo.config.properties")) {
+try{
+        InputStream input = new FileInputStream(System.getProperty("user.dir") + "/" + "SendToCodojo.config.properties");
 
-            Properties prop = new Properties();
+        Properties prop = new Properties();
 
-            // load a properties file
-            prop.load(input);
+        // load a properties file
+        prop.load(input);
 
-            // get the property value and print it out
-            // trae los valores de las properties del archivo.
-            String typedb = prop.getProperty("TYPE.DB");
-            String hostdb = prop.getProperty("HOST.DB");
-            String portdb = prop.getProperty("PORT.DB");
-            String namedb = prop.getProperty("NAME.DB");
-            String userdb = prop.getProperty("USER.DB");
-            String password = prop.getProperty("PASSWORD.DB");
+        // get the property value and print it out
+        // trae los valores de las properties del archivo.
+        String typedb = prop.getProperty("TYPE.DB");
+        String hostdb = prop.getProperty("HOST.DB");
+        String portdb = prop.getProperty("PORT.DB");
+        String namedb = prop.getProperty("NAME.DB");
+        String userdb = prop.getProperty("USER.DB");
+        String password = prop.getProperty("PASSWORD.DB");
 //             List<String> tablas = db.getTables(typedb, hostdb, portdb, namedb, userdb, password);
 
-            //si la linea contiene alguna de las anotaciones de jpa entra.
+        //si la linea contiene alguna de las anotaciones de jpa entra.
+        
+        if ((line.contains("@OneToOne") || line.contains("@OneToMany") || line.contains("@ManyToMany")
+                || line.contains("@ManyToOne")) && !line.contains("line.contains")) {
            
-            if (line.contains("@OneToOne") || line.contains("@OneToMany") || line.contains("@ManyToMany")
-                    || line.contains("@ManyToOne")) {
+            if (line.contains("@OneToOne")) {
+                relation = "OneToOne";
+            }
+            if (line.contains("@OneToMany")) {
+                relation = "OneToMany";
+            }
+            if (line.contains("@ManyToMany")) {
+                relation = "ManyToMany";
+            }
+            if (line.contains("@ManyToOne")) {
 
-                if (line.contains("@OneToOne")) {
-                    relation = "OneToOne";
+                relation = "ManyToOne";
+            }
+
+            //este bucle es para que ignore todas las anotaciones que no sean las relaciones de jpa
+            //y busque la declaracion de la clase donde se definio la relacion.
+            do {
+                if (!lines.get(i + 1).contains("@")) {
+                    entidad = lines.get(i + 1);
                 }
-                if (line.contains("@OneToMany")) {
-                    relation = "OneToMany";
+                i++;
+            } while (lines.get(i).contains("@"));
+
+            //divide en partes la declaracion de la clase en la que se esta haciendo la relacion.
+            String[] parts1 = entidad.split("\\s+");
+
+            //si la longitud de todas las partes es menor o igual a 3 entra
+            if (parts1.length <= 3) {
+                entidad = parts1[2].replace(";", "");
+                if (relation.equals("ManyToMany") && parts1.length <= 3) {
+
+                    String trim = discriptor.name.trim();
+                    trim = trim.replace(".", " ");
+                    String[] parts = trim.split("\\s+");
+                    //aqui se trae el nombre de la clase atual se convierte a minuscula y luego se concatena
+                    //con la clase donde se hizo la relacion
+                    entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[2].replace(";", "");
+
                 }
-                if (line.contains("@ManyToMany")) {
-                    relation = "ManyToMany";
+                //mismo patron
+                if (relation.equals("OneToMany")) {
+                    String trim = discriptor.name.trim();
+                    trim = trim.replace(".", " ");
+                    String[] parts = trim.split("\\s+");
+                    entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[2].replace(";", "");
                 }
-                if (line.contains("@ManyToOne")) {
 
-                    relation = "ManyToOne";
+            } else {
+                //mismo patron
+                entidad = parts1[parts1.length - 1].replace(";", "");
+                if (relation.equals("OneToMany")) {
+                    String trim = discriptor.name.trim();
+                    trim = trim.replace(".", " ");
+                    String[] parts = trim.split("\\s+");
+                    entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[3].replace(";", "");
+                }
+                //mismo patron
+                if (relation.equals("ManyToMany")) {
+
+                    String trim = discriptor.name.trim();
+                    trim = trim.replace(".", " ");
+                    String[] parts = trim.split("\\s+");
+                    entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[3].replace(";", "");
+
                 }
 
-               
-                
-                //este bucle es para que ignore todas las anotaciones que no sean las relaciones de jpa
-                //y busque la declaracion de la clase donde se definio la relacion.
-                do {
-                    if (!lines.get(i + 1).contains("@")) {
-                        entidad = lines.get(i + 1);
-                    }
-                    i++;
-                } while (lines.get(i).contains("@"));
+            }
 
-                //divide en partes la declaracion de la clase en la que se esta haciendo la relacion.
-                String[] parts1 = entidad.split("\\s+");
-
-                try {
-                    //si la longitud de todas las partes es menor o igual a 3 entra
-                    if (parts1.length <= 3) {
-                        entidad = parts1[2].replace(";", "");
-                        if (relation.equals("ManyToMany") && parts1.length <= 3) {
-
-                            String trim = discriptor.name.trim();
-                            trim = trim.replace(".", " ");
-                            String[] parts = trim.split("\\s+");
-                            //aqui se trae el nombre de la clase atual se convierte a minuscula y luego se concatena
-                            //con la clase donde se hizo la relacion
-                            entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[2].replace(";", "");
-
-                        }
-                        //mismo patron
-                        if (relation.equals("OneToMany")) {
-                            String trim = discriptor.name.trim();
-                            trim = trim.replace(".", " ");
-                            String[] parts = trim.split("\\s+");
-                            entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[2].replace(";", "");
-                        }
-
-                    } else {
-                        //mismo patron
-                        entidad = parts1[parts1.length - 1].replace(";", "");
-                        if (relation.equals("OneToMany")) {
-                            String trim = discriptor.name.trim();
-                            trim = trim.replace(".", " ");
-                            String[] parts = trim.split("\\s+");
-                            entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[3].replace(";", "");
-                        }
-                        //mismo patron
-                        if (relation.equals("ManyToMany")) {
-
-                            String trim = discriptor.name.trim();
-                            trim = trim.replace(".", " ");
-                            String[] parts = trim.split("\\s+");
-                            entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[3].replace(";", "");
-
-                        }
-
-                    }
-
-                    //String[] parts1 = entidad.split("\\s+");
+            //String[] parts1 = entidad.split("\\s+");
 //                    if(parts1.length>3){
 //                         entidad = parts1[3].replace(";", "");                          
 //                         if(relation.equals("OneToMany")){
@@ -739,19 +654,15 @@ public class ClassParser {
 //                             String[] parts = trim.split("\\s+");
 //                          entidad=parts[parts.length-1].toLowerCase() + "_" + parts1[3].replace(";", "");  
 //                             
-                    //se crea un array para que guarde lo que retorne gettables.
-                    List<String> tablas = db.getTables(typedb, hostdb, portdb, namedb, userdb, password);
-                    
-                    //si el array contiene una tabladb que sea igual que el nombre de la variable entidad que guardamos antes es true. 
-                    Boolean res = tablas.contains(entidad);
+            //se crea un array para que guarde lo que retorne gettables.
+            //List<String> tablas = db.getTables(typedb, hostdb, portdb, namedb, userdb, password);
+            //si el array contiene una tabladb que sea igual que el nombre de la variable entidad que guardamos antes es true. 
+            // Boolean res = tablas.contains(entidad);
+            //si es true entra y guarda el valor de entidad en una tabla para luego asignarselo a datasources.
+            tables.add(entidad);
+            
+            discriptor.setDatasources(tables);
 
-                    if (res) {
-                        //si es true entra y guarda el valor de entidad en una tabla para luego asignarselo a datasources.
-                        tables.add(entidad);
-                        mapdb.put(relation, tables);
-                        discriptor.setDatasources(mapdb);
-
-                    }
 //                    for (Map.Entry<String, List> entry : mapdb.entrySet()) {
 //                        String key = entry.getKey();
 //                        List value = entry.getValue();
@@ -759,15 +670,10 @@ public class ClassParser {
 //
 //                    }
 //                    mapdb.put(relation, tables);
-                    //discriptor.setDatasources(mapdb);
+            //discriptor.setDatasources(mapdb);
 //                }
-
-                    // System.out.println(res);
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                }
-                //Boolean res=tablas.contains(entidad);
-
+            // System.out.println(res);
+            //Boolean res=tablas.contains(entidad);
 //                   tables.add(entidad);
 //                   System.out.println(entidad);
 //                   discriptor.setDatasources(tables);
@@ -786,18 +692,17 @@ public class ClassParser {
 //                }
 //          for (String table : tables) {
 //                System.out.println(table);
-                //  }
-                return "true";
-            }
-
+            //  }
+        
+            return "true";
+        }
         }catch(Exception e){
             e.printStackTrace();
         }
-
         return "false";
     }
 
-    public String ObtenerHASHMD5(String textoEntrada) {
+    public String ObtenerHASHMD5(String textoEntrada) throws Exception {
         if (textoEntrada.equals("")) {
             return "";
         } else {
@@ -818,7 +723,7 @@ public class ClassParser {
         }
     }
 
-    public String getKey() {
+    public String getKey() throws Exception {
         String userkey = null;
         try (InputStream input = new FileInputStream(System.getProperty("user.dir") + "/" + "SendToCodojo.config.properties")) {
 
@@ -829,34 +734,28 @@ public class ClassParser {
             prop.load(input);
 
             // get the property value and print it out
-            userkey = prop.getProperty("USER.APPLICATION.KEY");
+            userkey = prop.getProperty("USER.APPLICATION.KEY").trim();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return userkey;
     }
 
-    public String getProjectName() {
+    public String getProjectName() throws Exception {
         String lines = null;
         File filename = null;
-        try {
-            try (BufferedReader br = new BufferedReader(new FileReader(System.getProperty("user.dir") + "/" + "SendToCodojo.config.properties"))) {
-                String line;
-                while ((line = br.readLine()) != null) {
-                    if (line.contains("APPLICATION.FILEPATH")) {
-                        lines = line.substring(22, line.length());
+
+        BufferedReader br = new BufferedReader(new FileReader(System.getProperty("user.dir") + "/" + "SendToCodojo.config.properties"));
+        String line;
+        while ((line = br.readLine()) != null) {
+            if (line.contains("APPLICATION.FILEPATH")) {
+                lines = line.substring(22, line.length()).trim();
 //                            
-                    }
-                }
-                String sCarpAct = System.getProperty(lines, lines);
-
-                filename = new File(sCarpAct);
-
             }
-        } catch (IOException e) {
-            //e.printStackTrace();
-            System.out.println(e.getMessage());
         }
+        String sCarpAct = System.getProperty(lines, lines);
+
+        filename = new File(sCarpAct);
 
         return filename.getName();
     }

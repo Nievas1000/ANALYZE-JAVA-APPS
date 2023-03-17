@@ -33,6 +33,7 @@ public class PostRequest {
 
     public Integer PostRequest(JsonObject json) throws Exception  {
          String str = "";
+         Integer response;
          
         
         
@@ -46,6 +47,10 @@ public class PostRequest {
             conexion.setDoOutput(true);
             OutputStream output = conexion.getOutputStream();     
             output.write(json.toString().getBytes());
+            response=conexion.getResponseCode();
+             if(response!=200){
+            throw new Exception("error sending JSON to codojo.io");
+            }
             //limpia
             output.flush();
             //cierra la conexion
@@ -67,10 +72,10 @@ public class PostRequest {
       
     }
 
-    public Integer VerificationKey(String userkey) throws MalformedURLException, IOException, SlackApiException {
+    public Integer VerificationKey(String userkey) throws MalformedURLException, IOException, SlackApiException, Exception {
         String str = "";
         Integer response = null;
-        try {
+//        try {
             HashMap<String, String> map = new HashMap<>();
             map.put("code", userkey);
 
@@ -87,6 +92,14 @@ public class PostRequest {
             OutputStream output = conexion.getOutputStream();
             output.write(json.toString().getBytes());
             response = conexion.getResponseCode();
+            
+            if(response!=200){
+            throw new Exception("USER.APPLICATION.KEY is incorrect."
+                     + " Find your USER.APPLICATION.KEY at https://app.codojo.io/how-to-add-application " + "\n"
+                     + "and set the USER.APPLICATION.KEY variable in " + System.getProperty("user.dir") + "/" + "SendToCodojo.config.properties");
+            
+            }
+            
             //limpia
             output.flush();
             //cierra la conexion
@@ -101,14 +114,19 @@ public class PostRequest {
             }
 
 //            JOptionPane.showMessageDialog(null, str);
-        } catch (Exception e) {
-            System.out.println("USERKEY INVALID");
-            sl.send("USERKEY INVALID");
-//            JOptionPane.showMessageDialog(null, "USERKEY INVALID");
-            return response;
-        }
+//        } catch (Exception e) {
+             
+//            sl.send("USERKEY INVALID",e.getMessage());
+             
+            
+            
 
-        return response;
+            
+       
+            return response;
+        
+
+        
     }
 
 

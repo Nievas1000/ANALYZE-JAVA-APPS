@@ -1,0 +1,3 @@
+weekhookurl=https://hooks.slack.com/services/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
+token=xoxb-4257485974725-4916310571927-SBiZh3ahzkMXGomnu1xUExc0
+channel=C04SY867CMD

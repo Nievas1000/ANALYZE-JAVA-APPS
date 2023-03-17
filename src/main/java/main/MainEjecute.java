@@ -5,6 +5,7 @@ package main;
 
 
 
+import Requests.SlackIntegration;
 import java.io.IOException;
 import javax.swing.JOptionPane;
 
@@ -18,8 +19,10 @@ public class MainEjecute {
         try {
             Main main=new Main();
             main.fileReader();
-        } catch (IOException ex) {
-            System.out.println("error running the program");
+        } catch (Exception ex) {
+            
+            System.out.println(ex.getMessage());
+             System.out.println("”The program did not complete successfully.”");
         }
     }
 
