@@ -306,7 +306,7 @@ public class ClassParser {
 
                     discriptor.extend = array;
 
-                } else {
+                } else   { 
                     lineif = lines.get(i);
                     lineif = lineif.replace("<", " ").replace(">", " ").replace(",", " ");
                     String[] partsif = lineif.split("\\s+");

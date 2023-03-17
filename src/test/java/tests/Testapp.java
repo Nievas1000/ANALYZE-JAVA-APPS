@@ -127,18 +127,18 @@ public class Testapp {
         } catch (Exception ex) {
             assertEquals("No .java file found in dsada or it’s subfolders", ex.getMessage());
             
-        }finally{
+          }finally{
             
         }
         
-        
+         
         
     }
     
      @Test
     public void userKeyInvalid() {
         Integer response = null;
-        try{
+        try{ 
         response=request.VerificationKey("***");
             
         }catch(Exception ex){
