@@ -106,7 +106,7 @@ public class Main {
         if (files.isEmpty()) {
 //            sl.send("ERROR: No project found", null);
             
-            throw new Exception("No .java file found in "+ args +" or it’s subfolders");
+            throw new Exception("No .java file found in "+ args +" or it's subfolders");
              
         }
 
