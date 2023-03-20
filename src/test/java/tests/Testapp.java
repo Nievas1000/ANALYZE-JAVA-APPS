@@ -141,15 +141,15 @@ public class Testapp {
 
 //             assertEquals(response.toString(), "403");
 //             System.out.println(response.toString() + "resposneeeee");
-            assertEquals(ex.getMessage(), "USER.APPLICATION.KEY is incorrect."
+            assertEquals("USER.APPLICATION.KEY is incorrect." 
                     + " Find your USER.APPLICATION.KEY at https://app.codojo.io/how-to-add-application " + "\n"
-                    + "and set the USER.APPLICATION.KEY variable in " + System.getProperty("user.dir") + "/" + "SendToCodojo.config.properties");
+                    + "and set the USER.APPLICATION.KEY variable in " + System.getProperty("user.dir") + "/" + "SendToCodojo.config.properties",ex.getMessage());
         }
     }
     
     @Test
     public void constructortest(){
-         String path = System.getProperty("user.dir") + "/test/constructors";
+        String path = System.getProperty("user.dir") + "/test/constructors";
         String json = null;
         String jsonexpected = "{\"userApplicationKey\":\"c6j76d7931a0a04bed50\",\"classes\":[{\"name\":\"classes.Foo\","
                 + "\"constructor\":[\"classes.foo1;\"]},{\"name\":\"classes.Foo1\",\"constructor\":"
@@ -162,9 +162,9 @@ public class Testapp {
         
        
         try {
-            jsonexpected=cp.ObtenerHASHMD5(jsonexpected);
+//            jsonexpected=cp.ObtenerHASHMD5(jsonexpected);
             json = main.implementacion(path, "c6j76d7931a0a04bed50", "no");
-            json=cp.ObtenerHASHMD5(json);
+//            json=cp.ObtenerHASHMD5(json);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
