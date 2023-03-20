@@ -110,7 +110,7 @@ public class Testapp {
             hashexpected = cp.ObtenerHASHMD5(jsonexpected);
             hashnow = cp.ObtenerHASHMD5(json);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            System.out.println(ex.getMessage());
         } finally {
             assertEquals(hashexpected, hashnow);
         }
