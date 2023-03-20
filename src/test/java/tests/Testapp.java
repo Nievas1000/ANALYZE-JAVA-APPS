@@ -160,12 +160,16 @@ public class Testapp {
                 + "{\"name\":\"Service.FooService\",\"constructor\":[\"classes.Foo1\",\"classes.Foo\",\"classes.foo1;\"]}],"
                 + "\"applicationName\":\"constructors\"}";
         
+       
         try {
-            
+            jsonexpected=cp.ObtenerHASHMD5(jsonexpected);
             json = main.implementacion(path, "c6j76d7931a0a04bed50", "no");
+            json=cp.ObtenerHASHMD5(json);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            System.out.println(jsonexpected);
+            System.out.println(json);
             assertEquals(jsonexpected, json);
         }
     }
