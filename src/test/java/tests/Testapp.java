@@ -96,9 +96,9 @@ public class Testapp {
     public void main() {
         String json = "";
         String jsonexpected = "{\"userApplicationKey\":\"c6j76d7931a0a04bed50\",\"classes\":"
-                + "[{\"name\":\"pruebaci.classes.Auto\",\"extend\":[\"pruebaci.classes.Moto\"]},"
-                + "{\"name\":\"pruebaci.classes.Moto\",\"constructor\":[\"pruebaci.classes.Auto\"],"
-                + "\"datasources\":[\"cliente\"]},{\"name\":\"pruebaci.PruebaCI\"}],"
+                + "[{\"name\":\"pruebaci.classes.Auto\",\"extend\":[\"pruebaci.classes.Moto\"]}"
+                + ",{\"name\":\"pruebaci.classes.Moto\",\"constructor\":[\"pruebaci.classes.Auto\"]"
+                + ",\"datasources\":[\"cliente\"]},{\"name\":\"pruebaci.PruebaCI\"}],"
                 + "\"applicationName\":\"PruebaCI\"}";
         
         String hashexpected = null;
