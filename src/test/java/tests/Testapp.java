@@ -112,6 +112,7 @@ public class Testapp {
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         } finally {
+           
             assertEquals(hashexpected, hashnow);
         }
     }
@@ -151,13 +152,13 @@ public class Testapp {
     public void constructortest(){
         String path = System.getProperty("user.dir") + "/test/constructors";
         String json = null;
-        String jsonexpected = "{\"userApplicationKey\":\"c6j76d7931a0a04bed50\",\"classes\":"
-                + "[{\"name\":\"classes.Foo5\"},{\"name\":\"classes.Foo2\"},{\"name\":\"classes.Foo6\"},"
-                + "{\"name\":\"classes.Foo3\"},{\"name\":\"classes.Foo4\"},{\"name\":\"classes.Foo\",\"constructor\":"
-                + "[\"classes.foo1;\"]},{\"name\":\"classes.Foo1\",\"constructor\":"
-                + "[\"classes.foo5;\",\"classes.foo4;\",\"classes.foo3;\",\"classes.foo2;\",\"classes.foo6;\"]},"
-                + "{\"name\":\"Service.FooService\",\"constructor\":[\"classes.Foo1\",\"classes.Foo\",\"classes.foo1;\"]},"
-                + "{\"name\":\"constructors.Constructors\"}],\"applicationName\":\"constructors\"}";
+        String jsonexpected = "{\"userApplicationKey\":\"c6j76d7931a0a04bed50\",\"classes\":[{\"name\":\"classes.Foo\",\"constructor\""
+                + ":[\"classes.Foo1\"]},{\"name\":\"classes.Foo1\",\"constructor\":"
+                + "[\"classes.Foo5\",\"classes.Foo4\",\"classes.Foo3\",\"classes.Foo2\",\"classes.Foo6\"]}"
+                + ",{\"name\":\"classes.Foo2\"},{\"name\":\"classes.Foo3\"},{\"name\":\"classes.Foo4\"},"
+                + "{\"name\":\"classes.Foo5\"},{\"name\":\"classes.Foo6\"},{\"name\":\"constructors.Constructors\"}"
+                + ",{\"name\":\"Service.FooService\",\"constructor\":[\"classes.Foo1\",\"classes.Foo\"]}],"
+                + "\"applicationName\":\"constructors\"}";
         
        
         try {
@@ -172,6 +173,27 @@ public class Testapp {
         }
     }
     
+//    public void interfacetest(){
+//           String path = System.getProperty("user.dir") + "/test/interfaces";
+//       String jsonexpected="{\"userApplicationKey\":\"c6j76d7931a0a04bed50\",\"classes\":[{\"name\":\"Classes.Foo\",\"implement\":"
+//               + "[\"interfaces.In1\",\"interfaces.In2\"],\"constructor\":[\"interfaces.In2\",\"interfaces.In1\"]},"
+//               + "{\"name\":\"Classes.Foo1\"},{\"name\":\"Classes.Foo2\",\"constructor\":"
+//               + "[\"interfaces.In2\",\"interfaces.In1\"]},{\"name\":\"interfaces.In1\",\"interfaz\":true},"
+//               + "{\"name\":\"interfaces.In2\",\"interfaz\":true},{\"name\":\"main.Interfaces\"}],\"applicationName\":\"interfaces\"}";
+//       String json=null;
+//        
+//       try {
+//     //      jsonexpected=cp.ObtenerHASHMD5(jsonexpected);
+//            json = main.implementacion(path, "c6j76d7931a0a04bed50", "no");
+//       //    json=cp.ObtenerHASHMD5(json);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            
+//            assertEquals(jsonexpected, json);
+//        }
+    }
+    
 
   
-}
+
