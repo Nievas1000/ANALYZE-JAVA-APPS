@@ -16,7 +16,7 @@ public class ClassDiscriptor {
     public String pathfile;
     public String userkey;
     public List<String> extend;
-    public String implement;
+    public List<String> implement;
     //se define un hashset para que no haya valores repetidos
     public Set<String> constructor;
     public List<String> datasources;
@@ -26,7 +26,7 @@ public class ClassDiscriptor {
 
     }
 
-    public ClassDiscriptor(String packageName, String name, Boolean interfaz, String pathfile, String userkey, List<String> extend, String implement, Set<String> constructor, List<String> datasources) {
+    public ClassDiscriptor(String packageName, String name, Boolean interfaz, String pathfile, String userkey, List<String> extend, List<String> implement, Set<String> constructor, List<String> datasources) {
         this.packageName = packageName;
         this.name = name;
         this.interfaz = interfaz;
@@ -38,6 +38,7 @@ public class ClassDiscriptor {
         this.datasources = datasources;
     }
 
+    
     public List<String> getDatasources() {
         return datasources;
     }
@@ -111,15 +112,17 @@ public class ClassDiscriptor {
     public void setExtend(List<String> extend) {
         this.extend = extend;
     }
-  
 
-    public String getImplement() {
+    public List<String> getImplement() {
         return implement;
     }
 
-    public void setImplement(String implement) {
+    public void setImplement(List<String> implement) {
         this.implement = implement;
     }
+  
+
+  
 
    
 //	public static class Member{
