@@ -168,8 +168,7 @@ public class Testapp {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            System.out.println(json);
-            System.out.println(jsonexpected);
+          
             assertEquals(jsonexpected.length(), json.length());
         }
     }
