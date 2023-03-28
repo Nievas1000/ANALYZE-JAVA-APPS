@@ -342,6 +342,7 @@ public class ClassParser {
               String lineimp=lines.get(i);
               lineimp=lineimp.replace("{", " ");
                String[] partsimp = lineimp.split("\\s+");
+//               if(line.endsWith("{")){
                 for (int j = 0; j < partsimp.length - 1; j++) {
                     if (parts[j].equalsIgnoreCase("implements")) {
                         List<String> list=new ArrayList();
@@ -366,6 +367,10 @@ public class ClassParser {
                     
                     }
                 }
+//               }else{
+//                   
+//                   
+//               }
             }
             
 
