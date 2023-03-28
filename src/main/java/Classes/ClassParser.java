@@ -208,7 +208,7 @@ public class ClassParser {
                                     list.add(map.get(parts[k + 1]) + "." + parts[k + 1]);
                                     discriptor.implement = list;
                                 } else {
-                                    discriptor.implement = null;
+                                    
                                 }
 
                             }
@@ -394,18 +394,57 @@ public class ClassParser {
 //            System.out.println(line);
 //            System.out.println(parts.length);
             String lineif;
+            if(!line.contains("extends") && !line.contains("{")){
+                List<String> array = new ArrayList<>();
+            
+                int e = i + 1;
+                    while (!lines.get(e).isEmpty()) {
+
+                        lineif = lines.get(e);
+                        e += 1;
+ 
+                        if(lineif.contains("extends")){
+                            String[] partsif = lineif.split("\\s+");
+                            for (int j = 0; j < partsif.length -1; j++) {
+                                if (map.containsKey(partsif[j].replace("{", ""))) {
+//                            System.out.println(map.get(partsif[j]) + "PARTSIFFF");
+
+                              array.add(map.get(partsif[j]) + "." + partsif[j]);
+                              discriptor.extend=array;
+                            }
+                            
+                        }
+                    }
+                   
+                
+            }
+            }
+
             if (line.contains("extends")) {
 
                 List<String> array = new ArrayList<>();
 
-                if (!line.endsWith("{")) {
+                if (!line.contains("{")) {
 
                     lineif = lines.get(i + 1);
 
-                    lineif = lineif.replace("<", " ").replace(">", " ");
-                    String[] partsif = lineif.split("\\s+");
+                    
+                  
                     //array.add(map.get(partsif[0]) + "." + partsif[0]);
+                    List<String> list = new ArrayList<>();
+                    
+                    int e = i + 1;
+                    while (!lines.get(e).isEmpty()) {
 
+                        lineif = lines.get(e);
+                        e += 1;
+
+                    }
+                    
+                
+                     lineif = lineif.replace("<", " ").replace(">", " ");
+                     String[] partsif = lineif.split("\\s+");
+                
                     //   discriptor.extend=array;
                     for (int j = 0; j < partsif.length - 1; j++) {
                         if (map.containsKey(partsif[j].replace("{", ""))) {
@@ -427,24 +466,39 @@ public class ClassParser {
                     String[] partsif = lineif.split("\\s+");
 
                     for (int j = 0; j < partsif.length - 1; j++) {
-
-                        if (partsif[j].equalsIgnoreCase("extends") && cont <= 0 && line.endsWith("{") && partsif.length > 5) {
-
-                            if (map.containsKey(partsif[j + 2].replace("{", ""))) {
-                                array.add((map.get(partsif[j + 2]) + "." + partsif[j + 2]));
-                                discriptor.extend = array;
-
-                            } else if (map.containsKey(partsif[j + 1].replace("{", ""))) {
-                                array.add(map.get(partsif[j + 1]) + "." + partsif[j + 1]);
-                                discriptor.extend = array;
-                            } else {
-
+                         if(partsif[j].equalsIgnoreCase("extends") && cont <= 0){
+                             for (int k = j; k < partsif.length; k++) {
+                                  if (map.containsKey(partsif[k].replace("{", ""))) {
+                               List<String> arrayl = new ArrayList<>();
+                                arrayl.add((map.get(partsif[k]) + "." + partsif[k]));
+                                discriptor.extend = arrayl;
                             }
+                             }
+                         } 
+                        
+//                        if (partsif[j].equalsIgnoreCase("extends") && cont <= 0 && partsif.length >= 5) {
+//                            System.out.println("entra");
+//                            if(partsif.length > 5) {
+//                            if (map.containsKey(partsif[j + 2].replace("{", ""))) {
+//                               
+//                                array.add((map.get(partsif[j + 2]) + "." + partsif[j + 2]));
+//                                discriptor.extend = array;
+//                            }
+//                            }
+//                            } else if (map.containsKey(partsif[j + 1].replace("{", ""))) {
+//                                
+//                                array.add(map.get(partsif[j + 1]) + "." + partsif[j + 1]);
+//                                discriptor.extend = array;
+//                            } else {
+//                                
+//                            }
+//}
+                            
                         }
-                    }
-
+                    
                 }
-
+                
+                
             } else if (line.contains("implements")) {
 
                 String lineimp = lines.get(i);
