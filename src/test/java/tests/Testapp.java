@@ -168,31 +168,39 @@ public class Testapp {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            
+            System.out.println(json);
+            System.out.println(jsonexpected);
             assertEquals(jsonexpected.length(), json.length());
         }
     }
     
-//    public void interfacetest(){
-//           String path = System.getProperty("user.dir") + "/test/interfaces";
-//       String jsonexpected="{\"userApplicationKey\":\"c6j76d7931a0a04bed50\",\"classes\":[{\"name\":\"Classes.Foo\",\"implement\":"
-//               + "[\"interfaces.In1\",\"interfaces.In2\"],\"constructor\":[\"interfaces.In2\",\"interfaces.In1\"]},"
-//               + "{\"name\":\"Classes.Foo1\"},{\"name\":\"Classes.Foo2\",\"constructor\":"
-//               + "[\"interfaces.In2\",\"interfaces.In1\"]},{\"name\":\"interfaces.In1\",\"interfaz\":true},"
-//               + "{\"name\":\"interfaces.In2\",\"interfaz\":true},{\"name\":\"main.Interfaces\"}],\"applicationName\":\"interfaces\"}";
-//       String json=null;
-//        
-//       try {
-//     //      jsonexpected=cp.ObtenerHASHMD5(jsonexpected);
-//            json = main.implementacion(path, "c6j76d7931a0a04bed50", "no");
-//       //    json=cp.ObtenerHASHMD5(json);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        } finally {
-//            
-//            assertEquals(jsonexpected, json);
-//        }
+    public void interfacetest(){
+           String path = System.getProperty("user.dir") + "/test/interfaces";
+       String jsonexpected="{\"userApplicationKey\":\"c6j76d7931a0a04bed50\",\"classes\":"
+               + "[{\"name\":\"Classes.Foo\",\"extend\":[\"Classes.Foo3\"],\"constructor\":"
+               + "[\"interfaces.In2\",\"interfaces.In1\"]},{\"name\":\"Classes.Foo1\"},"
+               + "{\"name\":\"Classes.Foo2\",\"implement\":[\"interfaces.In1\",\"interfaces.In2\"]"
+               + ",\"constructor\":[\"interfaces.In2\",\"interfaces.In1\"]},{\"name\":\"Classes.Foo3\""
+               + ",\"implement\":[\"interfaces.In1\",\"interfaces.In2\"],\"constructor\":[\"interfaces.In2\""
+               + ",\"interfaces.In1\"]},{\"name\":\"Classes.Foo4\",\"implement\":[\"interfaces.In2\",\"interfaces.In1\"]"
+               + ",\"constructor\":[\"interfaces.In2\",\"interfaces.In1\"]},{\"name\":\"interfaces.In1\",\"interfaz\":true}"
+               + ",{\"name\":\"interfaces.In2\",\"interfaz\":true},{\"name\":\"main.Interfaces\"}],"
+               + "\"applicationName\":\"interfaces\"}";
+       
+       String json=null;
+        
+       try {
+     //      jsonexpected=cp.ObtenerHASHMD5(jsonexpected);
+            json = main.implementacion(path, "c6j76d7931a0a04bed50", "no");
+       //    json=cp.ObtenerHASHMD5(json);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            
+            assertEquals(jsonexpected, json);
+        }
     }
+}
     
 
   

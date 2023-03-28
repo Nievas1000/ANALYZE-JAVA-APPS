@@ -90,7 +90,7 @@ public class Main {
 
         } catch (Exception e) {
             sl.send("Error scanning project", Arrays.toString(e.getStackTrace()));
-             System.out.println("”The program did not complete successfully.”");
+             System.out.println("The program did not complete successfully.");
 //            System.out.println("Error scanning project");
 //            System.out.println("HELP: contact us to give you a solution");
         }
@@ -189,7 +189,7 @@ public class Main {
 //                sl.send("Error generating json", e.getMessage());
 //                e.printStackTrace();
 //                System.out.println("HELP: contact us to give you a solution");
-              System.out.println("”The program did not complete successfully.”");
+              System.out.println("The program did not complete successfully.");
 
             }
 
@@ -199,7 +199,7 @@ public class Main {
 //            sl.send("Error Error getting json", e2.getMessage());
 //            e2.printStackTrace();
 //            System.out.println("HELP: contact us to give you a solution");
-            System.out.println("”The program did not complete successfully.”");
+            System.out.println("The program did not complete successfully.");
 
             // JOptionPane.showMessageDialog(null, e2.getMessage());
         }
@@ -228,14 +228,14 @@ public class Main {
                 } else {
                     System.out.println("See <" + filename.getName() + "> to view application results. \n"
                             + "This file was not sent to Codojo. \n"
-                            + "To send the results to Codojo, open the <SendToCodojo.config.properties>, set the variable “SEND_RESULTS_TO_CODOJO = true”, and rerun this application");
+                            + "To send the results to Codojo, open the <SendToCodojo.config.properties>, set the variable SEND_RESULTS_TO_CODOJO = true, and rerun this application");
 
                 }
             }
         } catch (Exception e) {
 //            sl.send("Error sending or getting json", e.getMessage());
             System.out.println(e.getMessage());
-            System.out.println("”The program did not complete successfully.”");
+            System.out.println("The program did not complete successfully.");
             
 //            e.printStackTrace();
 //
@@ -304,7 +304,7 @@ public class Main {
         if (userkey.isEmpty()) {
             throw new Exception("USER.APPLICATION.KEY is required. Find your USER.APPLICATION.KEY "
                     + "at https://app.codojo.io/how-to-add-application" + "\n"
-                    + " and set the USER.APPLICATION.KEY variable in " + System.getProperty("user.dir") + "/" + "SendToCodojo.config.properties" );
+                    + " and set the USER.APPLICATION.KEY variable in " + System.getProperty("user.dir") + "\\"+  "SendToCodojo.config.properties" );
 
         }
 
@@ -319,7 +319,8 @@ public class Main {
         String line;
         while ((line = br.readLine()) != null) {
             if (line.contains("APPLICATION.FILEPATH")) {
-                lines = line.substring(22, line.length()).trim();
+                lines = line.substring(22, line.length()).trim().replace("\"", "");
+                
 
 //                            
             }
@@ -329,9 +330,9 @@ public class Main {
 
 
             lines= System.getProperty("user.dir");
-            System.out.println("Looking at the code in <" + lines + ">...");
+            System.out.println("Looking at the code in " + lines + "...");
         }else{
-             System.out.println("Looking at the code in <" + lines + ">...");
+             System.out.println("Looking at the code in " + lines + "...");
         }
         
 
