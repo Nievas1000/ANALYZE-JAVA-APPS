@@ -199,6 +199,32 @@ public class Testapp {
             assertEquals(jsonexpected, json);
         }
     }
+    
+    @Test
+    public void extendstest(){
+        String path = System.getProperty("user.dir") + "/test/extends";
+       String jsonexpected="{\"userApplicationKey\":\"c6j76d7931a0a04bed50\",\"classes\":"
+               + "[{\"name\":\"Classes.Foo1\",\"extend\":[\"Classes.Foo2\"]},"
+               + "{\"name\":\"Classes.Foo2\",\"extend\":[\"Classes.Foo3\"]},"
+               + "{\"name\":\"Classes.Foo3\",\"extend\":[\"Classes.Foo4\"]},"
+               + "{\"name\":\"Classes.Foo4\",\"extend\":[\"Classes.Foo5\"],"
+               + "\"implement\":[\"Classes.In1\"]},{\"name\":\"Classes.Foo5\"}"
+               + ",{\"name\":\"Classes.In1\",\"interfaz\":true},{\"name\":\"pkgextends.Extends\"}]"
+               + ",\"applicationName\":\"extends\"}";
+       
+       String json=null;
+        
+       try {
+     //      jsonexpected=cp.ObtenerHASHMD5(jsonexpected);
+            json = main.implementacion(path, "c6j76d7931a0a04bed50", "no");
+       //    json=cp.ObtenerHASHMD5(json);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            
+            assertEquals(jsonexpected, json);
+        }
+    }
 }
     
 
