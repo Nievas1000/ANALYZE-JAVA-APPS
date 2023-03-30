@@ -221,10 +221,12 @@ public class Main {
         
         }
         try  {    
-            if (p.VerificationKey(userkey) == 200) {
+        
                 if (sendjson.equalsIgnoreCase("yes")) {
+                    if (p.VerificationKey(userkey) == 200) {
                     p.PostRequest(json);
                     System.out.println("The results are now viewable at app.codojo.io");
+                    }
 
                 } else {
                     System.out.println("See " + System.getProperty("user.dir") + "\\" + filename.getName() +".json to view application results. \n"
@@ -232,7 +234,7 @@ public class Main {
                             + "To send the results to Codojo, open the "+ System.getProperty("user.dir") +"\\SendToCodojo.config.properties, set the variable SEND.JSON.TO.SAAS.AUTOMATICALLY = yes, and rerun this application");
 
                 }
-            }
+            
         } catch (Exception e) {
 //            sl.send("Error sending or getting json", e.getMessage());
             System.out.println(e.getMessage());
@@ -305,7 +307,7 @@ public class Main {
         if (userkey.isEmpty()) {
             throw new Exception("USER.APPLICATION.KEY is required. Find your USER.APPLICATION.KEY "
                     + "at https://app.codojo.io/how-to-add-application" + "\n"
-                    + "and set the USER.APPLICATION.KEY variable in " + System.getProperty("user.dir") + "\\"+  "SendToCodojo.config.properties" );
+                    + "and set the USER.APPLICATION.KEY variable in " + System.getProperty("user.dir") + "\\SendToCodojo.config.properties" );
 
         }
 
