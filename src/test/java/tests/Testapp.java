@@ -45,7 +45,7 @@ public class Testapp {
             map.put("applicationName", "PruebaCI");
             map.put("classes", list);
 
-            String json = main.toJSON(map, "no", "c6j76d7931a0a04bed50", file,null);
+            String json = main.toJSON(map, "no", "c6j76d7931a0a04bed50", "",null);
 
             assertEquals("{\"userApplicationKey\":\"c6j76d7931a0a04bed50\",\"classes\":[{\"name\":\"pruebaci.classes.Auto\"},"
                     + "{\"name\":\"pruebaci.classes.Moto\"}],\"applicationName\":\"PruebaCI\"}", json);
@@ -105,7 +105,7 @@ public class Testapp {
         String hashnow = null;
         String path = System.getProperty("user.dir").concat("/PruebaCI");
         try {
-            json = main.implementacion(path, "c6j76d7931a0a04bed50", "no");
+            json = main.implementacion(path, "c6j76d7931a0a04bed50", "no","PruebaCI");
            
             hashexpected = cp.ObtenerHASHMD5(jsonexpected);
             hashnow = cp.ObtenerHASHMD5(json);
@@ -121,7 +121,7 @@ public class Testapp {
     public void noProjectFound() {
 
         try {
-            main.implementacion("dsada", "asdasd", "asdad");
+            main.implementacion("dsada", "asdasd", "asdad","");
         } catch (Exception ex) {
             assertEquals("No .java file found in dsada or it's subfolders", ex.getMessage());
 
@@ -163,7 +163,7 @@ public class Testapp {
        
         try {
      //      jsonexpected=cp.ObtenerHASHMD5(jsonexpected);
-            json = main.implementacion(path, "c6j76d7931a0a04bed50", "no");
+            json = main.implementacion(path, "c6j76d7931a0a04bed50", "no","");
        //    json=cp.ObtenerHASHMD5(json);
         } catch (Exception e) {
             e.printStackTrace();
@@ -190,7 +190,7 @@ public class Testapp {
         
        try {
      //      jsonexpected=cp.ObtenerHASHMD5(jsonexpected);
-            json = main.implementacion(path, "c6j76d7931a0a04bed50", "no");
+            json = main.implementacion(path, "c6j76d7931a0a04bed50", "no","");
        //    json=cp.ObtenerHASHMD5(json);
         } catch (Exception e) {
             e.printStackTrace();
@@ -216,7 +216,7 @@ public class Testapp {
         
        try {
      //      jsonexpected=cp.ObtenerHASHMD5(jsonexpected);
-            json = main.implementacion(path, "c6j76d7931a0a04bed50", "no");
+            json = main.implementacion(path, "c6j76d7931a0a04bed50", "no","");
        //    json=cp.ObtenerHASHMD5(json);
         } catch (Exception e) {
             e.printStackTrace();
@@ -240,7 +240,7 @@ public class Testapp {
         
        try {
      //      jsonexpected=cp.ObtenerHASHMD5(jsonexpected);
-            json = main.implementacion(path, "c6j76d7931a0a04bed50", "no");
+            json = main.implementacion(path, "c6j76d7931a0a04bed50", "no","");
        //    json=cp.ObtenerHASHMD5(json);
         } catch (Exception e) {
             e.printStackTrace();
