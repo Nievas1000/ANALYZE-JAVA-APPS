@@ -171,7 +171,7 @@ public class Main {
             mapjson.put("classes", cdList);
 
             //}
-            json = toJSON(mapjson, sendjson, userkey, filename);
+            json = toJSON(mapjson, sendjson, userkey, filename,sCarpAct);
             StringSelection selection = new StringSelection(json);
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             clipboard.setContents(selection, selection);
@@ -209,10 +209,11 @@ public class Main {
 
     //esta funcion 
     //Este metodo transforma un hashmap a json mediante la dependencia de google.gson
-    public String toJSON(HashMap map, String sendjson, String userkey, File filename) throws IOException, Exception {
+    public String toJSON(HashMap map, String sendjson, String userkey, File filename,String path) throws IOException, Exception {
         Scanner scan = new Scanner(System.in);
         Gson gson = new Gson();
         JsonObject json = gson.toJsonTree(map).getAsJsonObject();
+        
         ClassParser cp = new ClassParser();
         PostRequest p = new PostRequest();
        if(userkey.equals("j312312312gdfg")){
@@ -226,9 +227,9 @@ public class Main {
                     System.out.println("The results are now viewable at app.codojo.io");
 
                 } else {
-                    System.out.println("See <" + filename.getName() + "> to view application results. \n"
+                    System.out.println("See " + System.getProperty("user.dir") + "\\" + filename.getName() +".json to view application results. \n"
                             + "This file was not sent to Codojo. \n"
-                            + "To send the results to Codojo, open the <SendToCodojo.config.properties>, set the variable SEND_RESULTS_TO_CODOJO = true, and rerun this application");
+                            + "To send the results to Codojo, open the "+ System.getProperty("user.dir") +"\\SendToCodojo.config.properties, set the variable SEND.JSON.TO.SAAS.AUTOMATICALLY = yes, and rerun this application");
 
                 }
             }
@@ -304,7 +305,7 @@ public class Main {
         if (userkey.isEmpty()) {
             throw new Exception("USER.APPLICATION.KEY is required. Find your USER.APPLICATION.KEY "
                     + "at https://app.codojo.io/how-to-add-application" + "\n"
-                    + " and set the USER.APPLICATION.KEY variable in " + System.getProperty("user.dir") + "\\"+  "SendToCodojo.config.properties" );
+                    + "and set the USER.APPLICATION.KEY variable in " + System.getProperty("user.dir") + "\\"+  "SendToCodojo.config.properties" );
 
         }
 

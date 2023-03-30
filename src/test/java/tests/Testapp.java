@@ -45,7 +45,7 @@ public class Testapp {
             map.put("applicationName", "PruebaCI");
             map.put("classes", list);
 
-            String json = main.toJSON(map, "no", "c6j76d7931a0a04bed50", file);
+            String json = main.toJSON(map, "no", "c6j76d7931a0a04bed50", file,null);
 
             assertEquals("{\"userApplicationKey\":\"c6j76d7931a0a04bed50\",\"classes\":[{\"name\":\"pruebaci.classes.Auto\"},"
                     + "{\"name\":\"pruebaci.classes.Moto\"}],\"applicationName\":\"PruebaCI\"}", json);
@@ -225,6 +225,32 @@ public class Testapp {
             assertEquals(jsonexpected.length(), json.length());
         }
     }
+    
+    @Test
+    public void tablestest(){
+        String path = System.getProperty("user.dir") + "/test/relationsjpa";
+       String jsonexpected="{\"userApplicationKey\":\"c6j76d7931a0a04bed50\",\"classes\":"
+               + "[{\"name\":\"Classes.Foo1\",\"constructor\":[\"Classes.Foo2\"],\"datasources\":"
+               + "[\"foo2\",\"foo1_foos3\"]},{\"name\":\"Classes.Foo2\",\"constructor\":"
+               + "[\"Classes.Foo3\"],\"datasources\":[\"foo2s_foo3\",\"foo2_foo1s\"]},"
+               + "{\"name\":\"Classes.Foo3\"},{\"name\":\"relationsjpa.Relationsjpa\"}],"
+               + "\"applicationName\":\"relationsjpa\"}";
+       
+       String json=null;
+        
+       try {
+     //      jsonexpected=cp.ObtenerHASHMD5(jsonexpected);
+            json = main.implementacion(path, "c6j76d7931a0a04bed50", "no");
+       //    json=cp.ObtenerHASHMD5(json);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            
+            assertEquals(jsonexpected, json);
+        }
+    }
+    
+    
 }
     
 
