@@ -34,7 +34,7 @@ public class Main {
 //        
 //    }
     //Metodo principal que desencadena todo los procesos
-    public String implementacion(String args, String userkey, String sendjson) throws Exception {
+    public String implementacion(String args, String userkey, String sendjson,String name) throws Exception {
         //se hace una list con todos lo atributos de classdiscriptor
         List<ClassDiscriptor> cdList = new ArrayList();
         //map global 
@@ -43,7 +43,12 @@ public class Main {
         String sCarpAct = System.getProperty(args, args);
         //Se crea un nuevo file y se le pasa como argumento la direccion del archivo
 
-        File filename = new File(sCarpAct);
+        if(name.isEmpty()){
+            File filename = new File(sCarpAct);
+            name=filename.getName();
+        }
+        
+      
         File file = new File(sCarpAct);
         try {
 
@@ -167,18 +172,18 @@ public class Main {
             HashMap<String, Object> mapjson = new HashMap();
             
             mapjson.put("userApplicationKey", userkey);
-            mapjson.put("applicationName", filename.getName());
+            mapjson.put("applicationName", name);
             mapjson.put("classes", cdList);
 
             //}
-            json = toJSON(mapjson, sendjson, userkey, filename,sCarpAct);
+            json = toJSON(mapjson, sendjson, userkey, name,sCarpAct);
             StringSelection selection = new StringSelection(json);
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             clipboard.setContents(selection, selection);
             String user = System.getProperty("user.name");
             String dir = System.getProperty("user.dir");
 
-            String pathFile = dir + "\\" + filename.getName() + ".json";
+            String pathFile = dir + "\\" + name + ".json";
             try {
                 //se escribe el json en el pathfile del usuario y se guarda alli
                 FileWriter jsonFile = new FileWriter(pathFile);
@@ -209,7 +214,7 @@ public class Main {
 
     //esta funcion 
     //Este metodo transforma un hashmap a json mediante la dependencia de google.gson
-    public String toJSON(HashMap map, String sendjson, String userkey, File filename,String path) throws IOException, Exception {
+    public String toJSON(HashMap map, String sendjson, String userkey, String name,String path) throws IOException, Exception {
         Scanner scan = new Scanner(System.in);
         Gson gson = new Gson();
         JsonObject json = gson.toJsonTree(map).getAsJsonObject();
@@ -229,7 +234,7 @@ public class Main {
                     }
 
                 } else {
-                    System.out.println("See " + System.getProperty("user.dir") + "\\" + filename.getName() +".json to view application results. \n"
+                    System.out.println("See " + System.getProperty("user.dir") + "\\" + name +".json to view application results. \n"
                             + "This file was not sent to Codojo. \n"
                             + "To send the results to Codojo, open the "+ System.getProperty("user.dir") +"\\SendToCodojo.config.properties, set the variable SEND.JSON.TO.SAAS.AUTOMATICALLY = yes, and rerun this application");
 
@@ -303,6 +308,7 @@ public class Main {
         // get the property value and print it out
         String userkey = prop.getProperty("USER.APPLICATION.KEY").trim();
         String sendjson = prop.getProperty("SEND.JSON.TO.SAAS.AUTOMATICALLY").trim();
+        String nameproject=prop.getProperty("APPLICATION.NAME").trim().replace("\"", "");
 
         if (userkey.isEmpty()) {
             throw new Exception("USER.APPLICATION.KEY is required. Find your USER.APPLICATION.KEY "
@@ -350,7 +356,7 @@ public class Main {
 
         Main main = new Main();
 
-        json = main.implementacion(lines.toString(), userkey, sendjson);
+        json = main.implementacion(lines.toString(), userkey, sendjson,nameproject);
         // System.out.println(prop.getProperty("db.password"));
 
 //        } catch (IOException ex) {
