@@ -3,6 +3,7 @@
 package Classes;
 
 import java.lang.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -43,9 +44,16 @@ public class ClassDiscriptor {
         return datasources;
     }
 
-    public void setDatasources(List<String> datasources) {
-        this.datasources = datasources;
+    public void setDatasources(List<String>list)  {
+        
+        this.datasources=list;
+       
+        
     }
+    
+    
+    
+    
 
    
 

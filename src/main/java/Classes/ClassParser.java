@@ -68,6 +68,7 @@ public class ClassParser {
         HashMap<String, List> mapdb = new HashMap<>();
         List<String> list = new ArrayList<>();
         Set<String> set = new HashSet<String>();
+        List<String> listrelation = new ArrayList<>();
 
         //este es el for donde itera todas las clases e interfaces y hacen un paneo de sus nombres y package
         for (int i = 0; i < lines.size(); i++) {
@@ -96,7 +97,7 @@ public class ClassParser {
         for (int i = 0; i < lines.size(); i++) {
 
             if ((a == 1)) {
-                if (searchrelationjpa(lines, lines.get(i), i, mapdb).equals("true")) {
+                if (searchrelationjpa(lines, lines.get(i), i, mapdb, listrelation).equals("true")) {
 
                 }
 
@@ -190,8 +191,8 @@ public class ClassParser {
                 for (int j = 0; j < parts.length - 1; j++) {
                     if (parts[j].equalsIgnoreCase("extends")) {
                         if (map.containsKey(parts[j + 1].replace("{", ""))) {
-                                listex.add(map.get(parts[j + 1]) + "." + parts[j + 1]);
-                            discriptor.extend=listex;
+                            listex.add(map.get(parts[j + 1]) + "." + parts[j + 1]);
+                            discriptor.extend = listex;
                         } else {
                             discriptor.extend = null;
                         }
@@ -208,7 +209,7 @@ public class ClassParser {
                                     list.add(map.get(parts[k + 1]) + "." + parts[k + 1]);
                                     discriptor.implement = list;
                                 } else {
-                                    
+
                                 }
 
                             }
@@ -394,30 +395,29 @@ public class ClassParser {
 //            System.out.println(line);
 //            System.out.println(parts.length);
             String lineif;
-            if(!line.contains("extends") && !line.contains("{")){
+            if (!line.contains("extends") && !line.contains("{")) {
                 List<String> array = new ArrayList<>();
-            
-                int e = i + 1;
-                    while (!lines.get(e).isEmpty()) {
 
-                        lineif = lines.get(e);
-                        e += 1;
- 
-                        if(lineif.contains("extends")){
-                            String[] partsif = lineif.split("\\s+");
-                            for (int j = 0; j < partsif.length -1; j++) {
-                                if (map.containsKey(partsif[j].replace("{", ""))) {
+                int e = i + 1;
+                while (!lines.get(e).isEmpty()) {
+
+                    lineif = lines.get(e);
+                    e += 1;
+
+                    if (lineif.contains("extends")) {
+                        String[] partsif = lineif.split("\\s+");
+                        for (int j = 0; j < partsif.length - 1; j++) {
+                            if (map.containsKey(partsif[j].replace("{", ""))) {
 //                            System.out.println(map.get(partsif[j]) + "PARTSIFFF");
 
-                              array.add(map.get(partsif[j]) + "." + partsif[j]);
-                              discriptor.extend=array;
+                                array.add(map.get(partsif[j]) + "." + partsif[j]);
+                                discriptor.extend = array;
                             }
-                            
+
                         }
                     }
-                   
-                
-            }
+
+                }
             }
 
             if (line.contains("extends")) {
@@ -428,11 +428,9 @@ public class ClassParser {
 
                     lineif = lines.get(i + 1);
 
-                    
-                  
                     //array.add(map.get(partsif[0]) + "." + partsif[0]);
                     List<String> list = new ArrayList<>();
-                    
+
                     int e = i + 1;
                     while (!lines.get(e).isEmpty()) {
 
@@ -440,11 +438,10 @@ public class ClassParser {
                         e += 1;
 
                     }
-                    
-                
-                     lineif = lineif.replace("<", " ").replace(">", " ");
-                     String[] partsif = lineif.split("\\s+");
-                
+
+                    lineif = lineif.replace("<", " ").replace(">", " ");
+                    String[] partsif = lineif.split("\\s+");
+
                     //   discriptor.extend=array;
                     for (int j = 0; j < partsif.length - 1; j++) {
                         if (map.containsKey(partsif[j].replace("{", ""))) {
@@ -466,16 +463,16 @@ public class ClassParser {
                     String[] partsif = lineif.split("\\s+");
 
                     for (int j = 0; j < partsif.length - 1; j++) {
-                         if(partsif[j].equalsIgnoreCase("extends") && cont <= 0){
-                             for (int k = j; k < partsif.length; k++) {
-                                  if (map.containsKey(partsif[k].replace("{", ""))) {
-                               List<String> arrayl = new ArrayList<>();
-                                arrayl.add((map.get(partsif[k]) + "." + partsif[k]));
-                                discriptor.extend = arrayl;
+                        if (partsif[j].equalsIgnoreCase("extends") && cont <= 0) {
+                            for (int k = j; k < partsif.length; k++) {
+                                if (map.containsKey(partsif[k].replace("{", ""))) {
+                                    List<String> arrayl = new ArrayList<>();
+                                    arrayl.add((map.get(partsif[k]) + "." + partsif[k]));
+                                    discriptor.extend = arrayl;
+                                }
                             }
-                             }
-                         } 
-                        
+                        }
+
 //                        if (partsif[j].equalsIgnoreCase("extends") && cont <= 0 && partsif.length >= 5) {
 //                            System.out.println("entra");
 //                            if(partsif.length > 5) {
@@ -493,12 +490,10 @@ public class ClassParser {
 //                                
 //                            }
 //}
-                            
-                        }
-                    
+                    }
+
                 }
-                
-                
+
             } else if (line.contains("implements")) {
 
                 String lineimp = lines.get(i);
@@ -848,7 +843,7 @@ public class ClassParser {
     }
 
     //este metodo busca las relaciones de jpa (@OneToOne,@OneToMany,@ManyToOne,@ManyToMany)
-    public String searchrelationjpa(List<String> lines, String line, int i, HashMap<String, List> mapdb) throws FileNotFoundException, Exception {
+    public String searchrelationjpa(List<String> lines, String line, int i, HashMap<String, List> mapdb, List<String> list) throws FileNotFoundException, Exception {
         String entidad = "";
         String relation = "";
 
@@ -892,21 +887,39 @@ public class ClassParser {
                     relation = "ManyToOne";
                 }
 
+                int c = 0;
                 //este bucle es para que ignore todas las anotaciones que no sean las relaciones de jpa
                 //y busque la declaracion de la clase donde se definio la relacion.
                 do {
-                    if (!lines.get(i + 1).contains("@")) {
-                        entidad = lines.get(i + 1);
+
+                    if ((!lines.get(i + 1).contains("@")) && entidad.isEmpty()) {
+
+                        if (!lines.get(i + 1).isEmpty()) {
+                            entidad = lines.get(i + 1);
+
+                        } else {
+
+                        }
+                        //i++;
                     }
                     i++;
-                } while (lines.get(i).contains("@"));
+                    
+                } while (lines.get(i).contains("@") || !lines.get(i).isEmpty() && entidad.isEmpty());
 
                 //divide en partes la declaracion de la clase en la que se esta haciendo la relacion.
                 String[] parts1 = entidad.split("\\s+");
 
+                if (relation.equalsIgnoreCase("OneToOne")) {
+                    entidad = parts1[parts1.length - 1].replace(";", "");                
+                    list.add(entidad);
+                    discriptor.setDatasources(list);
+
+                }
+
                 //si la longitud de todas las partes es menor o igual a 3 entra
                 if (parts1.length <= 3) {
-                    entidad = parts1[2].replace(";", "");
+                    //entidad = parts1[parts1.length-1].replace(";", "");
+
                     if (relation.equals("ManyToMany") && parts1.length <= 3) {
 
                         String trim = discriptor.name.trim();
@@ -914,36 +927,58 @@ public class ClassParser {
                         String[] parts = trim.split("\\s+");
                         //aqui se trae el nombre de la clase atual se convierte a minuscula y luego se concatena
                         //con la clase donde se hizo la relacion
-                        entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[2].replace(";", "");
-                        System.out.println(entidad);
-
+                        entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[parts1.length - 1].replace(";", "");
+                        list.add(entidad);
                     }
+
                     //mismo patron
                     if (relation.equals("OneToMany")) {
                         String trim = discriptor.name.trim();
                         trim = trim.replace(".", " ");
                         String[] parts = trim.split("\\s+");
-                        entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[2].replace(";", "");
-                        System.out.println(entidad);
+                        entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[parts1.length - 1].replace(";", "");
+                        list.add(entidad);
+
+                    }
+
+                    if (relation.equals("ManyToOne")) {
+                        String trim = discriptor.name.trim();
+                        trim = trim.replace(".", " ");
+                        String[] parts = trim.split("\\s+");
+                        entidad = parts[parts.length - 1].toLowerCase() + "s_" + parts1[parts1.length - 1].replace(";", "");
+                        list.add(entidad);
+
                     }
 
                 } else {
                     //mismo patron
-                    entidad = parts1[parts1.length - 1].replace(";", "");
+
                     if (relation.equals("OneToMany")) {
                         String trim = discriptor.name.trim();
                         trim = trim.replace(".", " ");
                         String[] parts = trim.split("\\s+");
-                        entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[3].replace(";", "");
+                        entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[parts1.length - 1].replace(";", "");
+                        list.add(entidad);
 
                     }
+
                     //mismo patron
                     if (relation.equals("ManyToMany")) {
 
                         String trim = discriptor.name.trim();
                         trim = trim.replace(".", " ");
                         String[] parts = trim.split("\\s+");
-                        entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[3].replace(";", "");
+                        entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[parts1.length - 1].replace(";", "");
+                        list.add(entidad);
+
+                    }
+
+                    if (relation.equals("ManyToOne")) {
+                        String trim = discriptor.name.trim();
+                        trim = trim.replace(".", " ");
+                        String[] parts = trim.split("\\s+");
+                        entidad = parts[parts.length - 1].toLowerCase() + "s_" + parts1[parts1.length - 1].replace(";", "");
+                        list.add(entidad);
 
                     }
 
@@ -971,8 +1006,8 @@ public class ClassParser {
                 // Boolean res = tablas.contains(entidad);
                 //si es true entra y guarda el valor de entidad en una tabla para luego asignarselo a datasources.
                 if (!entidad.equalsIgnoreCase("{")) {
-                    tables.add(entidad);
-                    discriptor.setDatasources(tables);
+                    //tables.add(entidad);
+                    discriptor.setDatasources(list);
 
                 }
 
