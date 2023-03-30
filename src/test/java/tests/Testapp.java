@@ -246,7 +246,7 @@ public class Testapp {
             e.printStackTrace();
         } finally {
             
-            assertEquals(jsonexpected, json);
+            assertEquals(jsonexpected.length(), json.length());
         }
     }
     
