@@ -911,7 +911,7 @@ public class ClassParser {
 
                 if (relation.equalsIgnoreCase("OneToOne")) {
                     entidad = parts1[parts1.length - 1].replace(";", "");
-                    System.out.println(entidad + relation);
+                    
                     if(!entidad.endsWith("{")){
                              list.add(entidad);
                         }else{
@@ -931,7 +931,7 @@ public class ClassParser {
                         //aqui se trae el nombre de la clase atual se convierte a minuscula y luego se concatena
                         //con la clase donde se hizo la relacion
                         entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[parts1.length - 1].replace(";", "");
-                        System.out.println(entidad + relation);
+                        
                         if(!entidad.endsWith("{")){
                              list.add(entidad);
                         }else{
@@ -945,7 +945,7 @@ public class ClassParser {
                         trim = trim.replace(".", " ");
                         String[] parts = trim.split("\\s+");
                         entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[parts1.length - 1].replace(";", "");
-                        System.out.println(entidad + relation);
+                    
                         if(!entidad.endsWith("{")){
                              list.add(entidad);
                         }else{
@@ -959,7 +959,7 @@ public class ClassParser {
                         trim = trim.replace(".", " ");
                         String[] parts = trim.split("\\s+");
                         entidad = parts[parts.length - 1].toLowerCase() + "s_" + parts1[parts1.length - 1].replace(";", "");
-                        System.out.println(entidad + relation);
+                        
                        if(!entidad.endsWith("{")){
                              list.add(entidad);
                         }else{
@@ -976,7 +976,7 @@ public class ClassParser {
                         trim = trim.replace(".", " ");
                         String[] parts = trim.split("\\s+");
                         entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[parts1.length - 1].replace(";", "");
-                        System.out.println(entidad + relation);
+                       
                        
                        if(!entidad.endsWith("{")){
                              list.add(entidad);
@@ -993,7 +993,7 @@ public class ClassParser {
                         trim = trim.replace(".", " ");
                         String[] parts = trim.split("\\s+");
                         entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[parts1.length - 1].replace(";", ""); 
-                        System.out.println(entidad + relation);
+                    
                         if(!entidad.endsWith("{")){
                              list.add(entidad);
                         }else{
@@ -1007,7 +1007,7 @@ public class ClassParser {
                         trim = trim.replace(".", " ");
                         String[] parts = trim.split("\\s+");
                         entidad = parts[parts.length - 1].toLowerCase() + "s_" + parts1[parts1.length - 1].replace(";", "");
-                        System.out.println(entidad + relation);
+                       
                         if(!entidad.endsWith("{")){
                              list.add(entidad);
                         }else{

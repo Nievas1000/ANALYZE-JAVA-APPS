@@ -4,9 +4,9 @@
  * and open the template in the editor.
  */
 
-package classes;
+package Classes;
 
 
-public class Foo6 {
+public class Extend5 {
 
 }

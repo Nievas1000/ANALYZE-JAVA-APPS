@@ -6,7 +6,12 @@
 
 package Classes;
 
+import interfaces.In1;
+import interfaces.In2;
 
-public class Foo5 {
+
+public class Interfaces1 extends Interfaces4 implements In1,In2 {
+
+
 
 }

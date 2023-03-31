@@ -7,6 +7,6 @@
 package Classes;
 
 
-public class Foo1 extends Foo2 {
+public class Extend1 extends Extend2 {
 
 }

@@ -7,19 +7,19 @@
 package classes;
 
 
-public class Foo1 {
+public class Construct1 {
 
-    private Foo1 foo1;
+    private Construct1 construct1;
     
-    public Foo2 foo2;
+    public Construct2 construct2;
     
-    protected Foo3 foo3;
+    protected Construct3 construct3;
     
-    private Foo4 foo4;
-    private Foo5 foo5;
-    
-    
+    private Construct4 construct4;
+    private Construct5 construct5;
     
     
-     Foo6 foo6;
+    
+    
+     Construct6 foo6;
 }

@@ -7,7 +7,7 @@
 package Classes;
 
 
-public class Foo3 extends
-        Foo4 {
+public class Extend3 extends
+        Extend4 {
 
 }

@@ -7,7 +7,7 @@
 package Classes;
 
 
-public class Foo1 implements AutoCloseable {
+public class Interfaces2 implements AutoCloseable {
 
     @Override
     public void close() throws Exception {

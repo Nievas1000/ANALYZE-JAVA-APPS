@@ -4,14 +4,10 @@
  * and open the template in the editor.
  */
 
-package Service;
-
-import classes.Foo;
-import classes.Foo1;
+package Classes;
 
 
-public class FooService {
+public class Extend2
+extends Extend3 {
 
-    private Foo foo;
-    private Foo1 foo1;
 }

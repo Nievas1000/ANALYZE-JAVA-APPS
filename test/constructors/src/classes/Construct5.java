@@ -4,16 +4,9 @@
  * and open the template in the editor.
  */
 
-package Classes;
-
-import interfaces.In1;
-import interfaces.In2;
+package classes;
 
 
-public class Foo4 implements
-        
-        
-        
-        In2,In1 {
+public class Construct5 {
 
 }
