@@ -11,7 +11,7 @@ import interfaces.In2;
 import java.io.IOException;
 
 
-public class Foo2 implements In1,In2,Appendable {
+public class Interfaces5 implements In1,In2,Appendable {
 
     @Override
     public Appendable append(CharSequence cs) throws IOException {

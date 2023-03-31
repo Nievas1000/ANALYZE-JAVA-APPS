@@ -7,6 +7,6 @@
 package classes;
 
 
-public class Foo3 {
+public class Construct2 {
 
 }

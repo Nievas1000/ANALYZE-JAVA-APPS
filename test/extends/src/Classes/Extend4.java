@@ -7,6 +7,6 @@
 package Classes;
 
 
-public class Foo4 extends Foo5 implements In1 {
+public class Extend4 extends Extend5 implements Int1 {
     
 }

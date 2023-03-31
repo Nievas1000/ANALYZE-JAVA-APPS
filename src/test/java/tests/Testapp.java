@@ -152,13 +152,13 @@ public class Testapp {
     public void constructortest(){
         String path = System.getProperty("user.dir") + "/test/constructors";
         String json = null;
-        String jsonexpected = "{\"userApplicationKey\":\"c6j76d7931a0a04bed50\",\"classes\":[{\"name\":\"classes.Foo\",\"constructor\""
-                + ":[\"classes.Foo1\"]},{\"name\":\"classes.Foo1\",\"constructor\":"
-                + "[\"classes.Foo5\",\"classes.Foo4\",\"classes.Foo3\",\"classes.Foo2\",\"classes.Foo6\"]}"
-                + ",{\"name\":\"classes.Foo2\"},{\"name\":\"classes.Foo3\"},{\"name\":\"classes.Foo4\"},"
-                + "{\"name\":\"classes.Foo5\"},{\"name\":\"classes.Foo6\"},{\"name\":\"constructors.Constructors\"}"
-                + ",{\"name\":\"Service.FooService\",\"constructor\":[\"classes.Foo1\",\"classes.Foo\"]}],"
-                + "\"applicationName\":\"constructors\"}";
+        String jsonexpected = "{\"userApplicationKey\":\"c6j76d7931a0a04bed50\",\"classes\":[{\"name\":\"classes.Construct\",\"constructor\""
+                + ":[\"classes.Construct1\"]},{\"name\":\"classes.Construct1\",\"constructor\""
+                + ":[\"classes.Construct3\",\"classes.Construct4\",\"classes.Construct5\",\"classes.Construct6\",\"classes.Construct2\"]}"
+                + ",{\"name\":\"classes.Construct2\"},{\"name\":\"classes.Construct3\"},{\"name\":\"classes.Construct4\"}"
+                + ",{\"name\":\"classes.Construct5\"},{\"name\":\"classes.Construct6\"},{\"name\":\"constructors.Constructors\"}"
+                + ",{\"name\":\"Service.ConstructService\",\"constructor\":[\"classes.Construct\",\"classes.Construct1\"]}]"
+                + ",\"applicationName\":\"constructors\"}";
         
        
         try {
@@ -176,15 +176,15 @@ public class Testapp {
     public void interfacetest(){
            String path = System.getProperty("user.dir") + "/test/interfaces";
        String jsonexpected="{\"userApplicationKey\":\"c6j76d7931a0a04bed50\",\"classes\":"
-               + "[{\"name\":\"Classes.Foo\",\"extend\":[\"Classes.Foo3\"],\"constructor\":"
-               + "[\"interfaces.In2\",\"interfaces.In1\"]},{\"name\":\"Classes.Foo1\"},"
-               + "{\"name\":\"Classes.Foo2\",\"implement\":[\"interfaces.In1\",\"interfaces.In2\"]"
-               + ",\"constructor\":[\"interfaces.In2\",\"interfaces.In1\"]},{\"name\":\"Classes.Foo3\""
-               + ",\"implement\":[\"interfaces.In1\",\"interfaces.In2\"],\"constructor\":[\"interfaces.In2\""
-               + ",\"interfaces.In1\"]},{\"name\":\"Classes.Foo4\",\"implement\":[\"interfaces.In2\",\"interfaces.In1\"]"
-               + ",\"constructor\":[\"interfaces.In2\",\"interfaces.In1\"]},{\"name\":\"interfaces.In1\",\"interfaz\":true}"
-               + ",{\"name\":\"interfaces.In2\",\"interfaz\":true},{\"name\":\"main.Interfaces\"}],"
-               + "\"applicationName\":\"interfaces\"}";
+               + "[{\"name\":\"Classes.Interfaces1\",\"extend\":"
+               + "[\"Classes.Interfaces4\"],\"implement\":[\"interfaces.In1\",\"interfaces.In2\"],\"constructor\":"
+               + "[\"interfaces.In2\",\"interfaces.In1\"]},{\"name\":\"Classes.Interfaces2\"},"
+               + "{\"name\":\"Classes.Interfaces3\",\"implement\":[\"interfaces.In2\",\"interfaces.In1\"],"
+               + "\"constructor\":[\"interfaces.In2\",\"interfaces.In1\"]},{\"name\":\"Classes.Interfaces4\","
+               + "\"implement\":[\"interfaces.In1\",\"interfaces.In2\"],\"constructor\":[\"interfaces.In2\","
+               + "\"interfaces.In1\"]},{\"name\":\"Classes.Interfaces5\",\"implement\":[\"interfaces.In1\",\"interfaces.In2\"],"
+               + "\"constructor\":[\"interfaces.In2\",\"interfaces.In1\"]},{\"name\":\"interfaces.In1\",\"interfaz\":true},"
+               + "{\"name\":\"interfaces.In2\",\"interfaz\":true},{\"name\":\"main.Interfaces\"}],\"applicationName\":\"interfaces\"}";
        
        String json=null;
         
@@ -203,14 +203,13 @@ public class Testapp {
     @Test
     public void extendstest(){
         String path = System.getProperty("user.dir") + "/test/extends";
-       String jsonexpected="{\"userApplicationKey\":\"c6j76d7931a0a04bed50\",\"classes\":"
-               + "[{\"name\":\"Classes.Foo1\",\"extend\":[\"Classes.Foo2\"]},"
-               + "{\"name\":\"Classes.Foo2\",\"extend\":[\"Classes.Foo3\"]},"
-               + "{\"name\":\"Classes.Foo3\",\"extend\":[\"Classes.Foo4\"]},"
-               + "{\"name\":\"Classes.Foo4\",\"extend\":[\"Classes.Foo5\"],"
-               + "\"implement\":[\"Classes.In1\"]},{\"name\":\"Classes.Foo5\"}"
-               + ",{\"name\":\"Classes.In1\",\"interfaz\":true},{\"name\":\"pkgextends.Extends\"}]"
-               + ",\"applicationName\":\"extends\"}";
+       String jsonexpected="{\"userApplicationKey\":\"c6j76d7931a0a04bed50\",\"classes\":[{\"name\":\"Classes.Extend1\",\"extend\":"
+               + "[\"Classes.Extend2\"]},{\"name\":\"Classes.Extend2\",\"extend\":"
+               + "[\"Classes.Extend3\"]},{\"name\":\"Classes.Extend3\",\"extend\":"
+               + "[\"Classes.Extend4\"]},{\"name\":\"Classes.Extend4\",\"extend\":"
+               + "[\"Classes.Extend5\"],\"implement\":[\"Classes.Int1\"]},{\"name\":\"Classes.Extend5\"}"
+               + ",{\"name\":\"Classes.Int1\",\"interfaz\":true},{\"name\":\"pkgextends.Extends\"}],"
+               + "\"applicationName\":\"extends\"}";
        
        String json=null;
         

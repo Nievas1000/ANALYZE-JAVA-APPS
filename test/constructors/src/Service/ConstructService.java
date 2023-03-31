@@ -4,9 +4,14 @@
  * and open the template in the editor.
  */
 
-package classes;
+package Service;
+
+import classes.Construct;
+import classes.Construct1;
 
 
-public class Foo4 {
+public class ConstructService {
 
+    private Construct foo;
+    private Construct1 foo1;
 }
