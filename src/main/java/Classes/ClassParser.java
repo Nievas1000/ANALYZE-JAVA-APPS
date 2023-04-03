@@ -257,6 +257,7 @@ public class ClassParser {
 
                 }
 
+                if(lines.get(i+1).isEmpty()){
             } else if (lines.get(i + 1).contains("implements")) {
 
                 String lineimp = lines.get(i + 1);
@@ -322,7 +323,7 @@ public class ClassParser {
                 }
 
             }
-
+            }
 //                if (parts.length >= 6) {
 //                    System.out.println(parts[4] + "PARTE 4");
 //                    if (parts.length == 9) {
@@ -563,7 +564,11 @@ public class ClassParser {
 
                 }
 
-            } else if (lines.get(i + 1).contains("implements")) {
+                                   
+            }
+            if(!lines.get(i).contains("{") && !lines.get(i).contains("}")){
+                
+            if (lines.get(i + 1).contains("implements")) {
 
                 String lineimp = lines.get(i + 1);
                 lineimp = lineimp.replace(",", " ");
@@ -593,6 +598,7 @@ public class ClassParser {
 //                            discriptor.implement = null;
 //                        }
                     }
+                    
 
                 } else {
                     List<String> list = new ArrayList<>();
@@ -628,6 +634,8 @@ public class ClassParser {
                 }
 
             }
+            }
+            
 
 //            if (parts.length >= 4) {
 //
@@ -741,8 +749,11 @@ public class ClassParser {
         if (parts.length >= 3) {
             for (int j = 0; j < parts.length - 1; j++) {
                 if ((parts[j].equalsIgnoreCase("class") || parts[j].equalsIgnoreCase("interface") || parts[j].equalsIgnoreCase("enum")) && (!line.contains("//"))) {
-
+                   //este if guarda adentro del map los nombres que jamas tengan {} porque algunas veces el escaneo
+                   //puede filtrar eso y esto hace que no se guarde si tiene esos caracteres.
+                    if(!parts[j + 1].contains("{") || !parts[j + 1].contains("}")){
                     map.put(parts[j + 1].replace("<", "").replace(">", "").replace("T", "").replace(")", "").replace("(", "").replace(";", "").replace(",", ""), dp);
+                }
                 }
             }
             //guarda nombre de la clase y package en un hashmap.
@@ -758,20 +769,26 @@ public class ClassParser {
         line = line.trim();
         line = line.replace(".", " ");
 
+        
         //si la line contiene import entra al if
         if (line.contains("import")) {
+           
 
             //divide la linea en partes separadas por espacios
             String[] parts = line.split("\\s+");
             line = parts[parts.length - 1].replace(";", "");
             //si el map contiene la key = nombre de la clase entra al if
             // System.out.println(line);
+            
             if (map.containsKey(line)) {
+                
                 //System.out.println(map.get(line).concat(".").concat(line));
                 //guarda el package de la clase que acabamos de comparar en un hashset.
+                if(!line.contains("{")  && !line.contains("}")){
                 set.add(map.get(line).concat(".").concat(line));
+                }
             }
-
+           
 //guarda el hashset en el atributo constructor de la clase discriptor
             discriptor.constructor = set;
 
