@@ -61,6 +61,7 @@ public class Main {
             if (file != null && file.exists()) {
                 //trae el archivo
                 mostrarCarpeta(file);
+                
             }
 
             //Itera cada file si tiene name y no es null se agrega a una lista
@@ -71,7 +72,7 @@ public class Main {
             for (int i = 0; i < 2; i++) {
 
                 for (File f : files) {
-//            System.out.println("File: " + f.getAbsolutePath());
+//           System.out.println("File: " + f.getAbsolutePath());
                     if (f.exists()) {
                         contclasses += +1;
                     }
