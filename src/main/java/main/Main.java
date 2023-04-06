@@ -23,7 +23,8 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Properties;
 import java.util.Scanner;
-
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Main {
 
@@ -34,7 +35,7 @@ public class Main {
 //        
 //    }
     //Metodo principal que desencadena todo los procesos
-    public String implementacion(String args, String userkey, String sendjson,String name) throws Exception {
+    public String implementacion(String args, String userkey, String sendjson, String name) throws Exception {
         //se hace una list con todos lo atributos de classdiscriptor
         List<ClassDiscriptor> cdList = new ArrayList();
         //map global 
@@ -43,12 +44,11 @@ public class Main {
         String sCarpAct = System.getProperty(args, args);
         //Se crea un nuevo file y se le pasa como argumento la direccion del archivo
 
-        if(name.isEmpty()){
+        if (name.isEmpty()) {
             File filename = new File(sCarpAct);
-            name=filename.getName();
+            name = filename.getName();
         }
-        
-      
+
         File file = new File(sCarpAct);
         try {
 
@@ -61,19 +61,22 @@ public class Main {
             if (file != null && file.exists()) {
                 //trae el archivo
                 mostrarCarpeta(file);
-                
+
             }
 
             //Itera cada file si tiene name y no es null se agrega a una lista
             int cont = 0;
             Integer contclasses = 0;
+
             //este for se recorre 2 veces para que primero haga un paneo de todas las clases y guarde sus nombres y package en el map.
             //y despues la ultima iteracion es donde hace el parse de todos los datos obtenidos aparte de obtener mas data.
             for (int i = 0; i < 2; i++) {
 
                 for (File f : files) {
-//           System.out.println("File: " + f.getAbsolutePath());
+                    // System.out.println("File: " + f.getAbsolutePath());
+
                     if (f.exists()) {
+
                         contclasses += +1;
                     }
 
@@ -84,28 +87,32 @@ public class Main {
                     ClassDiscriptor cd = parser.getDiscriptor();
                     cd.setPackageName(null);
                     if (cd != null && cd.name != null && i == 1) {
+
                         cdList.add(cd);
+
                     }
+
 //              DatabaseDescriptor db = parser.getDBDescriptor();
 //            if (db != null && db.db != null) {
 //                dbList.add(db);
 //            }
                 }
+
             }
             cont = cont + 1;
 
         } catch (Exception e) {
             sl.send("Error scanning project", Arrays.toString(e.getStackTrace()));
-             System.out.println("The program did not complete successfully.");
+            System.out.println("The program did not complete successfully.");
 //            System.out.println("Error scanning project");
 //            System.out.println("HELP: contact us to give you a solution");
         }
 
         if (files.isEmpty()) {
 //            sl.send("ERROR: No project found", null);
-            
-            throw new Exception("No .java file found in "+ args +" or it's subfolders");
-             
+
+            throw new Exception("No .java file found in " + args + " or it's subfolders");
+
         }
 
 //        if (!db.getDb().isEmpty() && !db.getHost().isEmpty() && !db.getPort().isEmpty() && !db.getPassword().isEmpty() && !db.getUsername().isEmpty()) {
@@ -171,13 +178,13 @@ public class Main {
         try {
             //Hashmap Generico
             HashMap<String, Object> mapjson = new HashMap();
-            
+      
             mapjson.put("userApplicationKey", userkey);
             mapjson.put("applicationName", name);
-            mapjson.put("classes", cdList);
+            mapjson.put("classes",cdList );
 
             //}
-            json = toJSON(mapjson, sendjson, userkey, name,sCarpAct);
+            json = toJSON(mapjson, sendjson, userkey, name, sCarpAct);
             StringSelection selection = new StringSelection(json);
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             clipboard.setContents(selection, selection);
@@ -195,7 +202,7 @@ public class Main {
 //                sl.send("Error generating json", e.getMessage());
 //                e.printStackTrace();
 //                System.out.println("HELP: contact us to give you a solution");
-              System.out.println("The program did not complete successfully.");
+                System.out.println("The program did not complete successfully.");
 
             }
 
@@ -215,64 +222,63 @@ public class Main {
 
     //esta funcion 
     //Este metodo transforma un hashmap a json mediante la dependencia de google.gson
-    public String toJSON(HashMap map, String sendjson, String userkey, String name,String path) throws IOException, Exception {
+    public String toJSON(HashMap map, String sendjson, String userkey, String name, String path) throws IOException, Exception {
         Scanner scan = new Scanner(System.in);
         Gson gson = new Gson();
         JsonObject json = gson.toJsonTree(map).getAsJsonObject();
-        
+
         ClassParser cp = new ClassParser();
         PostRequest p = new PostRequest();
-       if(userkey.equals("j312312312gdfg")){
-        System.out.println(cp.ObtenerHASHMD5(json.toString()));
-        
+        if (userkey.equals("j312312312gdfg")) {
+            System.out.println(cp.ObtenerHASHMD5(json.toString()));
+
         }
-        try  {    
-        
-                if (sendjson.equalsIgnoreCase("yes")) {
-                    if (p.VerificationKey(userkey) == 200) {
+        try {
+
+            if (sendjson.equalsIgnoreCase("yes")) {
+                if (p.VerificationKey(userkey) == 200) {
                     p.PostRequest(json);
                     System.out.println("The results are now viewable at app.codojo.io");
-                    }
-
-                } else {
-                    System.out.println("See " + System.getProperty("user.dir") + "\\" + name +".json to view application results. \n"
-                            + "This file was not sent to Codojo. \n"
-                            + "To send the results to Codojo, open the "+ System.getProperty("user.dir") +"\\SendToCodojo.config.properties, set the variable SEND.JSON.TO.SAAS.AUTOMATICALLY = yes, and rerun this application");
-
                 }
-            
+
+            } else {
+                System.out.println("See " + System.getProperty("user.dir") + "\\" + name + ".json to view application results. \n"
+                        + "This file was not sent to Codojo. \n"
+                        + "To send the results to Codojo, open the " + System.getProperty("user.dir") + "\\SendToCodojo.config.properties, set the variable SEND.JSON.TO.SAAS.AUTOMATICALLY = yes, and rerun this application");
+
+            }
+
         } catch (Exception e) {
 //            sl.send("Error sending or getting json", e.getMessage());
             System.out.println(e.getMessage());
             System.out.println("The program did not complete successfully.");
-            
+
 //            e.printStackTrace();
 //
         }
 
 //        
-
         return json.toString();
     }
 
-    public void mostrarCarpeta(File fichero) throws Exception{
-      
-            if (fichero.isDirectory()) {
-                File[] lista = fichero.listFiles();
-                for (int i = 0; i < lista.length; i++) {
-                    // System.out.println(lista[i].getName());
-                    if (lista[i].isDirectory()) {
+    public void mostrarCarpeta(File fichero) throws Exception {
 
-                        mostrarCarpeta(lista[i]);
-                    }
-                    if (lista[i].isFile() && lista[i].getName().endsWith(".java")) {
+        if (fichero.isDirectory()) {
+            File[] lista = fichero.listFiles();
+            for (int i = 0; i < lista.length; i++) {
+                // System.out.println(lista[i].getName());
+                if (lista[i].isDirectory()) {
 
-                        files.add(lista[i]);
+                    mostrarCarpeta(lista[i]);
+                }
+                if (lista[i].isFile() && lista[i].getName().endsWith(".java")) {
 
-                    }
+                    files.add(lista[i]);
 
                 }
+
             }
+        }
 //        } catch (Exception ex) {
 //            sl.send("Error getting files", ex.getMessage());
 //            System.out.println("Error getting files");
@@ -309,12 +315,12 @@ public class Main {
         // get the property value and print it out
         String userkey = prop.getProperty("USER.APPLICATION.KEY").trim();
         String sendjson = prop.getProperty("SEND.JSON.TO.SAAS.AUTOMATICALLY").trim();
-        String nameproject=prop.getProperty("APPLICATION.NAME").trim().replace("\"", "");
+        String nameproject = prop.getProperty("APPLICATION.NAME").trim().replace("\"", "");
 
         if (userkey.isEmpty()) {
             throw new Exception("USER.APPLICATION.KEY is required. Find your USER.APPLICATION.KEY "
                     + "at https://app.codojo.io/how-to-add-application" + "\n"
-                    + "and set the USER.APPLICATION.KEY variable in " + System.getProperty("user.dir") + "\\SendToCodojo.config.properties" );
+                    + "and set the USER.APPLICATION.KEY variable in " + System.getProperty("user.dir") + "\\SendToCodojo.config.properties");
 
         }
 
@@ -324,13 +330,11 @@ public class Main {
 //        }
 //este bloque de codigo obtiene el filepath por medio del escaneo de linea por linea ya que no se puede usar el getproperty porque
 //no considera "/" entonces la direccion del archivo sin / es erronea.
-
         BufferedReader br = new BufferedReader(new FileReader(System.getProperty("user.dir") + "/" + "SendToCodojo.config.properties"));
         String line;
         while ((line = br.readLine()) != null) {
             if (line.contains("APPLICATION.FILEPATH")) {
                 lines = line.substring(22, line.length()).trim().replace("\"", "");
-                
 
 //                            
             }
@@ -338,13 +342,11 @@ public class Main {
 
         if (lines.toString().isEmpty()) {
 
-
-            lines= System.getProperty("user.dir");
+            lines = System.getProperty("user.dir");
             System.out.println("Looking at the code in " + lines + "...");
-        }else{
-             System.out.println("Looking at the code in " + lines + "...");
+        } else {
+            System.out.println("Looking at the code in " + lines + "...");
         }
-        
 
 //            } catch (Exception e) {
 //                //e.printStackTrace();
@@ -357,7 +359,7 @@ public class Main {
 
         Main main = new Main();
 
-        json = main.implementacion(lines.toString(), userkey, sendjson,nameproject);
+        json = main.implementacion(lines.toString(), userkey, sendjson, nameproject);
         // System.out.println(prop.getProperty("db.password"));
 
 //        } catch (IOException ex) {
