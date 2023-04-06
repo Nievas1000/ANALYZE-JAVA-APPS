@@ -220,7 +220,7 @@ public class Testapp {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            
+           
             assertEquals(jsonexpected.length(), json.length());
         }
     }
@@ -231,7 +231,7 @@ public class Testapp {
        String jsonexpected="{\"userApplicationKey\":\"c6j76d7931a0a04bed50\",\"classes\":"
                + "[{\"name\":\"Classes.Foo1\",\"constructor\":[\"Classes.Foo2\"],\"datasources\":"
                + "[\"foo2\",\"foo1_foos3\"]},{\"name\":\"Classes.Foo2\",\"constructor\":"
-               + "[\"Classes.Foo3\"],\"datasources\":[\"foo2s_foo3\",\"foo2_foo1s\"]},"
+               + "[\"Classes.Foo3\"],\"datasources\":[\"foo2s_foo3\",\"foo2s_foo1s\"]},"
                + "{\"name\":\"Classes.Foo3\"},{\"name\":\"relationsjpa.Relationsjpa\"}],"
                + "\"applicationName\":\"relationsjpa\"}";
        

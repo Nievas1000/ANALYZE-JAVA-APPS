@@ -52,7 +52,7 @@ public class ClassParser {
             parse(map, i, cont);
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, e.getMessage());
+           
         }
     }
 
@@ -156,7 +156,7 @@ public class ClassParser {
         String ex = null;
 
         int cont = 0;
-        if (line.contains("class") || line.contains("interface")) {
+        if (line.contains("class") || line.contains("interface") || line.contains("enum")) {
             String[] parts = line.split("\\s+");
 
 //            for (int i = 0; i < parts.length; i++) {
@@ -191,7 +191,7 @@ public class ClassParser {
                 for (int j = 0; j < parts.length - 1; j++) {
                     if (parts[j].equalsIgnoreCase("extends")) {
                         if (map.containsKey(parts[j + 1].replace("{", ""))) {
-                            listex.add(map.get(parts[j + 1]) + "." + parts[j + 1]);
+                            listex.add(map.get(parts[j + 1].replace("{", "")) + "." + parts[j + 1].replace("{", ""));
                             discriptor.extend = listex;
                         } else {
                             discriptor.extend = null;
@@ -206,7 +206,7 @@ public class ClassParser {
                             List<String> list = new ArrayList();
                             for (int k = j; k < parts.length - 1; k++) {
                                 if (map.containsKey(parts[k + 1].replace("{", ""))) {
-                                    list.add(map.get(parts[k + 1]) + "." + parts[k + 1]);
+                                    list.add(map.get(parts[k + 1].replace("{", "")) + "." + parts[k + 1].replace("{", ""));
                                     discriptor.implement = list;
                                 } else {
 
@@ -232,7 +232,7 @@ public class ClassParser {
                         for (int k = 0; k < partsget.length - 1; k++) {
                             if (map.containsKey(partsget[k].replace("{", ""))) {
 
-                                list.add(map.get(partsget[k]) + "." + partsget[k]);
+                                list.add(map.get(partsget[k].replace("{", "")) + "." + partsget[k].replace("{", ""));
                                 discriptor.implement = list;
 
                             }
@@ -247,7 +247,7 @@ public class ClassParser {
                         for (int n = 0; n < partsline.length - 1; n++) {
                             if (map.containsKey(partsline[n].replace("{", ""))) {
 
-                                listline.add(map.get(partsline[n]) + "." + partsline[n]);
+                                listline.add(map.get(partsline[n].replace("{", "")) + "." + partsline[n].replace("{", ""));
                                 discriptor.implement = listline;
 
                             }
@@ -257,29 +257,29 @@ public class ClassParser {
 
                 }
 
-                if(lines.get(i+1).isEmpty()){
-            } else if (lines.get(i + 1).contains("implements")) {
+                if (lines.get(i + 1).isEmpty()) {
+                } else if (lines.get(i + 1).contains("implements")) {
 
-                String lineimp = lines.get(i + 1);
-                lineimp = lineimp.replace(",", " ");
-                String[] partsimp = lineimp.split("\\s+");
+                    String lineimp = lines.get(i + 1);
+                    lineimp = lineimp.replace(",", " ");
+                    String[] partsimp = lineimp.split("\\s+");
 
-                if (lineimp.contains("{")) {
+                    if (lineimp.contains("{")) {
 
-                    for (int j = 0; j < partsimp.length - 1; j++) {
+                        for (int j = 0; j < partsimp.length - 1; j++) {
 
-                        if (partsimp[j].equalsIgnoreCase("implements")) {
-                            List<String> list = new ArrayList();
-                            for (int k = j; k < partsimp.length - 1; k++) {
+                            if (partsimp[j].equalsIgnoreCase("implements")) {
+                                List<String> list = new ArrayList();
+                                for (int k = j; k < partsimp.length - 1; k++) {
 
-                                if (map.containsKey(partsimp[k + 1].replace("{", ""))) {
+                                    if (map.containsKey(partsimp[k + 1].replace("{", ""))) {
 
-                                    list.add(map.get(partsimp[k + 1]) + "." + partsimp[k + 1]);
-                                    discriptor.implement = list;
+                                        list.add(map.get(partsimp[k + 1].replace("{", "")) + "." + partsimp[k + 1].replace("{", ""));
+                                        discriptor.implement = list;
+                                    }
                                 }
+                                //discriptor.implement=list;
                             }
-                            //discriptor.implement=list;
-                        }
 
 //                        if (map.containsKey(parts[j+1].replace("{", ""))) {
 //                            
@@ -287,42 +287,42 @@ public class ClassParser {
 //                        } else {
 //                            discriptor.implement = null;
 //                        }
-                    }
-
-                } else {
-                    List<String> list = new ArrayList<>();
-                    String lineget = lines.get(i + 2);
-                    if (lineget.endsWith("{")) {
-                        lineget = lineget.replace(",", " ");
-                        String[] partsget = lineget.split("\\s+");
-                        for (int k = 0; k < partsget.length - 1; k++) {
-                            if (map.containsKey(partsget[k].replace("{", ""))) {
-
-                                list.add(map.get(partsget[k]) + "." + partsget[k]);
-                                discriptor.implement = list;
-
-                            }
-
                         }
 
                     } else {
-                        List<String> listline = new ArrayList<>();
-                        String linei = lines.get(i + 2);
-                        linei = linei.replace(",", " ");
-                        String[] partsline = linei.split("\\s+");
-                        for (int n = 0; n < partsline.length - 1; n++) {
-                            if (map.containsKey(partsline[n].replace("{", ""))) {
+                        List<String> list = new ArrayList<>();
+                        String lineget = lines.get(i + 2);
+                        if (lineget.endsWith("{")) {
+                            lineget = lineget.replace(",", " ");
+                            String[] partsget = lineget.split("\\s+");
+                            for (int k = 0; k < partsget.length - 1; k++) {
+                                if (map.containsKey(partsget[k].replace("{", ""))) {
 
-                                listline.add(map.get(partsline[n]) + "." + partsline[n]);
-                                discriptor.implement = listline;
+                                    list.add(map.get(partsget[k].replace("{", "")) + "." + partsget[k].replace("{", ""));
+                                    discriptor.implement = list;
+
+                                }
 
                             }
+
+                        } else {
+                            List<String> listline = new ArrayList<>();
+                            String linei = lines.get(i + 2);
+                            linei = linei.replace(",", " ");
+                            String[] partsline = linei.split("\\s+");
+                            for (int n = 0; n < partsline.length - 1; n++) {
+                                if (map.containsKey(partsline[n].replace("{", ""))) {
+
+                                    listline.add(map.get(partsline[n].replace("{", "")) + "." + partsline[n].replace("{", ""));
+                                    discriptor.implement = listline;
+
+                                }
+                            }
                         }
+
                     }
 
                 }
-
-            }
             }
 //                if (parts.length >= 6) {
 //                    System.out.println(parts[4] + "PARTE 4");
@@ -395,23 +395,32 @@ public class ClassParser {
             //por eso tiene una contador para verificar si entro en el if anterior y si entro que aca no entre.
 //            System.out.println(line);
 //            System.out.println(parts.length);
+        
+    
             String lineif;
             if (!line.contains("extends") && !line.contains("{")) {
                 List<String> array = new ArrayList<>();
 
                 int e = i + 1;
-                while (!lines.get(e).isEmpty()) {
+                
+                
+                
+            
+                 
+                while (!lines.get(e).isEmpty() && lines.get(e).contains("{")) {
 
+                    
                     lineif = lines.get(e);
+                    
                     e += 1;
 
                     if (lineif.contains("extends")) {
                         String[] partsif = lineif.split("\\s+");
                         for (int j = 0; j < partsif.length - 1; j++) {
                             if (map.containsKey(partsif[j].replace("{", ""))) {
-//                            System.out.println(map.get(partsif[j]) + "PARTSIFFF");
+//                           System.out.println(map.get(partsif[j]) + "PARTSIFFF");
 
-                                array.add(map.get(partsif[j]) + "." + partsif[j]);
+                                array.add(map.get(partsif[j].replace("{", "")) + "." + partsif[j].replace("{", ""));
                                 discriptor.extend = array;
                             }
 
@@ -419,6 +428,8 @@ public class ClassParser {
                     }
 
                 }
+             
+               
             }
 
             if (line.contains("extends")) {
@@ -448,7 +459,7 @@ public class ClassParser {
                         if (map.containsKey(partsif[j].replace("{", ""))) {
 //                            System.out.println(map.get(partsif[j]) + "PARTSIFFF");
 
-                            array.add(map.get(partsif[j]) + "." + partsif[j]);
+                            array.add(map.get(partsif[j].replace("{", "")) + "." + partsif[j].replace("{", ""));
                             //discriptor.extend= map.get(partsif[j]) + "." + partsif[j];
                         } else {
                             discriptor.extend = null;
@@ -468,7 +479,7 @@ public class ClassParser {
                             for (int k = j; k < partsif.length; k++) {
                                 if (map.containsKey(partsif[k].replace("{", ""))) {
                                     List<String> arrayl = new ArrayList<>();
-                                    arrayl.add((map.get(partsif[k]) + "." + partsif[k]));
+                                    arrayl.add((map.get(partsif[k].replace("{", "")) + "." + partsif[k].replace("{", "")));
                                     discriptor.extend = arrayl;
                                 }
                             }
@@ -507,7 +518,7 @@ public class ClassParser {
                             for (int k = j; k < partsimp.length - 1; k++) {
                                 if (map.containsKey(partsimp[k + 1].replace("{", ""))) {
 
-                                    list.add(map.get(partsimp[k + 1]) + "." + partsimp[k + 1]);
+                                    list.add(map.get(partsimp[k + 1].replace("{", "")) + "." + partsimp[k + 1].replace("{", ""));
                                     discriptor.implement = list;
                                 }
                             }
@@ -539,7 +550,7 @@ public class ClassParser {
                         for (int k = 0; k < partsget.length - 1; k++) {
                             if (map.containsKey(partsget[k].replace("{", ""))) {
 
-                                list.add(map.get(partsget[k]) + "." + partsget[k]);
+                                list.add(map.get(partsget[k].replace("{", "")) + "." + partsget[k].replace("{", ""));
                                 discriptor.implement = list;
 
                             }
@@ -554,7 +565,7 @@ public class ClassParser {
                         for (int n = 0; n < partsline.length - 1; n++) {
                             if (map.containsKey(partsline[n].replace("{", ""))) {
 
-                                listline.add(map.get(partsline[n]) + "." + partsline[n]);
+                                listline.add(map.get(partsline[n].replace("{", "")) + "." + partsline[n].replace("{", ""));
                                 discriptor.implement = listline;
 
                             }
@@ -564,32 +575,31 @@ public class ClassParser {
 
                 }
 
-                                   
             }
-            if(!lines.get(i).contains("{") && !lines.get(i).contains("}")){
-                
-            if (lines.get(i + 1).contains("implements")) {
+            if (!lines.get(i).contains("{") && !lines.get(i).contains("}")) {
 
-                String lineimp = lines.get(i + 1);
-                lineimp = lineimp.replace(",", " ");
-                String[] partsimp = lineimp.split("\\s+");
+                if (lines.get(i + 1).contains("implements")) {
 
-                if (lineimp.contains("{")) {
+                    String lineimp = lines.get(i + 1);
+                    lineimp = lineimp.replace(",", " ");
+                    String[] partsimp = lineimp.split("\\s+");
 
-                    for (int j = 0; j < partsimp.length - 1; j++) {
+                    if (lineimp.contains("{")) {
 
-                        if (partsimp[j].equalsIgnoreCase("implements")) {
-                            List<String> list = new ArrayList();
-                            for (int k = j; k < partsimp.length - 1; k++) {
+                        for (int j = 0; j < partsimp.length - 1; j++) {
 
-                                if (map.containsKey(partsimp[k + 1].replace("{", ""))) {
+                            if (partsimp[j].equalsIgnoreCase("implements")) {
+                                List<String> list = new ArrayList();
+                                for (int k = j; k < partsimp.length - 1; k++) {
 
-                                    list.add(map.get(partsimp[k + 1]) + "." + partsimp[k + 1]);
-                                    discriptor.implement = list;
+                                    if (map.containsKey(partsimp[k + 1].replace("{", ""))) {
+
+                                        list.add(map.get(partsimp[k + 1].replace("{", "")) + "." + partsimp[k + 1].replace("{", ""));
+                                        discriptor.implement = list;
+                                    }
                                 }
+                                //discriptor.implement=list;
                             }
-                            //discriptor.implement=list;
-                        }
 
 //                        if (map.containsKey(parts[j+1].replace("{", ""))) {
 //                            
@@ -597,45 +607,43 @@ public class ClassParser {
 //                        } else {
 //                            discriptor.implement = null;
 //                        }
-                    }
-                    
-
-                } else {
-                    List<String> list = new ArrayList<>();
-                    String lineget = lines.get(i + 2);
-                    if (lineget.endsWith("{")) {
-                        lineget = lineget.replace(",", " ");
-                        String[] partsget = lineget.split("\\s+");
-                        for (int k = 0; k < partsget.length - 1; k++) {
-                            if (map.containsKey(partsget[k].replace("{", ""))) {
-
-                                list.add(map.get(partsget[k]) + "." + partsget[k]);
-                                discriptor.implement = list;
-
-                            }
-
                         }
 
                     } else {
-                        List<String> listline = new ArrayList<>();
-                        String linei = lines.get(i + 2);
-                        linei = linei.replace(",", " ");
-                        String[] partsline = linei.split("\\s+");
-                        for (int n = 0; n < partsline.length - 1; n++) {
-                            if (map.containsKey(partsline[n].replace("{", ""))) {
+                        List<String> list = new ArrayList<>();
+                        String lineget = lines.get(i + 2);
+                        if (lineget.endsWith("{")) {
+                            lineget = lineget.replace(",", " ");
+                            String[] partsget = lineget.split("\\s+");
+                            for (int k = 0; k < partsget.length - 1; k++) {
+                                if (map.containsKey(partsget[k].replace("{", ""))) {
 
-                                listline.add(map.get(partsline[n]) + "." + partsline[n]);
-                                discriptor.implement = listline;
+                                    list.add(map.get(partsget[k].replace("{", "")) + "." + partsget[k].replace("{", ""));
+                                    discriptor.implement = list;
+
+                                }
 
                             }
+
+                        } else {
+                            List<String> listline = new ArrayList<>();
+                            String linei = lines.get(i + 2);
+                            linei = linei.replace(",", " ");
+                            String[] partsline = linei.split("\\s+");
+                            for (int n = 0; n < partsline.length - 1; n++) {
+                                if (map.containsKey(partsline[n].replace("{", ""))) {
+
+                                    listline.add(map.get(partsline[n].replace("{", "")) + "." + partsline[n].replace("{", ""));
+                                    discriptor.implement = listline;
+
+                                }
+                            }
                         }
+
                     }
 
                 }
-
             }
-            }
-            
 
 //            if (parts.length >= 4) {
 //
@@ -687,45 +695,45 @@ public class ClassParser {
 //                    //discriptor.implement = discriptor.packageName + "." + parts[4].substring(0, parts[4].length() - 1);
 //                }
 //    
-            if (parts.length == 2 && isClassOrInterface(parts[0])) {
-                if (parts[1].endsWith("{")) {
-                    discriptor.name = discriptor.packageName + "." + parts[1].substring(0, parts[1].length() - 1);
+//            if (parts.length == 2 && isClassOrInterface(parts[0])) {
+//                if (parts[1].endsWith("{")) {
+//                    discriptor.name = discriptor.packageName + "." + parts[1].substring(0, parts[1].length() - 1);
+//
+//                } else {
+//                    discriptor.name = discriptor.packageName + "." + parts[1];
+//                }
+////                discriptor.modifier = Constants.MODIFIER_DEFAULT;
+//
+//            } else if (parts.length == 3 && isClassOrInterface(parts[1])) {
+//                if (parts[2].endsWith("{")) {
+//                    discriptor.name = discriptor.packageName + "." + parts[2].substring(0, parts[1].length() - 1);
+//
+//                } else {
+//                    discriptor.name = discriptor.packageName + "." + parts[2];
+//                }
+//                // discriptor.modifier = parts[0];
+//            } else if (parts.length == 3 && isClassOrInterface(parts[0]) && parts[2].equals("{")) {
+//                discriptor.name = discriptor.packageName + "." + parts[1];
+//                //	discriptor.modifier=Constants.MODIFIER_DEFAULT;
+//            } else if (parts.length == 4 && isClassOrInterface(parts[1]) && parts[3].equals("{")) {
+//                discriptor.name = discriptor.packageName + "." + parts[2];
+////                //	discriptor.modifier=parts[0];
+//            } else if (parts.length == 5 && isClassOrInterface(parts[1]) && isParentLinker(parts[3])) {
+//                discriptor.name = discriptor.packageName + "." + parts[2];
+//            } else {
+                for (int j = 0; j < parts.length-1; j++) {
 
-                } else {
-                    discriptor.name = discriptor.packageName + "." + parts[1];
-                }
-//                discriptor.modifier = Constants.MODIFIER_DEFAULT;
-
-            } else if (parts.length == 3 && isClassOrInterface(parts[1])) {
-                if (parts[2].endsWith("{")) {
-                    discriptor.name = discriptor.packageName + "." + parts[2].substring(0, parts[1].length() - 1);
-
-                } else {
-                    discriptor.name = discriptor.packageName + "." + parts[2];
-                }
-                // discriptor.modifier = parts[0];
-            } else if (parts.length == 3 && isClassOrInterface(parts[0]) && parts[2].equals("{")) {
-                discriptor.name = discriptor.packageName + "." + parts[1];
-                //	discriptor.modifier=Constants.MODIFIER_DEFAULT;
-            } else if (parts.length == 4 && isClassOrInterface(parts[1]) && parts[3].equals("{")) {
-                discriptor.name = discriptor.packageName + "." + parts[2];
-//                //	discriptor.modifier=parts[0];
-            } else if (parts.length == 5 && isClassOrInterface(parts[1]) && isParentLinker(parts[3])) {
-                discriptor.name = discriptor.packageName + "." + parts[2];
-            } else {
-                for (int j = 0; j < parts.length; j++) {
-
-                    if (parts[j].equalsIgnoreCase("class") || parts[j].equalsIgnoreCase("interface")) {
-                        discriptor.name = discriptor.packageName + "." + parts[j + 1];
+                    if (parts[j].equalsIgnoreCase("class") || parts[j].equalsIgnoreCase("interface") || parts[j].equalsIgnoreCase("enum")) {
+                        discriptor.name = discriptor.packageName + "." + parts[j + 1].replace("{", "");
                         break;
                     }
 
                 }
 
-                //return true;
+                return true;
             }
-            return true;
-        }
+            //return true;
+        
 
         return false;
     }
@@ -737,7 +745,7 @@ public class ClassParser {
 
     //compara entre class e interfaz
     public boolean isClassOrInterface(String part) {
-        return part.trim().equals("class") || part.trim().equals("interface");
+        return part.trim().equals("class") || part.trim().equals("interface") ||  part.trim().equals("enum");
     }
 
     //guarda los valores que se le pasan desde el primer for de esta clase
@@ -749,16 +757,18 @@ public class ClassParser {
         if (parts.length >= 3) {
             for (int j = 0; j < parts.length - 1; j++) {
                 if ((parts[j].equalsIgnoreCase("class") || parts[j].equalsIgnoreCase("interface") || parts[j].equalsIgnoreCase("enum")) && (!line.contains("//"))) {
-                   //este if guarda adentro del map los nombres que jamas tengan {} porque algunas veces el escaneo
-                   //puede filtrar eso y esto hace que no se guarde si tiene esos caracteres.
-                    if(!parts[j + 1].contains("{") || !parts[j + 1].contains("}")){
-                    map.put(parts[j + 1].replace("<", "").replace(">", "").replace("T", "").replace(")", "").replace("(", "").replace(";", "").replace(",", ""), dp);
-                }
+                    //este if guarda adentro del map los nombres que jamas tengan {} porque algunas veces el escaneo
+                    //puede filtrar eso y esto hace que no se guarde si tiene esos caracteres.
+                    if (!parts[j + 1].contains("{") || !parts[j + 1].contains("}")) {
+                        map.put(parts[j + 1].replace("<", "").replace(">", "").replace("<T>", "").replace(")", "").replace("(", "").replace(";", "").replace(",", "").replace("{", "").replace("}", ""), dp);
+                        
+                    }
                 }
             }
             //guarda nombre de la clase y package en un hashmap.
             //map.put(parts[2], dp);
 
+            
         }
 
     }
@@ -769,14 +779,13 @@ public class ClassParser {
         line = line.trim();
         line = line.replace(".", " ");
 
-        
         //si la line contiene import entra al if
         if (line.contains("import")) {
-           
 
             //divide la linea en partes separadas por espacios
             String[] parts = line.split("\\s+");
             line = parts[parts.length - 1].replace(";", "");
+            
             //si el map contiene la key = nombre de la clase entra al if
             // System.out.println(line);
             
@@ -784,11 +793,11 @@ public class ClassParser {
                 
                 //System.out.println(map.get(line).concat(".").concat(line));
                 //guarda el package de la clase que acabamos de comparar en un hashset.
-                if(!line.contains("{")  && !line.contains("}")){
-                set.add(map.get(line).concat(".").concat(line));
+                if (!line.contains("{") && !line.contains("}")) {
+                    set.add(map.get(line).concat(".").concat(line));
                 }
             }
-           
+
 //guarda el hashset en el atributo constructor de la clase discriptor
             discriptor.constructor = set;
 
@@ -863,6 +872,7 @@ public class ClassParser {
     public String searchrelationjpa(List<String> lines, String line, int i, HashMap<String, List> mapdb, List<String> list) throws FileNotFoundException, Exception {
         String entidad = "";
         String relation = "";
+        String nametable = null;
 
         DataBaseData db = new DataBaseData();
 
@@ -888,7 +898,7 @@ public class ClassParser {
 //             List<String> tablas = db.getTables(typedb, hostdb, portdb, namedb, userdb, password);
             //si la linea contiene alguna de las anotaciones de jpa entra.
             if ((line.contains("@OneToOne") || line.contains("@OneToMany") || line.contains("@ManyToMany")
-                    || line.contains("@ManyToOne")) && !line.contains("line.contains")) {
+                    || line.contains("@ManyToOne")) || line.contains("@JoinTable") && !line.contains("line.contains")) {
 
                 if (line.contains("@OneToOne")) {
                     relation = "OneToOne";
@@ -902,6 +912,27 @@ public class ClassParser {
                 if (line.contains("@ManyToOne")) {
 
                     relation = "ManyToOne";
+                }
+
+                if (lines.get(i+1).contains("@JoinTable") && !lines.get(i+1).contains("name")) {
+                    String[] partsJ = lines.get(i + 2).split("\\s+");
+                    for (int j = 0; j < partsJ.length - 1; j++) {
+                        if (partsJ[j].equals("name")) {
+                           
+                            nametable = partsJ[j + 2];
+                           
+                        }
+                    }
+
+                } else if (lines.get(i+1).contains("@JoinTable") && lines.get(i+1).contains("name")) {
+
+                    String[] partsJ = lines.get(i).split("\\s+");
+                    for (int j = 0; j < partsJ.length - 1; j++) {
+                        if (partsJ[j].equals("name")) {
+                             
+                            nametable = partsJ[j + 2];
+                        }
+                    }
                 }
 
                 int c = 0;
@@ -920,20 +951,24 @@ public class ClassParser {
                         //i++;
                     }
                     i++;
-                    
+
                 } while (lines.get(i).contains("@") || !lines.get(i).isEmpty() && entidad.isEmpty());
 
                 //divide en partes la declaracion de la clase en la que se esta haciendo la relacion.
                 String[] parts1 = entidad.split("\\s+");
 
                 if (relation.equalsIgnoreCase("OneToOne")) {
-                    entidad = parts1[parts1.length - 1].replace(";", "");
+                    if(nametable==null){
+                          entidad = parts1[parts1.length - 1].replace(";", "");
+                    }else{
+                        entidad = nametable.replace(";", "");
+                    }
                     
-                    if(!entidad.endsWith("{")){
-                             list.add(entidad);
-                        }else{
-                            list=null;
-                        }
+                     if (!entidad.endsWith("{")) {
+                        list.add(entidad);
+                    } else {
+                        list = null;
+                    }
                 }
 
                 //si la longitud de todas las partes es menor o igual a 3 entra
@@ -947,12 +982,16 @@ public class ClassParser {
                         String[] parts = trim.split("\\s+");
                         //aqui se trae el nombre de la clase atual se convierte a minuscula y luego se concatena
                         //con la clase donde se hizo la relacion
-                        entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[parts1.length - 1].replace(";", "");
-                        
-                        if(!entidad.endsWith("{")){
-                             list.add(entidad);
+                          
+                        if(nametable==null){
+                        entidad = parts[parts.length - 1].toLowerCase() + "s_" + parts1[parts1.length - 1].replace(";", "");
                         }else{
-                            list=null;
+                             entidad = parts[parts.length - 1].toLowerCase() + "s_" + nametable.replace(";", "");
+                        }
+                        if (!entidad.endsWith("{")) {
+                            list.add(entidad);
+                        } else {
+                            list = null;
                         }
                     }
 
@@ -961,12 +1000,17 @@ public class ClassParser {
                         String trim = discriptor.name.trim();
                         trim = trim.replace(".", " ");
                         String[] parts = trim.split("\\s+");
-                        entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[parts1.length - 1].replace(";", "");
-                    
-                        if(!entidad.endsWith("{")){
-                             list.add(entidad);
+
+                        if(nametable==null){
+                             entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[parts1.length - 1].replace(";", "");
                         }else{
-                            list=null;
+                             entidad = parts[parts.length - 1].toLowerCase() + "_" + nametable;
+                        }
+                        
+                        if (!entidad.endsWith("{")) {
+                            list.add(entidad);
+                        } else {
+                            list = null;
                         }
 
                     }
@@ -975,12 +1019,16 @@ public class ClassParser {
                         String trim = discriptor.name.trim();
                         trim = trim.replace(".", " ");
                         String[] parts = trim.split("\\s+");
+                        if(nametable==null){
                         entidad = parts[parts.length - 1].toLowerCase() + "s_" + parts1[parts1.length - 1].replace(";", "");
-                        
-                       if(!entidad.endsWith("{")){
-                             list.add(entidad);
                         }else{
-                            list=null;
+                         entidad = parts[parts.length - 1].toLowerCase() + "s_" + nametable;
+
+                        }
+                        if (!entidad.endsWith("{")) {
+                            list.add(entidad);
+                        } else {
+                            list = null;
                         }
 
                     }
@@ -992,13 +1040,17 @@ public class ClassParser {
                         String trim = discriptor.name.trim();
                         trim = trim.replace(".", " ");
                         String[] parts = trim.split("\\s+");
-                        entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[parts1.length - 1].replace(";", "");
-                       
-                       
-                       if(!entidad.endsWith("{")){
-                             list.add(entidad);
+                          if(nametable==null){
+                             entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[parts1.length - 1].replace(";", "");
                         }else{
-                            list=null;
+                             entidad = parts[parts.length - 1].toLowerCase() + "_" + nametable;
+                        }
+                       
+
+                        if (!entidad.endsWith("{")) {
+                            list.add(entidad);
+                        } else {
+                            list = null;
                         }
 
                     }
@@ -1009,12 +1061,19 @@ public class ClassParser {
                         String trim = discriptor.name.trim();
                         trim = trim.replace(".", " ");
                         String[] parts = trim.split("\\s+");
-                        entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[parts1.length - 1].replace(";", ""); 
-                    
-                        if(!entidad.endsWith("{")){
-                             list.add(entidad);
+                       
+                        if(nametable==null){
+                        entidad = parts[parts.length - 1].toLowerCase() + "s_" + parts1[parts1.length - 1].replace(";", "");
                         }else{
-                            list=null;
+                            System.out.println(nametable + "s");
+                             entidad = parts[parts.length - 1].toLowerCase() + "s_" + nametable.replace(";", "").replace("\"", "").replace(",", "");
+                        }
+
+                        if (!entidad.endsWith("{")) {
+                            System.out.println(entidad);
+                            list.add(entidad);
+                        } else {
+                            list = null;
                         }
 
                     }
@@ -1023,19 +1082,22 @@ public class ClassParser {
                         String trim = discriptor.name.trim();
                         trim = trim.replace(".", " ");
                         String[] parts = trim.split("\\s+");
-                        entidad = parts[parts.length - 1].toLowerCase() + "s_" + parts1[parts1.length - 1].replace(";", "");
-                       
-                        if(!entidad.endsWith("{")){
-                             list.add(entidad);
-                        }else{
-                            list=null;
-                        }
                         
+                        if(nametable==null){
+                        entidad = parts[parts.length - 1].toLowerCase() + "s_" + parts1[parts1.length - 1].replace(";", "");
+                        }else{
+                         entidad = parts[parts.length - 1].toLowerCase() + "s_" + nametable;
+                        }
+                        if (!entidad.endsWith("{")) {
+                            list.add(entidad);
+                        } else {
+                            list = null;
+                        }
 
                     }
 
                 }
-
+            
                 //String[] parts1 = entidad.split("\\s+");
 //                    if(parts1.length>3){
 //                         entidad = parts1[3].replace(";", "");                          
@@ -1094,8 +1156,10 @@ public class ClassParser {
 //          for (String table : tables) {
 //                System.out.println(table);
                 //  }
+                }
                 return "true";
-            }
+            
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
