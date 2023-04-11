@@ -49,7 +49,7 @@ public class PostRequest {
             output.write(json.toString().getBytes());
             response=conexion.getResponseCode();
              if(response!=200){
-            throw new Exception("error sending JSON to codojo.io");
+            throw new Exception("error sending JSON to Taffi.io");
             }
             //limpia
             output.flush();

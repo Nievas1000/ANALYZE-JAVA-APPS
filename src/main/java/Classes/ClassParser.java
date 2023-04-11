@@ -1202,7 +1202,7 @@ public class ClassParser {
 
     public String getKey() throws Exception {
         String userkey = null;
-        try (InputStream input = new FileInputStream(System.getProperty("user.dir") + "/" + "SendToTaffi.config.properties")) {
+        try (InputStream input = new FileInputStream(System.getProperty("user.dir") + "/" + "SendToSendToCodojo.config.properties")) {
 
 //            System.out.println(System.getProperty("user.dir"));
             Properties prop = new Properties();
@@ -1222,7 +1222,7 @@ public class ClassParser {
         String lines = null;
         File filename = null;
 
-        BufferedReader br = new BufferedReader(new FileReader(System.getProperty("user.dir") + "/" + "SendToTaffi.config.properties"));
+        BufferedReader br = new BufferedReader(new FileReader(System.getProperty("user.dir") + "/" + "SendToSendToCodojo.config.properties"));
         String line;
         while ((line = br.readLine()) != null) {
             if (line.contains("APPLICATION.FILEPATH")) {
