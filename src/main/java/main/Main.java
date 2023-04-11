@@ -87,7 +87,6 @@ public class Main {
                     ClassDiscriptor cd = parser.getDiscriptor();
                     cd.setPackageName(null);
                     if (cd != null && cd.name != null && i == 1) {
-
                         cdList.add(cd);
 
                     }
@@ -176,6 +175,8 @@ public class Main {
         String json = null;
 
         try {
+            
+           
             //Hashmap Generico
             HashMap<String, Object> mapjson = new HashMap();
       
@@ -223,10 +224,12 @@ public class Main {
     //esta funcion 
     //Este metodo transforma un hashmap a json mediante la dependencia de google.gson
     public String toJSON(HashMap map, String sendjson, String userkey, String name, String path) throws IOException, Exception {
+        
+       
+        
         Scanner scan = new Scanner(System.in);
         Gson gson = new Gson();
         JsonObject json = gson.toJsonTree(map).getAsJsonObject();
-
         ClassParser cp = new ClassParser();
         PostRequest p = new PostRequest();
         if (userkey.equals("j312312312gdfg")) {
@@ -238,19 +241,20 @@ public class Main {
             if (sendjson.equalsIgnoreCase("yes")) {
                 if (p.VerificationKey(userkey) == 200) {
                     p.PostRequest(json);
-                    System.out.println("The results are now viewable at app.codojo.io");
+                    System.out.println("The results are now viewable at app.taffi.io");
                 }
 
             } else {
                 System.out.println("See " + System.getProperty("user.dir") + "\\" + name + ".json to view application results. \n"
-                        + "This file was not sent to Codojo. \n"
-                        + "To send the results to Codojo, open the " + System.getProperty("user.dir") + "\\SendToCodojo.config.properties, set the variable SEND.JSON.TO.SAAS.AUTOMATICALLY = yes, and rerun this application");
+                        + "This file was not sent to Taffi. \n"
+                        + "To send the results to Taffi, open the " + System.getProperty("user.dir") + "\\SendToTaffi.config.properties, set the variable SEND.JSON.TO.SAAS.AUTOMATICALLY = yes, and rerun this application");
 
             }
 
         } catch (Exception e) {
 //            sl.send("Error sending or getting json", e.getMessage());
             System.out.println(e.getMessage());
+            sl.send(e.getMessage(), "ERROR");
             System.out.println("The program did not complete successfully.");
 
 //            e.printStackTrace();
@@ -304,7 +308,7 @@ public class Main {
         String json = null;
         System.out.println("The program is running...");
         Object lines = new Object();
-        InputStream input = new FileInputStream(System.getProperty("user.dir") + "/" + "SendToCodojo.config.properties");
+        InputStream input = new FileInputStream(System.getProperty("user.dir") + "/" + "SendToTaffi.config.properties");
 
 //            System.out.println(System.getProperty("user.dir"));
         Properties prop = new Properties();
@@ -320,7 +324,7 @@ public class Main {
         if (userkey.isEmpty()) {
             throw new Exception("USER.APPLICATION.KEY is required. Find your USER.APPLICATION.KEY "
                     + "at https://app.codojo.io/how-to-add-application" + "\n"
-                    + "and set the USER.APPLICATION.KEY variable in " + System.getProperty("user.dir") + "\\SendToCodojo.config.properties");
+                    + "and set the USER.APPLICATION.KEY variable in " + System.getProperty("user.dir") + "\\SendToTaffi.config.properties");
 
         }
 
@@ -330,7 +334,7 @@ public class Main {
 //        }
 //este bloque de codigo obtiene el filepath por medio del escaneo de linea por linea ya que no se puede usar el getproperty porque
 //no considera "/" entonces la direccion del archivo sin / es erronea.
-        BufferedReader br = new BufferedReader(new FileReader(System.getProperty("user.dir") + "/" + "SendToCodojo.config.properties"));
+        BufferedReader br = new BufferedReader(new FileReader(System.getProperty("user.dir") + "/" + "SendToTaffi.config.properties"));
         String line;
         while ((line = br.readLine()) != null) {
             if (line.contains("APPLICATION.FILEPATH")) {

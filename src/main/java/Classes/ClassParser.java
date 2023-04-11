@@ -85,6 +85,8 @@ public class ClassParser {
             if (lines.get(i).contains("public interface")) {
 
                 savevalues(lines.get(i), map, discriptor.packageName);
+                
+                
             }
 
             if (lines.get(i).contains("public class") || lines.get(i).contains("class")) {
@@ -730,6 +732,7 @@ public class ClassParser {
 
                 }
 
+                
                 return true;
             }
             //return true;
@@ -753,12 +756,15 @@ public class ClassParser {
 
         line = line.trim();
 //        System.out.println(line);
+         line=line.replace("<", " ");
         String[] parts = line.split("\\s+");
+        
         if (parts.length >= 3) {
             for (int j = 0; j < parts.length - 1; j++) {
                 if ((parts[j].equalsIgnoreCase("class") || parts[j].equalsIgnoreCase("interface") || parts[j].equalsIgnoreCase("enum")) && (!line.contains("//"))) {
                     //este if guarda adentro del map los nombres que jamas tengan {} porque algunas veces el escaneo
                     //puede filtrar eso y esto hace que no se guarde si tiene esos caracteres.
+                    
                     if (!parts[j + 1].contains("{") || !parts[j + 1].contains("}")) {
                         map.put(parts[j + 1].replace("<", "").replace(">", "").replace("<T>", "").replace(")", "").replace("(", "").replace(";", "").replace(",", "").replace("{", "").replace("}", ""), dp);
                         
@@ -788,6 +794,7 @@ public class ClassParser {
             
             //si el map contiene la key = nombre de la clase entra al if
             // System.out.println(line);
+           
             
             if (map.containsKey(line)) {
                 
@@ -831,7 +838,7 @@ public class ClassParser {
 
                     if (map.containsKey(parts[1].replace(">", "").replace("<", "").replace(",", "")) && !discriptor.name.contains(parts[1])) {
 
-                        set.add(map.get(parts[1].replace(">", "").replace("<", "").replace(",", "")).concat(".").concat(parts[1].replace("<", "").replace(",", "")));
+                        set.add(map.get(parts[1].replace(">", "").replace("<", "").replace(",", "")).concat(".").concat(parts[1].replace("<", "").replace(">", "").replace(",", "")));
 
                     }
                 }
@@ -839,7 +846,7 @@ public class ClassParser {
                 if (parts.length == 2) {
 
                     if (map.containsKey(parts[0].replace(">", "").replace("<", "").replace(",", "")) && !discriptor.name.contains(parts[0])) {
-                        set.add(map.get(parts[0].replace(">", "").replace("<", "").replace(",", "")).concat(".").concat(parts[0].replace("<", "").replace(",", "")));
+                        set.add(map.get(parts[0].replace(">", "").replace("<", "").replace(",", "")).concat(".").concat(parts[0].replace("<", "").replace(">", "").replace(",", "")));
 
                     }
 
@@ -880,12 +887,7 @@ public class ClassParser {
 
 //aca se identifica el archivo de propiedades pasandole el user.dir que seria el directorio donde esta parado ahora el usuario.
         try {
-            InputStream input = new FileInputStream(System.getProperty("user.dir") + "/" + "SendToCodojo.config.properties");
-
-            Properties prop = new Properties();
-
-            // load a properties file
-            prop.load(input);
+           
 
             // get the property value and print it out
             // trae los valores de las properties del archivo.
@@ -914,23 +916,25 @@ public class ClassParser {
                     relation = "ManyToOne";
                 }
 
-                if (lines.get(i+1).contains("@JoinTable") && !lines.get(i+1).contains("name")) {
+                if (lines.get(i+1).contains("@JoinTable") && !lines.get(i+1).contains("name") && !line.contains("//")) {
                     String[] partsJ = lines.get(i + 2).split("\\s+");
                     for (int j = 0; j < partsJ.length - 1; j++) {
                         if (partsJ[j].equals("name")) {
                            
                             nametable = partsJ[j + 2];
+                            
                            
                         }
                     }
 
-                } else if (lines.get(i+1).contains("@JoinTable") && lines.get(i+1).contains("name")) {
+                } else if (lines.get(i+1).contains("@JoinTable") && lines.get(i+1).contains("name" )&& !line.contains("//")) {
 
                     String[] partsJ = lines.get(i).split("\\s+");
                     for (int j = 0; j < partsJ.length - 1; j++) {
                         if (partsJ[j].equals("name")) {
                              
                             nametable = partsJ[j + 2];
+                           
                         }
                     }
                 }
@@ -940,7 +944,7 @@ public class ClassParser {
                 //y busque la declaracion de la clase donde se definio la relacion.
                 do {
 
-                    if ((!lines.get(i + 1).contains("@")) && entidad.isEmpty()) {
+                    if ((!lines.get(i + 1).contains("@")) && entidad.isEmpty() ) {
 
                         if (!lines.get(i + 1).isEmpty()) {
                             entidad = lines.get(i + 1);
@@ -957,7 +961,7 @@ public class ClassParser {
                 //divide en partes la declaracion de la clase en la que se esta haciendo la relacion.
                 String[] parts1 = entidad.split("\\s+");
 
-                if (relation.equalsIgnoreCase("OneToOne")) {
+                if (relation.equalsIgnoreCase("OneToOne") &&!line.contains("//")) {
                     if(nametable==null){
                           entidad = parts1[parts1.length - 1].replace(";", "");
                     }else{
@@ -975,7 +979,7 @@ public class ClassParser {
                 if (parts1.length <= 3) {
                     //entidad = parts1[parts1.length-1].replace(";", "");
 
-                    if (relation.equals("ManyToMany") && parts1.length <= 3) {
+                    if (relation.equals("ManyToMany") && parts1.length <= 3 && !line.contains("//")) {
 
                         String trim = discriptor.name.trim();
                         trim = trim.replace(".", " ");
@@ -989,6 +993,7 @@ public class ClassParser {
                              entidad = parts[parts.length - 1].toLowerCase() + "s_" + nametable.replace(";", "");
                         }
                         if (!entidad.endsWith("{")) {
+                          
                             list.add(entidad);
                         } else {
                             list = null;
@@ -996,15 +1001,18 @@ public class ClassParser {
                     }
 
                     //mismo patron
-                    if (relation.equals("OneToMany")) {
+                    if (relation.equals("OneToMany")&&!line.contains("//")) {
                         String trim = discriptor.name.trim();
                         trim = trim.replace(".", " ");
                         String[] parts = trim.split("\\s+");
 
-                        if(nametable==null){
-                             entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[parts1.length - 1].replace(";", "");
+                       if(nametable==null && parts1.length<7){
+                        entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[parts1.length - 1].replace(";", "");
+                        }else if(nametable==null && parts1.length>=7){
+//                            System.out.println(nametable + "s");
+                            entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[parts1.length - 4].replace(";", "");
                         }else{
-                             entidad = parts[parts.length - 1].toLowerCase() + "_" + nametable;
+                             entidad = parts[parts.length - 1].toLowerCase() + "_" + nametable.replace(";", "").replace("\"", "").replace(",", "");
                         }
                         
                         if (!entidad.endsWith("{")) {
@@ -1015,7 +1023,7 @@ public class ClassParser {
 
                     }
 
-                    if (relation.equals("ManyToOne")) {
+                    if (relation.equals("ManyToOne")&&!line.contains("//")) {
                         String trim = discriptor.name.trim();
                         trim = trim.replace(".", " ");
                         String[] parts = trim.split("\\s+");
@@ -1036,14 +1044,17 @@ public class ClassParser {
                 } else {
                     //mismo patron
 
-                    if (relation.equals("OneToMany")) {
+                    if (relation.equals("OneToMany")&&!line.contains("//")) {
                         String trim = discriptor.name.trim();
                         trim = trim.replace(".", " ");
                         String[] parts = trim.split("\\s+");
-                          if(nametable==null){
-                             entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[parts1.length - 1].replace(";", "");
+                          if(nametable==null && parts1.length<7){
+                        entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[parts1.length - 1].replace(";", "");
+                        }else if(nametable==null && parts1.length>=7){
+//                            System.out.println(nametable + "s");
+                            entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[parts1.length - 4].replace(";", "");
                         }else{
-                             entidad = parts[parts.length - 1].toLowerCase() + "_" + nametable;
+                             entidad = parts[parts.length - 1].toLowerCase() + "_" + nametable.replace(";", "").replace("\"", "").replace(",", "");
                         }
                        
 
@@ -1056,21 +1067,23 @@ public class ClassParser {
                     }
 
                     //mismo patron
-                    if (relation.equals("ManyToMany")) {
+                    if (relation.equals("ManyToMany") && !line.contains("//")  ) {
 
                         String trim = discriptor.name.trim();
                         trim = trim.replace(".", " ");
                         String[] parts = trim.split("\\s+");
                        
-                        if(nametable==null){
+                        if(nametable==null && parts1.length<7){
                         entidad = parts[parts.length - 1].toLowerCase() + "s_" + parts1[parts1.length - 1].replace(";", "");
+                        }else if(nametable==null && parts1.length>=7){
+//                            System.out.println(nametable + "s");
+                            entidad = parts[parts.length - 1].toLowerCase() + "s_" + parts1[parts1.length - 4].replace(";", "");
                         }else{
-                            System.out.println(nametable + "s");
                              entidad = parts[parts.length - 1].toLowerCase() + "s_" + nametable.replace(";", "").replace("\"", "").replace(",", "");
                         }
 
                         if (!entidad.endsWith("{")) {
-                            System.out.println(entidad);
+                             
                             list.add(entidad);
                         } else {
                             list = null;
@@ -1078,7 +1091,7 @@ public class ClassParser {
 
                     }
 
-                    if (relation.equals("ManyToOne")) {
+                    if (relation.equals("ManyToOne")&&!line.contains("//")) {
                         String trim = discriptor.name.trim();
                         trim = trim.replace(".", " ");
                         String[] parts = trim.split("\\s+");
@@ -1189,7 +1202,7 @@ public class ClassParser {
 
     public String getKey() throws Exception {
         String userkey = null;
-        try (InputStream input = new FileInputStream(System.getProperty("user.dir") + "/" + "SendToCodojo.config.properties")) {
+        try (InputStream input = new FileInputStream(System.getProperty("user.dir") + "/" + "SendToTaffi.config.properties")) {
 
 //            System.out.println(System.getProperty("user.dir"));
             Properties prop = new Properties();
@@ -1209,7 +1222,7 @@ public class ClassParser {
         String lines = null;
         File filename = null;
 
-        BufferedReader br = new BufferedReader(new FileReader(System.getProperty("user.dir") + "/" + "SendToCodojo.config.properties"));
+        BufferedReader br = new BufferedReader(new FileReader(System.getProperty("user.dir") + "/" + "SendToTaffi.config.properties"));
         String line;
         while ((line = br.readLine()) != null) {
             if (line.contains("APPLICATION.FILEPATH")) {

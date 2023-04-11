@@ -148,7 +148,7 @@
                 <configuration>
                     <obfuscate>true</obfuscate>
                     <injar>${project.build.finalName}.jar</injar>               
-                    <outjar>SendToCodojo.jar</outjar>
+                    <outjar>SendToTaffi.jar</outjar>
                     <outputDirectory>${project.build.directory}</outputDirectory>
                     <proguardInclude>${project.basedir}/proguard.conf</proguardInclude>
                     <exclusions>
@@ -160,11 +160,12 @@
                     <options>
                         <option>-libraryjars  ${java.home}</option>
                         <option>-dontshrink</option>
-                        <option>-dontoptimize</option>
-                        <option>-keep class com.** { *; }</option>
+                        <option>-dontoptimize</option>                    
                         <option>-keep class main.MainEjecute { *; }</option>
                         <option>-keep class Classes.ClassDiscriptor { *; }</option>
-                         <option>-keep class Requests.SlackIntegration</option>
+                        <option>-keep class Requests.SlackIntegration { *; } </option>
+                        <option>-keep class Requests.PostRequest { *; }</option>
+                      
                        
                         <!-- This option will replace all strings in reflections method invocations with new class names.
                              For example, invokes Class.forName('className')-->

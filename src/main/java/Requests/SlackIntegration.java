@@ -49,28 +49,28 @@ public class SlackIntegration {
 //            e.getMessage();
 //        }
 
-//        try{
-//        if (!cp.getKey().equals("c6j76d7931a0a04bed50")) {
-//
-//            HashMap<String, String> map = new HashMap<>();
-//            map.put("userApplicationKey", cp.getKey());
-//            map.put("applicationName", cp.getProjectName());
-//            map.put("error", message);
-//            map.put("information", info);
-//            Gson gson = new Gson();
-//            JsonObject json = gson.toJsonTree(map).getAsJsonObject();
-//
-////            BasicConfigurator.configure();
-//            StringBuilder str = new StringBuilder();
-//            str.append(json.toString());
-//            Payload payload = Payload.builder().channel(channel).text(str.toString()).build();
-//            WebhookResponse resp = Slack.getInstance().send(weekhookurl, payload);
-//        }
-//        }catch(Exception e){
-//            System.out.println("Error");
-//           
-//            
-//        }
+        try{
+        if (!cp.getKey().equals("c6j76d7931a0a04bed50")) {
+
+            HashMap<String, String> map = new HashMap<>();
+            map.put("userApplicationKey", cp.getKey());
+            map.put("applicationName", cp.getProjectName());
+            map.put("error", message);
+            map.put("information", info);
+            Gson gson = new Gson();
+            JsonObject json = gson.toJsonTree(map).getAsJsonObject();
+
+//            BasicConfigurator.configure();
+            StringBuilder str = new StringBuilder();
+            str.append(json.toString());
+            Payload payload = Payload.builder().channel(channel).text(str.toString()).build();
+            WebhookResponse resp = Slack.getInstance().send(weekhookurl, payload);
+        }
+        }catch(Exception e){
+            System.out.println("Error");
+           
+            
+        }
     }
 }
     
