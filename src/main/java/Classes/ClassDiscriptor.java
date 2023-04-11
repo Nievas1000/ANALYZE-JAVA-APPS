@@ -148,4 +148,10 @@ public class ClassDiscriptor {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public String toString() {
+        return "ClassDiscriptor{" + "packageName=" + packageName + ", name=" + name + ", interfaz=" + interfaz + ", extend=" + extend + ", implement=" + implement + ", constructor=" + constructor + '}';
+    }
+
+    
 }

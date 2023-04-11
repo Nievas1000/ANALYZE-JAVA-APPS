@@ -96,7 +96,7 @@ public class PostRequest {
             if(response!=200){
             throw new Exception("USER.APPLICATION.KEY is incorrect."
                      + " Find your USER.APPLICATION.KEY at https://app.codojo.io/how-to-add-application " + "\n"
-                     + "and set the USER.APPLICATION.KEY variable in " + System.getProperty("user.dir") + "\\SendToCodojo.config.properties");
+                     + "and set the USER.APPLICATION.KEY variable in " + System.getProperty("user.dir") + "\\SendToTaffi.config.properties");
             
             }
             

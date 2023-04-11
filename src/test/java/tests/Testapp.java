@@ -144,7 +144,7 @@ public class Testapp {
 //             System.out.println(response.toString() + "resposneeeee");
             assertEquals("USER.APPLICATION.KEY is incorrect." 
                     + " Find your USER.APPLICATION.KEY at https://app.codojo.io/how-to-add-application " + "\n"
-                    + "and set the USER.APPLICATION.KEY variable in " + System.getProperty("user.dir") + "\\SendToCodojo.config.properties",ex.getMessage());
+                    + "and set the USER.APPLICATION.KEY variable in " + System.getProperty("user.dir") + "\\SendToTaffi.config.properties",ex.getMessage());
         }
     }
     
