@@ -148,7 +148,7 @@
                 <configuration>
                     <obfuscate>true</obfuscate>
                     <injar>${project.build.finalName}.jar</injar>               
-                    <outjar>SendToCodojo.jar</outjar>
+                    <outjar>SendToTaffi.jar</outjar>
                     <outputDirectory>${project.build.directory}</outputDirectory>
                     <proguardInclude>${project.basedir}/proguard.conf</proguardInclude>
                     <exclusions>
