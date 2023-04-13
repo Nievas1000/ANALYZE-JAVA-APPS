@@ -76,17 +76,17 @@ jobs:
           uses: actions/upload-artifact@v2
           with:
             name: Fileproperties
-            path: src/SendToCodojo.config.properties
+            path: src/SendToTaffi.config.properties
         - name: Upload scriptbat
           uses: actions/upload-artifact@v2
           with:
             name: scriptbat
-            path: src/SendCodojo.bat
+            path: src/SendTaffi.bat
         - name: Upload scriptsh
           uses: actions/upload-artifact@v2
           with:
             name: scriptsh
-            path: src/SendCodojo.sh
+            path: src/SendTaffi.sh
   test:
       if: ${{ github.event_name == 'push' }}
       needs: [build]
