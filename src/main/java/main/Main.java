@@ -254,7 +254,7 @@ public class Main {
         } catch (Exception e) {
 //            sl.send("Error sending or getting json", e.getMessage());
             System.out.println(e.getMessage());
-            sl.send(e.getMessage(), "ERROR");
+           
             System.out.println("The program did not complete successfully.");
 
 //            e.printStackTrace();
