@@ -154,7 +154,7 @@ public class ClassParser {
     // Este metodo obtiene el nombre de cada clase y clasifica si es class o interface ademas dde obtener los extends e implements.
     public boolean getClassName(String line, List<String> lines, int i, HashMap<String, String> map) throws Exception {
         line = line.trim();
-        line = line.replace(",", " ").replace("<", "").replace(">", "");
+        line = line.replace(",", " ").replace("<", " ").replace(">", "");
         String ex = null;
 
         int cont = 0;
@@ -724,7 +724,7 @@ public class ClassParser {
 //                discriptor.name = discriptor.packageName + "." + parts[2];
 //            } else {
                 for (int j = 0; j < parts.length-1; j++) {
-
+                      
                     if (parts[j].equalsIgnoreCase("class") || parts[j].equalsIgnoreCase("interface") || parts[j].equalsIgnoreCase("enum")) {
                         discriptor.name = discriptor.packageName + "." + parts[j + 1].replace("{", "");
                         break;
@@ -758,6 +758,7 @@ public class ClassParser {
 //        System.out.println(line);
          line=line.replace("<", " ");
         String[] parts = line.split("\\s+");
+       
         
         if (parts.length >= 3) {
             for (int j = 0; j < parts.length - 1; j++) {
@@ -1202,7 +1203,7 @@ public class ClassParser {
 
     public String getKey() throws Exception {
         String userkey = null;
-        try (InputStream input = new FileInputStream(System.getProperty("user.dir") + "/" + "SendToSendToCodojo.config.properties")) {
+        try (InputStream input = new FileInputStream(System.getProperty("user.dir") + "/" + "SendToTaffi.config.properties")) {
 
 //            System.out.println(System.getProperty("user.dir"));
             Properties prop = new Properties();
@@ -1222,7 +1223,7 @@ public class ClassParser {
         String lines = null;
         File filename = null;
 
-        BufferedReader br = new BufferedReader(new FileReader(System.getProperty("user.dir") + "/" + "SendToSendToCodojo.config.properties"));
+        BufferedReader br = new BufferedReader(new FileReader(System.getProperty("user.dir") + "/" + "SendToTaffi.config.properties"));
         String line;
         while ((line = br.readLine()) != null) {
             if (line.contains("APPLICATION.FILEPATH")) {

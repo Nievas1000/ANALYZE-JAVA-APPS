@@ -1,3 +1,3 @@
 #!/bin/bash
-java -jar SendToCodojo.jar
+java -jar SendToTaffi.jar
 read -rsp $'Press enter to continue...\n'
