@@ -5,7 +5,6 @@ import Classes.ClassParser;
 import Classes.DataBaseData;
 import java.awt.Toolkit;
 import Requests.PostRequest;
-import Requests.SlackIntegration;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.io.File;
@@ -28,7 +27,7 @@ import java.util.stream.Stream;
 
 public class Main {
 
-    SlackIntegration sl = new SlackIntegration();
+    
     List<File> files;
 
 //    public static void main(String[] args) {
@@ -101,7 +100,7 @@ public class Main {
             cont = cont + 1;
 
         } catch (Exception e) {
-            sl.send("Error scanning project", Arrays.toString(e.getStackTrace()));
+//            sl.send("Error scanning project", Arrays.toString(e.getStackTrace()));
             System.out.println("The program did not complete successfully.");
 //            System.out.println("Error scanning project");
 //            System.out.println("HELP: contact us to give you a solution");
