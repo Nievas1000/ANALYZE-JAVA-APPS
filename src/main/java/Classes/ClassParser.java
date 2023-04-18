@@ -52,7 +52,7 @@ public class ClassParser {
             parse(map, i, cont);
         } catch (Exception e) {
             e.printStackTrace();
-           
+
         }
     }
 
@@ -85,8 +85,7 @@ public class ClassParser {
             if (lines.get(i).contains("public interface")) {
 
                 savevalues(lines.get(i), map, discriptor.packageName);
-                
-                
+
             }
 
             if (lines.get(i).contains("public class") || lines.get(i).contains("class")) {
@@ -98,20 +97,22 @@ public class ClassParser {
         //este for es donde se parsea toda la data obtenida anteriormente y se obtiene data nueva(relaciones,constructs,etc)
         for (int i = 0; i < lines.size(); i++) {
 
+            if (isCommented(lines.get(i))) {
+                continue;
+            }
+
             if ((a == 1)) {
+
                 if (searchrelationjpa(lines, lines.get(i), i, mapdb, listrelation).equals("true")) {
 
                 }
-
+                searchmain(lines.get(i));
+                searchapi(lines.get(i));
             }
 
             searchrelation(lines, lines.get(i), map, set);
 
-            if (isCommented(lines.get(i))) {
-                continue;
-            }
 //			
-
             if (discriptor.name == null) {
 
                 getClassName(lines.get(i), lines, i, map);
@@ -397,23 +398,17 @@ public class ClassParser {
             //por eso tiene una contador para verificar si entro en el if anterior y si entro que aca no entre.
 //            System.out.println(line);
 //            System.out.println(parts.length);
-        
-    
+
             String lineif;
             if (!line.contains("extends") && !line.contains("{")) {
                 List<String> array = new ArrayList<>();
 
                 int e = i + 1;
-                
-                
-                
-            
-                 
+
                 while (!lines.get(e).isEmpty() && lines.get(e).contains("{")) {
 
-                    
                     lineif = lines.get(e);
-                    
+
                     e += 1;
 
                     if (lineif.contains("extends")) {
@@ -430,8 +425,7 @@ public class ClassParser {
                     }
 
                 }
-             
-               
+
             }
 
             if (line.contains("extends")) {
@@ -723,20 +717,18 @@ public class ClassParser {
 //            } else if (parts.length == 5 && isClassOrInterface(parts[1]) && isParentLinker(parts[3])) {
 //                discriptor.name = discriptor.packageName + "." + parts[2];
 //            } else {
-                for (int j = 0; j < parts.length-1; j++) {
-                      
-                    if (parts[j].equalsIgnoreCase("class") || parts[j].equalsIgnoreCase("interface") || parts[j].equalsIgnoreCase("enum")) {
-                        discriptor.name = discriptor.packageName + "." + parts[j + 1].replace("{", "");
-                        break;
-                    }
+            for (int j = 0; j < parts.length - 1; j++) {
 
+                if (parts[j].equalsIgnoreCase("class") || parts[j].equalsIgnoreCase("interface") || parts[j].equalsIgnoreCase("enum")) {
+                    discriptor.name = discriptor.packageName + "." + parts[j + 1].replace("{", "");
+                    break;
                 }
 
-                
-                return true;
             }
-            //return true;
-        
+
+            return true;
+        }
+        //return true;
 
         return false;
     }
@@ -748,7 +740,7 @@ public class ClassParser {
 
     //compara entre class e interfaz
     public boolean isClassOrInterface(String part) {
-        return part.trim().equals("class") || part.trim().equals("interface") ||  part.trim().equals("enum");
+        return part.trim().equals("class") || part.trim().equals("interface") || part.trim().equals("enum");
     }
 
     //guarda los valores que se le pasan desde el primer for de esta clase
@@ -756,26 +748,24 @@ public class ClassParser {
 
         line = line.trim();
 //        System.out.println(line);
-         line=line.replace("<", " ");
+        line = line.replace("<", " ");
         String[] parts = line.split("\\s+");
-       
-        
+
         if (parts.length >= 3) {
             for (int j = 0; j < parts.length - 1; j++) {
                 if ((parts[j].equalsIgnoreCase("class") || parts[j].equalsIgnoreCase("interface") || parts[j].equalsIgnoreCase("enum")) && (!line.contains("//"))) {
                     //este if guarda adentro del map los nombres que jamas tengan {} porque algunas veces el escaneo
                     //puede filtrar eso y esto hace que no se guarde si tiene esos caracteres.
-                    
+
                     if (!parts[j + 1].contains("{") || !parts[j + 1].contains("}")) {
                         map.put(parts[j + 1].replace("<", "").replace(">", "").replace("<T>", "").replace(")", "").replace("(", "").replace(";", "").replace(",", "").replace("{", "").replace("}", ""), dp);
-                        
+
                     }
                 }
             }
             //guarda nombre de la clase y package en un hashmap.
             //map.put(parts[2], dp);
 
-            
         }
 
     }
@@ -792,13 +782,11 @@ public class ClassParser {
             //divide la linea en partes separadas por espacios
             String[] parts = line.split("\\s+");
             line = parts[parts.length - 1].replace(";", "");
-            
+
             //si el map contiene la key = nombre de la clase entra al if
             // System.out.println(line);
-           
-            
             if (map.containsKey(line)) {
-                
+
                 //System.out.println(map.get(line).concat(".").concat(line));
                 //guarda el package de la clase que acabamos de comparar en un hashset.
                 if (!line.contains("{") && !line.contains("}")) {
@@ -888,7 +876,6 @@ public class ClassParser {
 
 //aca se identifica el archivo de propiedades pasandole el user.dir que seria el directorio donde esta parado ahora el usuario.
         try {
-           
 
             // get the property value and print it out
             // trae los valores de las properties del archivo.
@@ -917,25 +904,24 @@ public class ClassParser {
                     relation = "ManyToOne";
                 }
 
-                if (lines.get(i+1).contains("@JoinTable") && !lines.get(i+1).contains("name") && !line.contains("//")) {
+                if (lines.get(i + 1).contains("@JoinTable") && !lines.get(i + 1).contains("name") && !line.contains("//")) {
                     String[] partsJ = lines.get(i + 2).split("\\s+");
                     for (int j = 0; j < partsJ.length - 1; j++) {
                         if (partsJ[j].equals("name")) {
-                           
+
                             nametable = partsJ[j + 2];
-                            
-                           
+
                         }
                     }
 
-                } else if (lines.get(i+1).contains("@JoinTable") && lines.get(i+1).contains("name" )&& !line.contains("//")) {
+                } else if (lines.get(i + 1).contains("@JoinTable") && lines.get(i + 1).contains("name") && !line.contains("//")) {
 
                     String[] partsJ = lines.get(i).split("\\s+");
                     for (int j = 0; j < partsJ.length - 1; j++) {
                         if (partsJ[j].equals("name")) {
-                             
+
                             nametable = partsJ[j + 2];
-                           
+
                         }
                     }
                 }
@@ -945,7 +931,7 @@ public class ClassParser {
                 //y busque la declaracion de la clase donde se definio la relacion.
                 do {
 
-                    if ((!lines.get(i + 1).contains("@")) && entidad.isEmpty() ) {
+                    if ((!lines.get(i + 1).contains("@")) && entidad.isEmpty()) {
 
                         if (!lines.get(i + 1).isEmpty()) {
                             entidad = lines.get(i + 1);
@@ -962,14 +948,14 @@ public class ClassParser {
                 //divide en partes la declaracion de la clase en la que se esta haciendo la relacion.
                 String[] parts1 = entidad.split("\\s+");
 
-                if (relation.equalsIgnoreCase("OneToOne") &&!line.contains("//")) {
-                    if(nametable==null){
-                          entidad = parts1[parts1.length - 1].replace(";", "");
-                    }else{
+                if (relation.equalsIgnoreCase("OneToOne") && !line.contains("//")) {
+                    if (nametable == null) {
+                        entidad = parts1[parts1.length - 1].replace(";", "");
+                    } else {
                         entidad = nametable.replace(";", "");
                     }
-                    
-                     if (!entidad.endsWith("{")) {
+
+                    if (!entidad.endsWith("{")) {
                         list.add(entidad);
                     } else {
                         list = null;
@@ -987,14 +973,14 @@ public class ClassParser {
                         String[] parts = trim.split("\\s+");
                         //aqui se trae el nombre de la clase atual se convierte a minuscula y luego se concatena
                         //con la clase donde se hizo la relacion
-                          
-                        if(nametable==null){
-                        entidad = parts[parts.length - 1].toLowerCase() + "s_" + parts1[parts1.length - 1].replace(";", "");
-                        }else{
-                             entidad = parts[parts.length - 1].toLowerCase() + "s_" + nametable.replace(";", "");
+
+                        if (nametable == null) {
+                            entidad = parts[parts.length - 1].toLowerCase() + "s_" + parts1[parts1.length - 1].replace(";", "");
+                        } else {
+                            entidad = parts[parts.length - 1].toLowerCase() + "s_" + nametable.replace(";", "");
                         }
                         if (!entidad.endsWith("{")) {
-                          
+
                             list.add(entidad);
                         } else {
                             list = null;
@@ -1002,20 +988,20 @@ public class ClassParser {
                     }
 
                     //mismo patron
-                    if (relation.equals("OneToMany")&&!line.contains("//")) {
+                    if (relation.equals("OneToMany") && !line.contains("//")) {
                         String trim = discriptor.name.trim();
                         trim = trim.replace(".", " ");
                         String[] parts = trim.split("\\s+");
 
-                       if(nametable==null && parts1.length<7){
-                        entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[parts1.length - 1].replace(";", "");
-                        }else if(nametable==null && parts1.length>=7){
+                        if (nametable == null && parts1.length < 7) {
+                            entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[parts1.length - 1].replace(";", "");
+                        } else if (nametable == null && parts1.length >= 7) {
 //                            System.out.println(nametable + "s");
                             entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[parts1.length - 4].replace(";", "");
-                        }else{
-                             entidad = parts[parts.length - 1].toLowerCase() + "_" + nametable.replace(";", "").replace("\"", "").replace(",", "");
+                        } else {
+                            entidad = parts[parts.length - 1].toLowerCase() + "_" + nametable.replace(";", "").replace("\"", "").replace(",", "");
                         }
-                        
+
                         if (!entidad.endsWith("{")) {
                             list.add(entidad);
                         } else {
@@ -1024,14 +1010,14 @@ public class ClassParser {
 
                     }
 
-                    if (relation.equals("ManyToOne")&&!line.contains("//")) {
+                    if (relation.equals("ManyToOne") && !line.contains("//")) {
                         String trim = discriptor.name.trim();
                         trim = trim.replace(".", " ");
                         String[] parts = trim.split("\\s+");
-                        if(nametable==null){
-                        entidad = parts[parts.length - 1].toLowerCase() + "s_" + parts1[parts1.length - 1].replace(";", "");
-                        }else{
-                         entidad = parts[parts.length - 1].toLowerCase() + "s_" + nametable;
+                        if (nametable == null) {
+                            entidad = parts[parts.length - 1].toLowerCase() + "s_" + parts1[parts1.length - 1].replace(";", "");
+                        } else {
+                            entidad = parts[parts.length - 1].toLowerCase() + "s_" + nametable;
 
                         }
                         if (!entidad.endsWith("{")) {
@@ -1045,19 +1031,18 @@ public class ClassParser {
                 } else {
                     //mismo patron
 
-                    if (relation.equals("OneToMany")&&!line.contains("//")) {
+                    if (relation.equals("OneToMany") && !line.contains("//")) {
                         String trim = discriptor.name.trim();
                         trim = trim.replace(".", " ");
                         String[] parts = trim.split("\\s+");
-                          if(nametable==null && parts1.length<7){
-                        entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[parts1.length - 1].replace(";", "");
-                        }else if(nametable==null && parts1.length>=7){
+                        if (nametable == null && parts1.length < 7) {
+                            entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[parts1.length - 1].replace(";", "");
+                        } else if (nametable == null && parts1.length >= 7) {
 //                            System.out.println(nametable + "s");
                             entidad = parts[parts.length - 1].toLowerCase() + "_" + parts1[parts1.length - 4].replace(";", "");
-                        }else{
-                             entidad = parts[parts.length - 1].toLowerCase() + "_" + nametable.replace(";", "").replace("\"", "").replace(",", "");
+                        } else {
+                            entidad = parts[parts.length - 1].toLowerCase() + "_" + nametable.replace(";", "").replace("\"", "").replace(",", "");
                         }
-                       
 
                         if (!entidad.endsWith("{")) {
                             list.add(entidad);
@@ -1068,23 +1053,23 @@ public class ClassParser {
                     }
 
                     //mismo patron
-                    if (relation.equals("ManyToMany") && !line.contains("//")  ) {
+                    if (relation.equals("ManyToMany") && !line.contains("//")) {
 
                         String trim = discriptor.name.trim();
                         trim = trim.replace(".", " ");
                         String[] parts = trim.split("\\s+");
-                       
-                        if(nametable==null && parts1.length<7){
-                        entidad = parts[parts.length - 1].toLowerCase() + "s_" + parts1[parts1.length - 1].replace(";", "");
-                        }else if(nametable==null && parts1.length>=7){
+
+                        if (nametable == null && parts1.length < 7) {
+                            entidad = parts[parts.length - 1].toLowerCase() + "s_" + parts1[parts1.length - 1].replace(";", "");
+                        } else if (nametable == null && parts1.length >= 7) {
 //                            System.out.println(nametable + "s");
                             entidad = parts[parts.length - 1].toLowerCase() + "s_" + parts1[parts1.length - 4].replace(";", "");
-                        }else{
-                             entidad = parts[parts.length - 1].toLowerCase() + "s_" + nametable.replace(";", "").replace("\"", "").replace(",", "");
+                        } else {
+                            entidad = parts[parts.length - 1].toLowerCase() + "s_" + nametable.replace(";", "").replace("\"", "").replace(",", "");
                         }
 
                         if (!entidad.endsWith("{")) {
-                             
+
                             list.add(entidad);
                         } else {
                             list = null;
@@ -1092,15 +1077,15 @@ public class ClassParser {
 
                     }
 
-                    if (relation.equals("ManyToOne")&&!line.contains("//")) {
+                    if (relation.equals("ManyToOne") && !line.contains("//")) {
                         String trim = discriptor.name.trim();
                         trim = trim.replace(".", " ");
                         String[] parts = trim.split("\\s+");
-                        
-                        if(nametable==null){
-                        entidad = parts[parts.length - 1].toLowerCase() + "s_" + parts1[parts1.length - 1].replace(";", "");
-                        }else{
-                         entidad = parts[parts.length - 1].toLowerCase() + "s_" + nametable;
+
+                        if (nametable == null) {
+                            entidad = parts[parts.length - 1].toLowerCase() + "s_" + parts1[parts1.length - 1].replace(";", "");
+                        } else {
+                            entidad = parts[parts.length - 1].toLowerCase() + "s_" + nametable;
                         }
                         if (!entidad.endsWith("{")) {
                             list.add(entidad);
@@ -1111,7 +1096,7 @@ public class ClassParser {
                     }
 
                 }
-            
+
                 //String[] parts1 = entidad.split("\\s+");
 //                    if(parts1.length>3){
 //                         entidad = parts1[3].replace(";", "");                          
@@ -1170,10 +1155,9 @@ public class ClassParser {
 //          for (String table : tables) {
 //                System.out.println(table);
                 //  }
-                }
-                return "true";
-            
-            
+            }
+            return "true";
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1237,4 +1221,33 @@ public class ClassParser {
 
         return filename.getName();
     }
+
+    public void searchapi(String line) {
+        line = line.trim();
+        line = line.replace("(", " ");
+
+        //divide la linea en partes separadas por espacios
+        String[] parts = line.split("\\s+");
+
+        for (String part : parts) {
+            if (part.equals("@RequestMapping")) {
+                discriptor.setEndpoints(Boolean.TRUE);
+
+            }
+        }
+    }
+
+    public void searchmain(String line) {
+
+        line = line.trim();
+        line = line.replace("(", " ");
+        String[] parts = line.split("\\s+");
+        if (parts[0].equals("public") && parts[1].equals("static") && parts[2].equals("void") && parts[3].equals("main")) {
+
+            discriptor.setMainClass(Boolean.TRUE);
+
+        }
+
+    }
+
 }
