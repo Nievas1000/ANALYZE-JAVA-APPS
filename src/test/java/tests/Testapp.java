@@ -106,7 +106,8 @@ public class Testapp {
         String path = System.getProperty("user.dir").concat("/PruebaCI");
         try {
             json = main.implementacion(path, "c6j76d7931a0a04bed50", "no","PruebaCI");
-           
+            System.out.println(json);
+            System.out.println(jsonexpected);
             hashexpected = cp.ObtenerHASHMD5(jsonexpected);
             hashnow = cp.ObtenerHASHMD5(json);
         } catch (Exception ex) {
