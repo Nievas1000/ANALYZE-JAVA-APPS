@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Set;
 
 public class ClassDiscriptor {
-    
 
     public String packageName;
     public String name;
@@ -21,13 +20,15 @@ public class ClassDiscriptor {
     //se define un hashset para que no haya valores repetidos
     public Set<String> constructor;
     public List<String> datasources;
+    public Boolean endpoints;
+    public Boolean mainClass;
 
     //public String lastModified;
     public ClassDiscriptor() {
 
     }
 
-    public ClassDiscriptor(String packageName, String name, Boolean interfaz, String pathfile, String userkey, List<String> extend, List<String> implement, Set<String> constructor, List<String> datasources) {
+    public ClassDiscriptor(String packageName, String name, Boolean interfaz, String pathfile, String userkey, List<String> extend, List<String> implement, Set<String> constructor, List<String> datasources, Boolean endpoints, Boolean mainClass) {
         this.packageName = packageName;
         this.name = name;
         this.interfaz = interfaz;
@@ -37,30 +38,23 @@ public class ClassDiscriptor {
         this.implement = implement;
         this.constructor = constructor;
         this.datasources = datasources;
+        this.endpoints = endpoints;
+        this.mainClass = mainClass;
     }
 
     
+
+  
+
     public List<String> getDatasources() {
         return datasources;
     }
 
-    public void setDatasources(List<String>list)  {
-        
-        this.datasources=list;
-       
-        
+    public void setDatasources(List<String> list) {
+
+        this.datasources = list;
+
     }
-    
-    
-    
-    
-
-   
-
-    
-    
-
-   
 
     public Set<String> getConstructor() {
         return constructor;
@@ -70,9 +64,6 @@ public class ClassDiscriptor {
         this.constructor = constructor;
     }
 
-
-
-    
     public String getPathfile() {
         return pathfile;
     }
@@ -128,11 +119,7 @@ public class ClassDiscriptor {
     public void setImplement(List<String> implement) {
         this.implement = implement;
     }
-  
 
-  
-
-   
 //	public static class Member{
 //		public String modifier;
 //		public String type;
@@ -148,10 +135,27 @@ public class ClassDiscriptor {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    public Boolean getEndpoints() {
+        return endpoints;
+    }
+
+    public void setEndpoints(Boolean endpoints) {
+        this.endpoints = endpoints;
+    }
+
+    public Boolean getMainClass() {
+        return mainClass;
+    }
+
+    public void setMainClass(Boolean mainClass) {
+        this.mainClass = mainClass;
+    }
+
+  
+
     @Override
     public String toString() {
         return "ClassDiscriptor{" + "packageName=" + packageName + ", name=" + name + ", interfaz=" + interfaz + ", extend=" + extend + ", implement=" + implement + ", constructor=" + constructor + '}';
     }
 
-    
 }

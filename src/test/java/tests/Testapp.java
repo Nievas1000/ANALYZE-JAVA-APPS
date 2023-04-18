@@ -97,8 +97,8 @@ public class Testapp {
         String json = "";
         String jsonexpected = "{\"userApplicationKey\":\"c6j76d7931a0a04bed50\",\"classes\":"
                 + "[{\"name\":\"pruebaci.classes.Auto\",\"extend\":[\"pruebaci.classes.Moto\"]}"
-                + ",{\"name\":\"pruebaci.classes.Moto\",\"constructor\":[\"pruebaci.classes.Auto\"]"
-                + ",\"datasources\":[\"cliente\"]},{\"name\":\"pruebaci.PruebaCI\"}],"
+                + ",{\"name\":\"pruebaci.classes.Moto\",\"constructor\":[\"pruebaci.classes.Auto\"],"
+                + "\"datasources\":[\"cliente\"]},{\"name\":\"pruebaci.PruebaCI\",\"mainClass\":true}],"
                 + "\"applicationName\":\"PruebaCI\"}";
         
         String hashexpected = null;
@@ -234,6 +234,50 @@ public class Testapp {
                + "[\"Classes.Foo3\"],\"datasources\":[\"foo2s_foo3\",\"foo2s_foo1s\"]},"
                + "{\"name\":\"Classes.Foo3\"},{\"name\":\"relationsjpa.Relationsjpa\"}],"
                + "\"applicationName\":\"relationsjpa\"}";
+       
+       String json=null;
+        
+       try {
+     //      jsonexpected=cp.ObtenerHASHMD5(jsonexpected);
+            json = main.implementacion(path, "c6j76d7931a0a04bed50", "no","");
+       //    json=cp.ObtenerHASHMD5(json);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            
+            assertEquals(jsonexpected.length(), json.length());
+        }
+    }
+    
+    public void endpointstest(){
+        String path = System.getProperty("user.dir") + "/test/endpoints";
+       String jsonexpected="{\"userApplicationKey\":\"c6j76d7931a0a04bed50\",\"classes\":"
+               + "[{\"name\":\"com.example.demo.Controladores.ClienteControlador\",\"endpoints\":true},"
+               + "{\"name\":\"com.example.demo.Controladores.MainController\",\"endpoints\":true},"
+               + "{\"name\":\"com.example.demo.Controladores.PedidoControlador\",\"endpoints\":true},"
+               + "{\"name\":\"com.example.demo.VerdicchioBikesApplication\"},"
+               + "{\"name\":\"com.example.demo.VerdicchioBikesApplicationTests\"}]"
+               + ",\"applicationName\":\"endpoints\"}";
+       
+       String json=null;
+        
+       try {
+     //      jsonexpected=cp.ObtenerHASHMD5(jsonexpected);
+            json = main.implementacion(path, "c6j76d7931a0a04bed50", "no","");
+       //    json=cp.ObtenerHASHMD5(json);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            
+            assertEquals(jsonexpected.length(), json.length());
+        }
+    }
+    
+    public void maintest(){
+         String path = System.getProperty("user.dir") + "/test/maintest";
+       String jsonexpected="{\"userApplicationKey\":\"c6j76d7931a0a04bed50\",\"classes\":"
+               + "[{\"name\":\"maintest.Maintest\",\"mainClass\":true}],"
+               + "\"applicationName\":\"maintest\"}";
        
        String json=null;
         
