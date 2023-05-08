@@ -41,7 +41,7 @@ public class ClassParser {
     public ClassParser() {
     }
 
-    public ClassParser(File file, HashMap<String, String> map, int i, int cont) {
+    public ClassParser(File file, HashMap<String, String> map, int i, int cont,HashMap<String,String> hashesjson) {
         this.file = file.toPath();
 
         this.discriptor = new ClassDiscriptor();
@@ -49,7 +49,7 @@ public class ClassParser {
 //        discriptor.lastModified = String.valueOf(file.lastModified());
 //discriptor.members = new ArrayList();
         try {
-            parse(map, i, cont);
+            parse(map, i, cont,hashesjson);
         } catch (Exception e) {
             e.printStackTrace();
 
@@ -61,7 +61,7 @@ public class ClassParser {
     }
 
     //Este metodo lee linea por linea cada clase
-    public void parse(HashMap<String, String> map, int a, int cont) throws Exception {
+    public void parse(HashMap<String, String> map, int a, int cont,HashMap<String,String> hashesjson) throws Exception {
         List<String> lines = Files.readAllLines(file, Charset.forName("ISO-8859-1"));
 
         //se crean list y hashmap globales.
@@ -69,6 +69,7 @@ public class ClassParser {
         List<String> list = new ArrayList<>();
         Set<String> set = new HashSet<String>();
         List<String> listrelation = new ArrayList<>();
+        String hashes="";
 
         //este es el for donde itera todas las clases e interfaces y hacen un paneo de sus nombres y package
         for (int i = 0; i < lines.size(); i++) {
@@ -103,7 +104,7 @@ public class ClassParser {
 
             if ((a == 1)) {
 
-                if (searchrelationjpa(lines, lines.get(i), i, mapdb, listrelation).equals("true")) {
+                if (searchrelationjpa(lines, lines.get(i), i, mapdb, listrelation,hashes,hashesjson).equals("true")) {
 
                 }
                 searchmain(lines.get(i));
@@ -863,16 +864,47 @@ public class ClassParser {
         }
 
     }
-
+int contjpa=0;
     //este metodo busca las relaciones de jpa (@OneToOne,@OneToMany,@ManyToOne,@ManyToMany)
-    public String searchrelationjpa(List<String> lines, String line, int i, HashMap<String, List> mapdb, List<String> list) throws FileNotFoundException, Exception {
+    public String searchrelationjpa(List<String> lines, String line, int i, HashMap<String, List> mapdb, List<String> list,String hashes,HashMap<String,String>hashesjson) throws FileNotFoundException, Exception {
         String entidad = "";
         String relation = "";
         String nametable = null;
-
+        String namet=null;
+        contjpa++;
+        String hashesprueba="";
         DataBaseData db = new DataBaseData();
+        
+       
+        
+        
 
         List<String> tables = new ArrayList();
+        
+        
+        
+        for (int e = 0; e < lines.size()-1; e++) {
+            if(lines.get(e).contains("@Column") || lines.get(e).contains("@JoinColumn")){
+                String linejpa=lines.get(e).replace("(", "").replace(")","" ).replace("\"", "");
+                hashes=hashes+linejpa.replace(",", "").replace("=", "").replace(" ", "");
+                hashes=hashes.trim();
+                
+                hashes=ObtenerHASHMD5(hashes);
+              
+                
+            }
+            
+            if(lines.get(e).contains("@Table")){
+                String tn=lines.get(e).replace("(", " ").replace("=", " ").replace(")", "");
+                String [] partstn=tn.split("\\s+");
+                namet=partstn[2].replace("\"", "").toLowerCase();
+                
+                
+            }
+        }
+      
+       
+        
 
 //aca se identifica el archivo de propiedades pasandole el user.dir que seria el directorio donde esta parado ahora el usuario.
         try {
@@ -971,6 +1003,7 @@ public class ClassParser {
                         String trim = discriptor.name.trim();
                         trim = trim.replace(".", " ");
                         String[] parts = trim.split("\\s+");
+                       
                         //aqui se trae el nombre de la clase atual se convierte a minuscula y luego se concatena
                         //con la clase donde se hizo la relacion
 
@@ -1097,29 +1130,16 @@ public class ClassParser {
 
                 }
 
-                //String[] parts1 = entidad.split("\\s+");
-//                    if(parts1.length>3){
-//                         entidad = parts1[3].replace(";", "");                          
-//                         if(relation.equals("OneToMany")){
-//                             String trim=discriptor.name.trim();
-//                             trim=trim.replace(".", " ");
-//                             String[] parts = trim.split("\\s+");
-//                          entidad=parts[parts.length-1].toLowerCase() + "_" + parts1[3].replace(";", "");   
-//                         }
-//                     if(relation.equals("ManyToMany")){
-//                         System.out.println(relation);
-//                         String trim=discriptor.name.trim();
-//                             trim=trim.replace(".", " ");
-//                             String[] parts = trim.split("\\s+");
-//                          entidad=parts[parts.length-1].toLowerCase() + "_" + parts1[3].replace(";", "");  
-//                             
-                //se crea un array para que guarde lo que retorne gettables.
-                //List<String> tablas = db.getTables(typedb, hostdb, portdb, namedb, userdb, password);
-                //si el array contiene una tabladb que sea igual que el nombre de la variable entidad que guardamos antes es true. 
-                // Boolean res = tablas.contains(entidad);
-                //si es true entra y guarda el valor de entidad en una tabla para luego asignarselo a datasources.
+              
+                String hashestable=discriptor.name.replace(".", " ");
+                String[] partshashes=hashestable.split("\\s+");
                 if (!entidad.equalsIgnoreCase("{")) {
                     //tables.add(entidad);
+                    if(namet!=null && !hashes.isEmpty()){
+                    hashesjson.put(namet, hashes);
+                    }else if(namet==null && !hashes.isEmpty() ){
+                    hashesjson.put(partshashes[1], hashes);
+                    }
                     discriptor.setDatasources(list);
 
                 }
@@ -1181,7 +1201,7 @@ public class ClassParser {
             } catch (NoSuchAlgorithmException e) {
                 System.out.println("Error al obtener el hash: " + e.getMessage());
                 return "";
-            }
+            } 
         }
     }
 

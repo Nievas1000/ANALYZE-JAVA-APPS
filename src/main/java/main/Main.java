@@ -39,6 +39,7 @@ public class Main {
         List<ClassDiscriptor> cdList = new ArrayList();
         //map global 
         HashMap<String, String> map = new HashMap<>();
+        HashMap<String, String> hashesjson = new HashMap<>();
         //trae la direccion del archivo
         String sCarpAct = System.getProperty(args, args);
         //Se crea un nuevo file y se le pasa como argumento la direccion del archivo
@@ -82,7 +83,7 @@ public class Main {
                     if (contclasses.toString().contains("000") && contclasses.toString().length() == 4) {
                         System.out.println(contclasses + " classes discovered…");
                     }
-                    ClassParser parser = new ClassParser(f, map, i, cont);
+                    ClassParser parser = new ClassParser(f, map, i, cont,hashesjson);
                     ClassDiscriptor cd = parser.getDiscriptor();
                     cd.setPackageName(null);
                     if (cd != null && cd.name != null && i == 1) {
@@ -182,7 +183,9 @@ public class Main {
             mapjson.put("userApplicationKey", userkey);
             mapjson.put("applicationName", name);
             mapjson.put("classes",cdList );
-
+            if(!hashesjson.isEmpty()){
+            mapjson.put("hashes",hashesjson);
+            }
             //}
             json = toJSON(mapjson, sendjson, userkey, name, sCarpAct);
             StringSelection selection = new StringSelection(json);
